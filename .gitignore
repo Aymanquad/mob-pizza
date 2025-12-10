@@ -1,0 +1,53 @@
+# General
+.DS_Store
+Thumbs.db
+*.log
+
+# Node
+node_modules
+pnpm-lock.yaml
+package-lock.json
+yarn.lock
+.npmrc
+
+# Build outputs
+dist
+build
+.next
+.turbo
+
+# Flutter / Dart
+.dart_tool
+.flutter-plugins
+.flutter-plugins-dependencies
+.flutter-plugins
+.packages
+pubspec.lock
+android/.gradle
+android/app/build
+ios/Pods
+ios/.symlinks
+ios/Flutter/Flutter.framework
+ios/Flutter/Flutter.podspec
+ios/ServiceDefinitions.json
+ios/Runner/GeneratedPluginRegistrant.*
+
+# Env
+.env
+.env.local
+apps/**/.env
+apps/**/.env.local
+apps/**/env.local
+apps/**/env
+
+# IDE
+.idea
+.vscode
+
+# Images cache
+apps/web/public/images/deals.jpg
+
+# Misc
+coverage
+*.iml
+
