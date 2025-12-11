@@ -32,6 +32,11 @@ class ProfileScreen extends StatelessWidget {
               subtitle: Text('Push • Email'),
               trailing: Icon(Icons.chevron_right),
             ),
+            const Divider(),
+            const ListTile(
+              title: Text('House Secrets'),
+              subtitle: Text('Boss Picks • Under-the-Table Deals • Family Combos'),
+            ),
           ],
         ),
       ),

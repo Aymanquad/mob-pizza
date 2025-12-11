@@ -10,14 +10,15 @@ const styles = {
     transition: 'transform 120ms ease, box-shadow 120ms ease',
   },
   primary: {
-    background: 'var(--gold)',
-    color: '#0b0c10',
-    boxShadow: '0 6px 18px rgba(217,164,65,0.35)',
+    background: 'var(--mob-black)',
+    color: 'var(--gold)',
+    boxShadow: '0 6px 18px rgba(0,0,0,0.25)',
+    border: '1px solid var(--gold)',
   },
   ghost: {
-    background: 'transparent',
-    color: 'var(--gold)',
-    border: '1px solid var(--gold)',
+    background: 'var(--bootleg-burgundy)',
+    color: 'var(--ivory)',
+    border: '1px solid var(--bootleg-burgundy)',
   },
 };
 

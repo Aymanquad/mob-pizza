@@ -1,8 +1,8 @@
 const Badge = ({ label, tone = 'gold' }) => {
   const palette = {
-    gold: { bg: 'rgba(217,164,65,0.12)', fg: 'var(--gold)', border: '1px solid rgba(217,164,65,0.4)' },
-    red: { bg: 'rgba(179,34,34,0.12)', fg: 'var(--mob-red)', border: '1px solid rgba(179,34,34,0.4)' },
-    olive: { bg: 'rgba(145,159,137,0.12)', fg: 'var(--olive)', border: '1px solid rgba(145,159,137,0.4)' },
+    gold: { bg: 'rgba(198,166,103,0.12)', fg: 'var(--gangster-gold)', border: '1px solid rgba(198,166,103,0.4)' },
+    red: { bg: 'rgba(193,39,39,0.12)', fg: 'var(--hitman-red)', border: '1px solid rgba(193,39,39,0.4)' },
+    olive: { bg: 'rgba(82,96,78,0.12)', fg: 'var(--olive)', border: '1px solid rgba(82,96,78,0.4)' },
   }[tone];
 
   return (

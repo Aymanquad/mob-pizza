@@ -1,15 +1,22 @@
 :root {
-  --bg-primary: #0b0c10;
-  --bg-secondary: #1c1512;
-  --bg-glass: rgba(20, 14, 12, 0.65);
-  --mob-red: #b32222;
-  --gold: #d9a441;
-  --amber: #e98354;
-  --olive: #919f89;
-  --text-primary: #f5f3ec;
-  --text-secondary: #c0b8a8;
-  --border: #3a3a3a;
-  --shadow-1: 0 16px 40px rgba(0, 0, 0, 0.35);
+  --mob-black: #0f0f0f;
+  --gangster-gold: #c6a667;
+  --bootleg-burgundy: #7a1f1f;
+  --ivory: #f5e8c7;
+  --whiskey: #6b4f2c;
+  --olive: #52604e;
+  --hitman-red: #c12727;
+  --silent-slate: #878787;
+
+  --bg-primary: var(--ivory);
+  --bg-secondary: var(--whiskey);
+  --bg-glass: rgba(107, 79, 44, 0.12);
+  --gold: var(--gangster-gold);
+  --amber: var(--bootleg-burgundy);
+  --text-primary: var(--mob-black);
+  --text-secondary: var(--silent-slate);
+  --border: var(--silent-slate);
+  --shadow-1: 0 16px 40px rgba(0, 0, 0, 0.25);
 }
 
 * {
@@ -19,12 +26,15 @@
 
 body {
   margin: 0;
-  background: radial-gradient(circle at 20% 20%, rgba(179, 34, 34, 0.12), transparent 32%),
-    radial-gradient(circle at 80% 0%, rgba(217, 164, 65, 0.12), transparent 30%),
-    var(--bg-primary);
+  background: var(--bg-primary);
   color: var(--text-primary);
   min-height: 100vh;
   line-height: 1.6;
+  background-image:
+    radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0),
+    radial-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 0);
+  background-size: 6px 6px, 8px 8px;
+  background-position: 0 0, 3px 3px;
 }
 
 a {
@@ -45,7 +55,7 @@ a:hover {
 
 .card {
   background: var(--bg-secondary);
-  border: 1px solid var(--border);
+  border: 1px solid rgba(135, 135, 135, 0.4);
   border-radius: 12px;
   padding: 16px;
   box-shadow: var(--shadow-1);

@@ -32,11 +32,13 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: const [
-              Icon(Icons.local_pizza, size: 72, color: Color(0xFFD9A441)),
+              Icon(Icons.local_pizza, size: 78, color: Color(0xFFD9A441)),
               SizedBox(height: 12),
-              Text('Mob Pizza', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
+              Text('Mob Pizza', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
               SizedBox(height: 6),
               Text('The Family’s Slice Since 1928', style: TextStyle(color: Color(0xFFC0B8A8))),
+              SizedBox(height: 8),
+              Text('Cinematic pies, speakeasy service.', style: TextStyle(color: Color(0xFFC0B8A8))),
             ],
           ),
         ),

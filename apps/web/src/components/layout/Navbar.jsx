@@ -15,33 +15,17 @@ const Navbar = () => {
         position: 'sticky',
         top: 0,
         zIndex: 10,
-        backdropFilter: 'blur(10px)',
-        background: 'rgba(12, 12, 16, 0.8)',
-        borderBottom: '1px solid var(--border)',
+        background: 'var(--mob-black)',
+        borderBottom: '1px solid var(--gold)',
         boxShadow: '0 10px 30px rgba(0,0,0,0.35)',
       }}
     >
       <div className="page" style={{ paddingTop: 18, paddingBottom: 12, display: 'flex', alignItems: 'center', gap: 18 }}>
         <Link to="/" style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
-          <div
-            style={{
-              width: 44,
-              height: 44,
-              borderRadius: 10,
-              background: 'linear-gradient(135deg, var(--mob-red), var(--gold))',
-              display: 'grid',
-              placeItems: 'center',
-              fontWeight: 800,
-              color: '#0b0c10',
-              letterSpacing: 1,
-              boxShadow: '0 10px 24px rgba(179,34,34,0.35)',
-            }}
-          >
-            MP
-          </div>
+          <img src="/logo-mob.svg" alt="Mob Pizza" width={46} height={46} />
           <div>
-            <div style={{ fontSize: 13, color: 'var(--text-secondary)', letterSpacing: 1 }}>The Family</div>
-            <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: 2, color: 'var(--text-primary)' }}>MOB PIZZA</div>
+            <div style={{ fontSize: 13, color: 'var(--gold)', letterSpacing: 1, textTransform: 'uppercase' }}>The Family</div>
+            <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: 2, color: 'var(--gold)', fontFamily: 'Cinzel, serif' }}>Mob Pizza</div>
           </div>
         </Link>
         <nav style={{ display: 'flex', gap: 18, marginLeft: 'auto', alignItems: 'center' }}>

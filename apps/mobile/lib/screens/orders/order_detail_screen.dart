@@ -23,6 +23,8 @@ class OrderDetailScreen extends StatelessWidget {
             ),
             const Spacer(),
             const Text('Runner: Tony • ETA 18 mins', style: TextStyle(color: Color(0xFFC0B8A8))),
+            const SizedBox(height: 6),
+            const Text('Family Tip: Keep your line open; runners may call on arrival.', style: TextStyle(color: Color(0xFFC0B8A8))),
           ],
         ),
       ),

@@ -43,7 +43,15 @@ const LandingPage = () => {
             ))}
           </div>
         </div>
-        <div className="card hero-card">
+        <div
+          className="card hero-card"
+          style={{
+            backgroundImage:
+              "linear-gradient(145deg, rgba(122,31,31,0.45), rgba(12,12,16,0.82)), url('https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1400&q=80&sat=-100')",
+            border: '1px solid var(--gold)',
+            boxShadow: '0 16px 40px rgba(0,0,0,0.35)',
+          }}
+        >
           <SectionHeader eyebrow="Tonight’s Specials" title="The Hit List" subtitle="Curated by the Don" />
           <div style={{ display: 'grid', gap: 14 }}>
             {[

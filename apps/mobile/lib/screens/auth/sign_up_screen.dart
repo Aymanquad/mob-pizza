@@ -12,9 +12,9 @@ class SignUpScreen extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: ListView(
           children: [
-            const Text('Create Account', style: TextStyle(fontSize: 26, fontWeight: FontWeight.w800)),
+            const Text('Create Account', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
             const SizedBox(height: 6),
-            const Text('We keep it hush. Only the family knows.'),
+            const Text('We keep it hush. Only the family knows. Your credentials stay in the vault.'),
             const SizedBox(height: 20),
             TextField(decoration: const InputDecoration(labelText: 'Name')),
             const SizedBox(height: 12),
