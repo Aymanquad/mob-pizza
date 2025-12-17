@@ -14,6 +14,8 @@ const users = [
       spiceLevel: 'medium',
       allergies: []
     },
+    locale: 'en',
+    consents: { location: true, notifications: true },
     loyaltyPoints: 150,
     isActive: true,
     emailVerified: true,
@@ -53,6 +55,8 @@ const users = [
       spiceLevel: 'hot',
       allergies: ['nuts']
     },
+    locale: 'en',
+    consents: { location: true, notifications: false },
     loyaltyPoints: 300,
     isActive: true,
     emailVerified: true,
@@ -92,6 +96,8 @@ const users = [
       spiceLevel: 'medium',
       allergies: []
     },
+    locale: 'en',
+    consents: { location: false, notifications: false },
     loyaltyPoints: 0,
     isActive: true,
     emailVerified: true,
@@ -112,6 +118,8 @@ const users = [
       spiceLevel: 'medium',
       allergies: []
     },
+    locale: 'en',
+    consents: { location: true, notifications: true },
     loyaltyPoints: 0,
     isActive: true,
     emailVerified: true,

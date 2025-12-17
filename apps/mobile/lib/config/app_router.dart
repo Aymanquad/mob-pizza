@@ -9,86 +9,94 @@ import 'package:mob_pizza_mobile/screens/orders/orders_screen.dart';
 import 'package:mob_pizza_mobile/screens/orders/order_detail_screen.dart';
 import 'package:mob_pizza_mobile/screens/profile/profile_screen.dart';
 import 'package:mob_pizza_mobile/widgets/bottom_nav_bar.dart';
+import 'package:mob_pizza_mobile/screens/onboarding/onboarding_screen.dart';
 
 class AppRouter {
-  static final router = GoRouter(
-    initialLocation: '/', // Start with home as the main navigation item
-    routes: [
-      StatefulShellRoute.indexedStack(
-        builder: (context, state, navigationShell) {
-          return ScaffoldWithBottomNavBar(navigationShell: navigationShell);
-        },
-        branches: [
-          // Index 0: Home
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/',
-                builder: (context, state) => const HomeScreen(),
-              ),
-            ],
-          ),
-          // Index 1: Menu
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/menu',
-                builder: (context, state) => const MenuListScreen(),
-                routes: [
-                  GoRoute(
-                    path: ':id',
-                    builder: (context, state) {
-                      final id = state.pathParameters['id'] ?? '0';
-                      return ItemDetailScreen(itemIndex: int.tryParse(id) ?? 0);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-          // Index 2: Cart
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/cart',
-                builder: (context, state) => const CartScreen(),
-              ),
-            ],
-          ),
-          // Index 3: Orders
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/orders',
-                builder: (context, state) => const OrdersScreen(),
-                routes: [
-                  GoRoute(
-                    path: ':id',
-                    builder: (context, state) {
-                      final id = state.pathParameters['id'] ?? '';
-                      return OrderDetailScreen(orderId: id);
-                    },
-                  ),
-                ],
-              ),
-            ],
-          ),
-          // Index 4: Profile
-          StatefulShellBranch(
-            routes: [
-              GoRoute(
-                path: '/profile',
-                builder: (context, state) => const ProfileScreen(),
-              ),
-            ],
-          ),
-        ],
+  static GoRouter create({required bool isOnboarded}) {
+    return GoRouter(
+      initialLocation: isOnboarded ? '/' : '/onboarding',
+      // No redirect - let navigation work freely after onboarding completes
+      routes: [
+        GoRoute(
+          path: '/onboarding',
+          builder: (context, state) => const OnboardingScreen(),
+        ),
+        StatefulShellRoute.indexedStack(
+          builder: (context, state, navigationShell) {
+            return ScaffoldWithBottomNavBar(navigationShell: navigationShell);
+          },
+          branches: [
+            // Index 0: Home
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/',
+                  builder: (context, state) => const HomeScreen(),
+                ),
+              ],
+            ),
+            // Index 1: Menu
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/menu',
+                  builder: (context, state) => const MenuListScreen(),
+                  routes: [
+                    GoRoute(
+                      path: ':id',
+                      builder: (context, state) {
+                        final id = state.pathParameters['id'] ?? '0';
+                        return ItemDetailScreen(itemIndex: int.tryParse(id) ?? 0);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            // Index 2: Cart
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/cart',
+                  builder: (context, state) => const CartScreen(),
+                ),
+              ],
+            ),
+            // Index 3: Orders
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/orders',
+                  builder: (context, state) => const OrdersScreen(),
+                  routes: [
+                    GoRoute(
+                      path: ':id',
+                      builder: (context, state) {
+                        final id = state.pathParameters['id'] ?? '';
+                        return OrderDetailScreen(orderId: id);
+                      },
+                    ),
+                  ],
+                ),
+              ],
+            ),
+            // Index 4: Profile
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/profile',
+                  builder: (context, state) => const ProfileScreen(),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ],
+      errorBuilder: (context, state) => Scaffold(
+        body: Center(child: Text('Route not found: ${state.error}')),
       ),
-    ],
-    errorBuilder: (context, state) => Scaffold(
-      body: Center(child: Text('Route not found: ${state.error}')),
-    ),
-  );
+    );
+  }
 }
 
 class ScaffoldWithBottomNavBar extends StatelessWidget {

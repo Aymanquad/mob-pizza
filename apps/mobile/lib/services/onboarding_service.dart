@@ -1,0 +1,45 @@
+import 'dart:convert';
+import 'package:flutter/foundation.dart';
+import 'package:http/http.dart' as http;
+import 'package:mob_pizza_mobile/config/constants.dart';
+
+class OnboardingService {
+  Future<void> submitOnboarding({
+    required String phone,
+    required String locale,
+    required bool allowLocation,
+    required bool allowNotifications,
+  }) async {
+    final uri = Uri.parse('$apiBaseUrl/onboarding');
+    final payload = {
+      'phone': phone,
+      'locale': locale,
+      'allowLocation': allowLocation,
+      'allowNotifications': allowNotifications,
+    };
+    debugPrint('[onboarding] POST $uri payload=$payload');
+    final resp = await http
+        .post(
+          uri,
+          headers: {'Content-Type': 'application/json'},
+          body: jsonEncode(payload),
+        )
+        .timeout(const Duration(seconds: 10));
+    debugPrint('[onboarding] status=${resp.statusCode} body=${resp.body}');
+
+    if (resp.statusCode >= 200 && resp.statusCode < 300) {
+      return;
+    }
+
+    String msg = 'Onboarding failed (${resp.statusCode})';
+    try {
+      final data = jsonDecode(resp.body);
+      if (data is Map && data['message'] is String) {
+        msg = data['message'] as String;
+      }
+    } catch (_) {}
+
+    throw Exception(msg);
+  }
+}
+

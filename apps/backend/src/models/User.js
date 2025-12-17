@@ -175,6 +175,29 @@ const userSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    locale: {
+      type: String,
+      enum: ['en', 'es'],
+      default: 'en',
+    },
+    consents: {
+      location: {
+        type: Boolean,
+        default: false,
+      },
+      notifications: {
+        type: Boolean,
+        default: false,
+      },
+    },
+    onboardingCompleted: {
+      type: Boolean,
+      default: false,
+    },
+    onboardingAt: {
+      type: Date,
+      default: null,
+    },
     // User-scoped nested data
     addresses: {
       type: [addressSchema],
