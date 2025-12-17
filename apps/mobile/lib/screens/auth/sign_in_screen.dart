@@ -1,12 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 
 class SignInScreen extends StatelessWidget {
   const SignInScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
+    final formKey = GlobalKey<FormState>();
+    final emailCtrl = TextEditingController();
+    final passCtrl = TextEditingController();
     final headingStyle = GoogleFonts.cinzel(
       textStyle: const TextStyle(fontSize: 26, fontWeight: FontWeight.w800, color: Color(0xFFF5E8C7)),
     );
@@ -24,40 +29,86 @@ class SignInScreen extends StatelessWidget {
     );
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Back in the Family')),
+      appBar: AppBar(
+        title: Text(l10n.signIn),
+        backgroundColor: const Color(0xFF1C1512),
+        foregroundColor: const Color(0xFFF5E8C7),
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back, color: Color(0xFFF5E8C7)),
+          onPressed: () => context.go('/'),
+        ),
+      ),
       body: Container(
         color: const Color(0xFF0F0F0F),
         padding: const EdgeInsets.all(20),
-        child: ListView(
-          children: [
-            Text('Sign In', style: headingStyle),
-            const SizedBox(height: 6),
-            Text('Enter your credentials to get back in. We keep it hush.', style: subheadStyle),
-            const SizedBox(height: 20),
-            TextField(
-              style: fieldStyle,
-              decoration: const InputDecoration(labelText: 'Email or Phone', hintText: 'you@example.com'),
-            ),
-            const SizedBox(height: 12),
-            TextField(
-              obscureText: true,
-              style: fieldStyle,
-              decoration: const InputDecoration(labelText: 'Password', hintText: '••••••••'),
-            ),
-            const SizedBox(height: 20),
-            SizedBox(
-              width: double.infinity,
-              child: ElevatedButton(
-                style: buttonStyle,
-                onPressed: () => context.go('/'),
-                child: const Text('Back in the Family'),
+        child: Form(
+          key: formKey,
+          child: ListView(
+            children: [
+              Text(l10n.signIn, style: headingStyle),
+              const SizedBox(height: 6),
+              Text('Enter your credentials to get back in. We keep it hush.', style: subheadStyle),
+              const SizedBox(height: 20),
+              TextFormField(
+                controller: emailCtrl,
+                style: fieldStyle,
+                decoration: InputDecoration(labelText: l10n.email, hintText: 'you@example.com or +19998887777'),
+                validator: (v) {
+                  if (v == null || v.trim().isEmpty) return 'Email or phone is required';
+                  final emailOk = RegExp(r'^[^@\\s]+@[^@\\s]+\\.[^@\\s]+\$').hasMatch(v.trim());
+                  final phoneOk = RegExp(r'^\\+\\d{8,15}\$').hasMatch(v.trim());
+                  if (!emailOk && !phoneOk) return 'Enter a valid email or E.164 phone';
+                  return null;
+                },
               ),
-            ),
-            TextButton(
-              onPressed: () => context.go('/sign-up'),
-              child: Text('Join the Family', style: subheadStyle.copyWith(color: const Color(0xFFC6A667))),
-            ),
-          ],
+              const SizedBox(height: 12),
+              TextFormField(
+                controller: passCtrl,
+                obscureText: true,
+                style: fieldStyle,
+                decoration: InputDecoration(labelText: l10n.password, hintText: 'Min 8 chars, 1 upper, 1 number'),
+                validator: (v) {
+                  if (v == null || v.isEmpty) return 'Password is required';
+                  if (v.length < 8) return 'At least 8 characters';
+                  if (!RegExp(r'[A-Z]').hasMatch(v)) return 'Add at least one uppercase letter';
+                  if (!RegExp(r'\\d').hasMatch(v)) return 'Add at least one number';
+                  return null;
+                },
+              ),
+              const SizedBox(height: 20),
+              SizedBox(
+                width: double.infinity,
+                child: ElevatedButton(
+                  style: buttonStyle,
+                  onPressed: () {
+                    if (formKey.currentState?.validate() ?? false) {
+                      // TODO: call auth API
+                      context.go('/');
+                    }
+                  },
+                  child: Text(l10n.signIn),
+                ),
+              ),
+              TextButton(
+                onPressed: () => context.go('/sign-up'),
+                child: Text(l10n.signUp, style: subheadStyle.copyWith(color: const Color(0xFFC6A667))),
+              ),
+              const SizedBox(height: 16),
+              OutlinedButton(
+                style: OutlinedButton.styleFrom(
+                  foregroundColor: const Color(0xFFC6A667),
+                  side: const BorderSide(color: Color(0xFFC6A667)),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                  textStyle: const TextStyle(fontWeight: FontWeight.w700),
+                ),
+                onPressed: () {
+                  // Test user bypass: no API, no persistence
+                  context.go('/');
+                },
+                child: Text(l10n.continueAsGuest),
+              ),
+            ],
+          ),
         ),
       ),
     );

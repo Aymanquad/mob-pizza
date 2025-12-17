@@ -9,7 +9,6 @@ ThemeData buildTheme() {
   const ivory = Color(0xFFF5E8C7);
   const whiskeyBrown = Color(0xFF6B4F2C);
   const oliveMafia = Color(0xFF52604E);
-  const hitmanRed = Color(0xFFC12727);
   const silentSlate = Color(0xFF878787);
 
   final colorScheme = ColorScheme.fromSeed(
@@ -17,8 +16,7 @@ ThemeData buildTheme() {
     brightness: Brightness.light,
     primary: gangsterGold,
     secondary: bootlegBurgundy,
-    background: ivory,
-    surface: whiskeyBrown,
+    surface: ivory,
   );
 
   final baseText = GoogleFonts.interTextTheme(
@@ -106,12 +104,12 @@ ThemeData buildTheme() {
       ),
     ),
     chipTheme: ChipThemeData(
-      backgroundColor: oliveMafia.withOpacity(0.1),
+      backgroundColor: oliveMafia.withValues(alpha: 0x19),
       labelStyle: const TextStyle(color: mobBlack, fontWeight: FontWeight.w700),
       side: const BorderSide(color: silentSlate),
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(999)),
     ),
-    dividerColor: silentSlate.withOpacity(0.6),
+    dividerColor: silentSlate.withValues(alpha: 0x99),
     primaryTextTheme: baseText,
     iconTheme: const IconThemeData(color: mobBlack),
   );

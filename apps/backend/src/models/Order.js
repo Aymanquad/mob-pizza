@@ -1,0 +1,184 @@
+const mongoose = require('mongoose');
+
+const orderSchema = new mongoose.Schema({
+  orderId: {
+    type: String,
+    required: true,
+    unique: true,
+    uppercase: true
+  },
+  customer: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: [true, 'Customer is required']
+  },
+  items: [{
+    menuItem: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'MenuItem',
+      required: true
+    },
+    name: String, // Cache item name
+    image: String, // Cache item image
+    size: {
+      type: String,
+      required: true,
+      enum: ['small', 'medium', 'large', 'extra-large']
+    },
+    quantity: {
+      type: Number,
+      required: true,
+      min: [1, 'Quantity must be at least 1'],
+      max: [10, 'Quantity cannot exceed 10']
+    },
+    addOns: [{
+      toppingId: String,
+      name: String,
+      price: Number,
+      quantity: { type: Number, default: 1 }
+    }],
+    specialInstructions: {
+      type: String,
+      trim: true,
+      maxlength: [200, 'Special instructions cannot exceed 200 characters']
+    },
+    pricePerUnit: {
+      type: Number,
+      required: true,
+      min: 0
+    },
+    total: {
+      type: Number,
+      required: true,
+      min: 0
+    }
+  }],
+  orderType: {
+    type: String,
+    required: true,
+    enum: ['delivery', 'pickup'],
+    default: 'delivery'
+  },
+  deliveryAddress: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Address'
+  },
+  pickupLocation: {
+    type: String,
+    trim: true
+  },
+  subtotal: {
+    type: Number,
+    required: true,
+    min: 0
+  },
+  deliveryCharges: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
+  tax: {
+    type: Number,
+    required: true,
+    min: 0
+  },
+  discount: {
+    type: Number,
+    default: 0,
+    min: 0
+  },
+  promoCode: {
+    type: String,
+    trim: true,
+    uppercase: true
+  },
+  totalAmount: {
+    type: Number,
+    required: true,
+    min: 0
+  },
+  paymentMethod: {
+    type: String,
+    enum: ['razorpay', 'cash', 'card'],
+    default: 'razorpay'
+  },
+  paymentStatus: {
+    type: String,
+    enum: ['pending', 'completed', 'failed', 'refunded'],
+    default: 'pending'
+  },
+  orderStatus: {
+    type: String,
+    enum: ['pending', 'confirmed', 'preparing', 'ready', 'picked-up', 'delivered', 'cancelled'],
+    default: 'pending'
+  },
+  deliveryPartner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User'
+  },
+  estimatedDeliveryTime: Date,
+  actualDeliveryTime: Date,
+  customerNotes: {
+    type: String,
+    trim: true,
+    maxlength: [300, 'Notes cannot exceed 300 characters']
+  },
+  rating: {
+    type: Number,
+    min: 1,
+    max: 5
+  },
+  review: {
+    type: String,
+    trim: true,
+    maxlength: [500, 'Review cannot exceed 500 characters']
+  }
+}, {
+  timestamps: true,
+  toJSON: { virtuals: true },
+  toObject: { virtuals: true }
+});
+
+// Indexes for better query performance
+orderSchema.index({ customer: 1, createdAt: -1 });
+orderSchema.index({ orderId: 1 });
+orderSchema.index({ orderStatus: 1 });
+orderSchema.index({ deliveryPartner: 1 });
+orderSchema.index({ createdAt: -1 });
+
+// Pre-save middleware to generate orderId
+orderSchema.pre('save', async function(next) {
+  if (this.isNew && !this.orderId) {
+    const date = new Date();
+    const dateStr = date.toISOString().slice(0, 10).replace(/-/g, '');
+    const count = await mongoose.model('Order').countDocuments({
+      createdAt: { $gte: new Date(date.toDateString()) }
+    });
+    this.orderId = `ORD-${dateStr}-${String(count + 1).padStart(3, '0')}`;
+  }
+  next();
+});
+
+// Virtual for order age in minutes
+orderSchema.virtual('orderAge').get(function() {
+  return Math.floor((Date.now() - this.createdAt) / (1000 * 60));
+});
+
+// Static method to get orders by status
+orderSchema.statics.getByStatus = function(status, limit = 50) {
+  return this.find({ orderStatus: status })
+    .populate('customer', 'firstName lastName phone')
+    .populate('deliveryPartner', 'firstName lastName phone')
+    .sort({ createdAt: -1 })
+    .limit(limit);
+};
+
+// Static method to get customer's recent orders
+orderSchema.statics.getRecentOrders = function(customerId, limit = 10) {
+  return this.find({ customer: customerId })
+    .populate('items.menuItem', 'name image')
+    .sort({ createdAt: -1 })
+    .limit(limit);
+};
+
+module.exports = mongoose.model('Order', orderSchema);

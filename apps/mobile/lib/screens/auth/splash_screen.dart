@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -19,6 +20,7 @@ class _SplashScreenState extends State<SplashScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -28,15 +30,15 @@ class _SplashScreenState extends State<SplashScreen> {
             end: Alignment.bottomRight,
           ),
         ),
-        child: Center(
+        child: const Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
-            children: const [
+            children: [
               Icon(Icons.local_pizza, size: 78, color: Color(0xFFD9A441)),
               SizedBox(height: 12),
-              Text('Mob Pizza', style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
+              Text(l10n.appName, style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
               SizedBox(height: 6),
-              Text('The Family’s Slice Since 1928', style: TextStyle(color: Color(0xFFC0B8A8))),
+              Text(l10n.homeScreenSubtitle, style: TextStyle(color: Color(0xFFC0B8A8))),
               SizedBox(height: 8),
               Text('Cinematic pies, speakeasy service.', style: TextStyle(color: Color(0xFFC0B8A8))),
             ],
