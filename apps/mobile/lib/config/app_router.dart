@@ -113,11 +113,21 @@ class ScaffoldWithBottomNavBar extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: const Color(0xFF1C1512),
         elevation: 0,
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFFF5E8C7)),
-          onPressed: () => navigationShell.goBranch(0), // Always go to home tab
-          tooltip: 'Go Home',
-        ),
+        leading: navigationShell.currentIndex != 0
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back, color: Color(0xFFF5E8C7)),
+                onPressed: () {
+                  // Check if there's a page to pop within the current navigation stack
+                  if (context.canPop()) {
+                    context.pop();
+                  } else {
+                    // If no page to pop, go back to home tab
+                    navigationShell.goBranch(0);
+                  }
+                },
+                tooltip: 'Back',
+              )
+            : null,
         title: Row(
           children: [
             SvgPicture.asset(
