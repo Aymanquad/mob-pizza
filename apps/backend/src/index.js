@@ -6,6 +6,7 @@ const compression = require('compression');
 const rateLimit = require('express-rate-limit');
 const { connectDatabase } = require('./config/database');
 const onboardingRoutes = require('./routes/onboarding.routes');
+const userRoutes = require('./routes/user.routes');
 
 const PORT = process.env.PORT || 5000;
 
@@ -29,6 +30,7 @@ const createApp = () => {
 
   // Routes
   app.use('/api/v1/onboarding', onboardingRoutes);
+  app.use('/api/v1/users', userRoutes);
   // TODO: wire routes (auth/menu/order/etc.)
   app.get('/health', (_req, res) => {
     res.json({ status: 'ok', service: 'mob-pizza-api' });

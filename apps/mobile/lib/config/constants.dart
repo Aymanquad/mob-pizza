@@ -7,5 +7,8 @@ class PrefKeys {
   static const phone = 'onboardingPhone';
   static const allowLocation = 'onboardingAllowLocation';
   static const allowNotifications = 'onboardingAllowNotifications';
+  static const firstName = 'firstName';
+  static const lastName = 'lastName';
+  static const address = 'address';
 }
 
