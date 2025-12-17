@@ -128,11 +128,11 @@ abstract class AppLocalizations {
   /// **'Order Now'**
   String get orderNow;
 
-  /// No description provided for @trackJobs.
+  /// No description provided for @trackOrders.
   ///
   /// In en, this message translates to:
-  /// **'Track Jobs'**
-  String get trackJobs;
+  /// **'Track Orders'**
+  String get trackOrders;
 
   /// No description provided for @familyShortcuts.
   ///
@@ -152,29 +152,29 @@ abstract class AppLocalizations {
   /// **'Browse signature pies'**
   String get theHitListDesc;
 
-  /// No description provided for @jobSummary.
+  /// No description provided for @orderSummaryCard.
   ///
   /// In en, this message translates to:
-  /// **'Job Summary'**
-  String get jobSummary;
+  /// **'Order Summary'**
+  String get orderSummaryCard;
 
-  /// No description provided for @jobSummaryDesc.
+  /// No description provided for @orderSummaryCardDesc.
   ///
   /// In en, this message translates to:
   /// **'Your cart, Mob-styled'**
-  String get jobSummaryDesc;
+  String get orderSummaryCardDesc;
 
-  /// No description provided for @pastJobs.
+  /// No description provided for @pastOrders.
   ///
   /// In en, this message translates to:
-  /// **'Past Jobs'**
-  String get pastJobs;
+  /// **'Past Orders'**
+  String get pastOrders;
 
-  /// No description provided for @pastJobsDesc.
+  /// No description provided for @pastOrdersDesc.
   ///
   /// In en, this message translates to:
   /// **'Track & re-order'**
-  String get pastJobsDesc;
+  String get pastOrdersDesc;
 
   /// No description provided for @yourFile.
   ///
@@ -206,11 +206,11 @@ abstract class AppLocalizations {
   /// **'Convertir a Inglés?'**
   String get languageToggleSpanish;
 
-  /// No description provided for @jobsClosed.
+  /// No description provided for @ordersClosed.
   ///
   /// In en, this message translates to:
-  /// **'Jobs Closed'**
-  String get jobsClosed;
+  /// **'Orders Closed'**
+  String get ordersClosed;
 
   /// No description provided for @familyPoints.
   ///
@@ -716,11 +716,11 @@ abstract class AppLocalizations {
   /// **'Drop Location'**
   String get dropLocation;
 
-  /// No description provided for @lockInTheJob.
+  /// No description provided for @lockInTheOrder.
   ///
   /// In en, this message translates to:
-  /// **'Lock In the Job'**
-  String get lockInTheJob;
+  /// **'Lock In the Order'**
+  String get lockInTheOrder;
 }
 
 class _AppLocalizationsDelegate

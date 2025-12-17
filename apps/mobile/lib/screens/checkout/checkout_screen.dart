@@ -131,8 +131,8 @@ class CheckoutScreen extends StatelessWidget {
                           borderRadius: BorderRadius.circular(8),
                         ),
                       ),
-                      items: const [
-                        DropdownMenuItem(
+                      items: [
+                        const DropdownMenuItem(
                           value: 'razorpay',
                           child: Text(
                             'Razorpay',
@@ -164,7 +164,7 @@ class CheckoutScreen extends StatelessWidget {
                   ),
                   onPressed: () => context.go('/orders'),
                   child: Text(
-                    l10n.lockInTheJob,
+                    l10n.lockInTheOrder,
                     style: GoogleFonts.cinzel(
                       fontSize: 16,
                       fontWeight: FontWeight.w600,

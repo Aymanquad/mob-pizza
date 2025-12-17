@@ -25,7 +25,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get orderNow => 'Order Now';
 
   @override
-  String get trackJobs => 'Track Jobs';
+  String get trackOrders => 'Track Orders';
 
   @override
   String get familyShortcuts => 'Family Shortcuts';
@@ -37,16 +37,16 @@ class AppLocalizationsEn extends AppLocalizations {
   String get theHitListDesc => 'Browse signature pies';
 
   @override
-  String get jobSummary => 'Job Summary';
+  String get orderSummaryCard => 'Order Summary';
 
   @override
-  String get jobSummaryDesc => 'Your cart, Mob-styled';
+  String get orderSummaryCardDesc => 'Your cart, Mob-styled';
 
   @override
-  String get pastJobs => 'Past Jobs';
+  String get pastOrders => 'Past Orders';
 
   @override
-  String get pastJobsDesc => 'Track & re-order';
+  String get pastOrdersDesc => 'Track & re-order';
 
   @override
   String get yourFile => 'Your File';
@@ -64,7 +64,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get languageToggleSpanish => 'Convertir a Inglés?';
 
   @override
-  String get jobsClosed => 'Jobs Closed';
+  String get ordersClosed => 'Orders Closed';
 
   @override
   String get familyPoints => 'Family Points';
@@ -323,5 +323,5 @@ class AppLocalizationsEn extends AppLocalizations {
   String get dropLocation => 'Drop Location';
 
   @override
-  String get lockInTheJob => 'Lock In the Job';
+  String get lockInTheOrder => 'Lock In the Order';
 }

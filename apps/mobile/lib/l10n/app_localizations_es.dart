@@ -25,7 +25,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get orderNow => 'Ordenar Ahora';
 
   @override
-  String get trackJobs => 'Rastrear Trabajos';
+  String get trackOrders => 'Rastrear Pedidos';
 
   @override
   String get familyShortcuts => 'Atajos Familiares';
@@ -37,16 +37,16 @@ class AppLocalizationsEs extends AppLocalizations {
   String get theHitListDesc => 'Navega pizzas de firma';
 
   @override
-  String get jobSummary => 'Resumen del Trabajo';
+  String get orderSummaryCard => 'Resumen del Pedido';
 
   @override
-  String get jobSummaryDesc => 'Tu carrito, estilo Mafia';
+  String get orderSummaryCardDesc => 'Tu carrito, estilo Mafia';
 
   @override
-  String get pastJobs => 'Trabajos Pasados';
+  String get pastOrders => 'Pedidos Pasados';
 
   @override
-  String get pastJobsDesc => 'Rastrea y reordena';
+  String get pastOrdersDesc => 'Rastrea y reordena';
 
   @override
   String get yourFile => 'Tu Archivo';
@@ -64,7 +64,7 @@ class AppLocalizationsEs extends AppLocalizations {
   String get languageToggleSpanish => 'Convertir a Inglés?';
 
   @override
-  String get jobsClosed => 'Trabajos Cerrados';
+  String get ordersClosed => 'Pedidos Cerrados';
 
   @override
   String get familyPoints => 'Puntos Familiares';
@@ -323,5 +323,5 @@ class AppLocalizationsEs extends AppLocalizations {
   String get dropLocation => 'Ubicación de entrega';
 
   @override
-  String get lockInTheJob => 'Confirmar el trabajo';
+  String get lockInTheOrder => 'Confirmar el pedido';
 }

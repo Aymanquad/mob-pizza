@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
     final cards = [
       (l10n.theHitList, l10n.theHitListDesc, '/menu'),
       (isSpanish ? l10n.languageToggleSpanish : l10n.languageToggle, l10n.languageToggleDesc, ''),
-      (l10n.pastJobs, l10n.pastJobsDesc, '/orders'),
+      (l10n.pastOrders, l10n.pastOrdersDesc, '/orders'),
       (l10n.yourFile, l10n.yourFileDesc, '/profile'),
     ];
     final featured = [
@@ -27,7 +27,7 @@ class HomeScreen extends StatelessWidget {
     ];
 
     final stats = [
-      (l10n.jobsClosed, '124'),
+      (l10n.ordersClosed, '124'),
       (l10n.familyPoints, '1,240'),
       (l10n.safehouses, '3'),
     ];
@@ -100,7 +100,7 @@ class HomeScreen extends StatelessWidget {
                             side: const BorderSide(color: Color(0xFFC6A667)),
                           ),
                           onPressed: () => context.go('/orders'),
-                          child: Text(l10n.trackJobs),
+                          child: Text(l10n.trackOrders),
                         ),
                       ],
                     ),
