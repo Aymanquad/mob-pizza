@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 
 class ItemDetailScreen extends StatefulWidget {
   final int itemIndex;
@@ -320,7 +319,6 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     final item = widget.itemIndex < items.length ? items[widget.itemIndex] : items.first;
 
     return Scaffold(
@@ -331,19 +329,13 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             fontWeight: FontWeight.w900,
             fontSize: 18,
             letterSpacing: 1.2,
-            shadows: const [
-              Shadow(
-                color: Color(0xFFC6A667),
-                offset: Offset(0, 0),
-                blurRadius: 4,
-              ),
-            ],
+            color: const Color(0xFFFFF8E1),
           ),
         ),
         backgroundColor: const Color(0xFF1C1512),
         foregroundColor: const Color(0xFFF5E8C7),
-        elevation: 8,
-        shadowColor: const Color(0xFFC6A667).withValues(alpha: 0x4D),
+        elevation: 2,
+        shadowColor: Colors.black.withValues(alpha: 0x33),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFFF5E8C7)),
           onPressed: () => context.go('/menu'),
@@ -369,14 +361,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   border: Border.all(color: const Color(0xFFC6A667).withValues(alpha: 0x4D), width: 2),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFC6A667).withValues(alpha: 0x33),
-                      blurRadius: 16,
-                      offset: const Offset(0, 8),
-                    ),
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0x80),
-                      blurRadius: 12,
-                      offset: const Offset(0, 6),
+                      color: Colors.black.withValues(alpha: 0x33),
+                      blurRadius: 6,
+                      offset: const Offset(0, 3),
                     ),
                   ],
                 ),
@@ -410,9 +397,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       border: Border.all(color: const Color(0xFFC6A667), width: 1.5),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFC6A667).withValues(alpha: 0x33),
-                          blurRadius: 8,
-                          offset: const Offset(0, 3),
+                          color: Colors.black.withValues(alpha: 0x26),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
                         ),
                       ],
                     ),
@@ -451,14 +438,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   border: Border.all(color: const Color(0xFF878787), width: 1.5),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFC6A667).withValues(alpha: 0x26),
-                      blurRadius: 12,
-                      offset: const Offset(0, 6),
-                    ),
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0x66),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
+                      color: Colors.black.withValues(alpha: 0x33),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -470,7 +452,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       style: GoogleFonts.cinzel(
                         fontWeight: FontWeight.w900,
                         fontSize: 14,
-                        color: const Color(0xFFC6A667),
+                        color: const Color(0xFFD4AF7A),
                         letterSpacing: 1.5,
                       ),
                     ),
@@ -479,7 +461,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       item.$6,
                       textAlign: TextAlign.center,
                       style: const TextStyle(
-                        color: Color(0xFFF5E8C7),
+                        color: Color(0xFFFFF8E1),
                         fontSize: 14,
                         fontFamily: 'Lato',
                         height: 1.6,
@@ -499,14 +481,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   border: Border.all(color: const Color(0xFF878787), width: 1.5),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFC6A667).withValues(alpha: 0x26),
-                      blurRadius: 12,
-                      offset: const Offset(0, 6),
-                    ),
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0x66),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
+                      color: Colors.black.withValues(alpha: 0x33),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -518,7 +495,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       style: GoogleFonts.cinzel(
                         fontWeight: FontWeight.w900,
                         fontSize: 14,
-                        color: const Color(0xFFC6A667),
+                        color: const Color(0xFFD4AF7A),
                         letterSpacing: 1.5,
                       ),
                     ),
@@ -558,14 +535,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   border: Border.all(color: const Color(0xFF878787), width: 1.5),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFC6A667).withValues(alpha: 0x26),
-                      blurRadius: 12,
-                      offset: const Offset(0, 6),
-                    ),
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0x66),
-                      blurRadius: 8,
-                      offset: const Offset(0, 4),
+                      color: Colors.black.withValues(alpha: 0x33),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -577,7 +549,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       style: GoogleFonts.cinzel(
                         fontWeight: FontWeight.w900,
                         fontSize: 14,
-                        color: const Color(0xFFC6A667),
+                        color: const Color(0xFFD4AF7A),
                         letterSpacing: 1.5,
                       ),
                     ),
@@ -646,9 +618,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   border: Border.all(color: const Color(0xFFC6A667), width: 1.5),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFFC6A667).withValues(alpha: 0x33),
-                      blurRadius: 8,
-                      offset: const Offset(0, 3),
+                      color: Colors.black.withValues(alpha: 0x26),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -660,7 +632,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       style: GoogleFonts.cinzel(
                         fontWeight: FontWeight.w900,
                         fontSize: 14,
-                        color: const Color(0xFFC6A667),
+                        color: const Color(0xFFD4AF7A),
                         letterSpacing: 1.5,
                       ),
                     ),
@@ -712,9 +684,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   border: Border.all(color: const Color(0xFF878787), width: 2),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0x80),
-                      blurRadius: 10,
-                      offset: const Offset(0, 5),
+                      color: Colors.black.withValues(alpha: 0x33),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
@@ -731,8 +703,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              elevation: 4,
-                              shadowColor: const Color(0xFFC6A667).withValues(alpha: 0x4D),
+                              elevation: 2,
+                              shadowColor: Colors.black.withValues(alpha: 0x33),
                               minimumSize: const Size(double.infinity, 50),
                             ),
                             child: const Text(
@@ -755,8 +727,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(12),
                               ),
-                              elevation: 4,
-                              shadowColor: const Color(0xFF7A1F1F).withValues(alpha: 0x4D),
+                              elevation: 2,
+                              shadowColor: Colors.black.withValues(alpha: 0x33),
                               minimumSize: const Size(double.infinity, 50),
                             ),
                             child: const Text(
@@ -780,9 +752,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         border: Border.all(color: const Color(0xFF878787), width: 1.5),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0x4D),
-                            blurRadius: 6,
-                            offset: const Offset(0, 2),
+                            color: Colors.black.withValues(alpha: 0x26),
+                            blurRadius: 3,
+                            offset: const Offset(0, 1),
                           ),
                         ],
                       ),

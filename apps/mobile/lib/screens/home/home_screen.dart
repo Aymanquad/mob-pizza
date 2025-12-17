@@ -5,8 +5,26 @@ import 'package:provider/provider.dart';
 import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 import 'package:mob_pizza_mobile/providers/locale_provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final GlobalKey _familyBulletinKey = GlobalKey();
+
+  void _scrollToFamilyBulletin() {
+    final context = _familyBulletinKey.currentContext;
+    if (context != null) {
+      Scrollable.ensureVisible(
+        context,
+        duration: const Duration(milliseconds: 500),
+        curve: Curves.easeInOut,
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +39,9 @@ class HomeScreen extends StatelessWidget {
       (l10n.yourFile, l10n.yourFileDesc, '/profile'),
     ];
     final featured = [
-      (l10n.bossPick, l10n.margheritaBoss, '\$12', 'Solo • Extra cheese'),
-      (l10n.houseSecret, l10n.smokyCapo, '\$15', 'Brick oven • Sweet heat'),
-      (l10n.familyCombo, l10n.crewFeast, '\$29', '2 pies • Sides • Liquid alibi'),
+      (l10n.bossPick, l10n.margheritaBoss, '\$12', 'Solo • Extra cheese', 0), // Item ID 0
+      (l10n.houseSecret, l10n.smokyCapo, '\$15', 'Brick oven • Sweet heat', 1), // Item ID 1
+      (l10n.familyCombo, l10n.crewFeast, '\$29', '2 pies • Sides • Liquid alibi', 2), // Item ID 2
     ];
 
     final stats = [
@@ -107,13 +125,22 @@ class HomeScreen extends StatelessWidget {
                     const SizedBox(height: 12),
                     SvgPicture.asset('assets/icons/filigree_bottom.svg', width: 140, colorFilter: const ColorFilter.mode(Color(0xFFC6A667), BlendMode.srcIn)),
                     const SizedBox(height: 12),
-                    const Wrap(
+                    Wrap(
                       spacing: 10,
                       runSpacing: 8,
                       children: [
-                        Chip(label: Text('Boss Picks')),
-                        Chip(label: Text('Under-the-Table Deals')),
-                        Chip(label: Text('Family Combos')),
+                        ActionChip(
+                          label: const Text('Boss Picks'),
+                          onPressed: _scrollToFamilyBulletin,
+                        ),
+                        ActionChip(
+                          label: const Text('Under-the-Table Deals'),
+                          onPressed: _scrollToFamilyBulletin,
+                        ),
+                        ActionChip(
+                          label: const Text('Family Combos'),
+                          onPressed: _scrollToFamilyBulletin,
+                        ),
                       ],
                     ),
                   ],
@@ -242,6 +269,7 @@ class HomeScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
           Container(
+            key: _familyBulletinKey,
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: const Color(0xFF0F0F0F),
@@ -254,21 +282,41 @@ class HomeScreen extends StatelessWidget {
                 Text(l10n.familyBulletin, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFFC6A667))),
                 const SizedBox(height: 8),
                 ...featured.map(
-                  (f) => Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 6),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(f.$1, style: const TextStyle(color: Color(0xFFC6A667), fontWeight: FontWeight.w700)),
-                            Text(f.$2, style: const TextStyle(color: Color(0xFFF5E8C7), fontWeight: FontWeight.w800)),
-                            Text(f.$4, style: const TextStyle(color: Color(0xFF878787))),
-                          ],
-                        ),
-                        Text(f.$3, style: const TextStyle(color: Color(0xFFF5E8C7), fontWeight: FontWeight.w800)),
-                      ],
+                  (f) => GestureDetector(
+                    onTap: () => context.go('/menu/${f.$5}'),
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(vertical: 6),
+                      padding: const EdgeInsets.all(12),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF1C1512),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(color: const Color(0xFF878787).withValues(alpha: 0x4D)),
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(f.$1, style: const TextStyle(color: Color(0xFFC6A667), fontWeight: FontWeight.w700, fontSize: 12)),
+                                const SizedBox(height: 4),
+                                Text(f.$2, style: const TextStyle(color: Color(0xFFF5E8C7), fontWeight: FontWeight.w800, fontSize: 16)),
+                                const SizedBox(height: 4),
+                                Text(f.$4, style: const TextStyle(color: Color(0xFF878787), fontSize: 12)),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 12),
+                          Column(
+                            children: [
+                              Text(f.$3, style: const TextStyle(color: Color(0xFFC6A667), fontWeight: FontWeight.w800, fontSize: 18)),
+                              const SizedBox(height: 4),
+                              const Icon(Icons.arrow_forward_ios, color: Color(0xFF878787), size: 16),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),

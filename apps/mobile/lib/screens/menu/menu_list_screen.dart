@@ -2,8 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 
-class MenuListScreen extends StatelessWidget {
+class MenuListScreen extends StatefulWidget {
   const MenuListScreen({super.key});
+
+  @override
+  State<MenuListScreen> createState() => _MenuListScreenState();
+}
+
+class _MenuListScreenState extends State<MenuListScreen> {
+  String _searchQuery = '';
 
   String getSpiceLevel(String name, String description) {
     final lowerName = name.toLowerCase();
@@ -246,28 +253,39 @@ class MenuListScreen extends StatelessWidget {
                 border: Border.all(color: const Color(0xFF878787), width: 1.5),
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withValues(alpha: 0x4D),
-                    blurRadius: 8,
-                    offset: const Offset(0, 3),
-                  ),
-                  BoxShadow(
-                    color: const Color(0xFFC6A667).withValues(alpha: 0x19),
+                    color: Colors.black.withValues(alpha: 0x26),
                     blurRadius: 4,
-                    offset: const Offset(0, 1),
+                    offset: const Offset(0, 2),
                   ),
                 ],
               ),
               child: TextField(
-                style: TextStyle(
-                  color: Color(0xFFF5E8C7),
+                onChanged: (value) {
+                  setState(() {
+                    _searchQuery = value.toLowerCase();
+                  });
+                },
+                style: const TextStyle(
+                  color: Color(0xFF000000),
                   fontFamily: 'Cinzel',
                   fontSize: 14,
                   letterSpacing: 0.5,
+                  fontWeight: FontWeight.w600,
                 ),
                 decoration: InputDecoration(
-                  prefixIcon: Icon(Icons.search, color: Color(0xFFC6A667)),
+                  prefixIcon: const Icon(Icons.search, color: Color(0xFFC6A667)),
+                  suffixIcon: _searchQuery.isNotEmpty
+                      ? IconButton(
+                          icon: const Icon(Icons.clear, color: Color(0xFFC6A667)),
+                          onPressed: () {
+                            setState(() {
+                              _searchQuery = '';
+                            });
+                          },
+                        )
+                      : null,
                   hintText: l10n.searchMenu,
-                  hintStyle: TextStyle(
+                  hintStyle: const TextStyle(
                     color: Color(0xFFC6A667),
                     fontFamily: 'Cinzel',
                     fontStyle: FontStyle.italic,
@@ -275,14 +293,72 @@ class MenuListScreen extends StatelessWidget {
                     letterSpacing: 0.8,
                   ),
                   border: InputBorder.none,
-                  contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+                  contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
                 ),
               ),
             ),
             const SizedBox(height: 16),
+            // Check if any items match the search
+            if (_searchQuery.isNotEmpty && 
+                sections.every((section) => 
+                  section.$2.every((item) => 
+                    !item.$1.toLowerCase().contains(_searchQuery) && 
+                    !item.$2.toLowerCase().contains(_searchQuery) &&
+                    !section.$1.toLowerCase().contains(_searchQuery)
+                  )
+                ))
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.all(32),
+                  child: Column(
+                    children: [
+                      const Icon(
+                        Icons.search_off,
+                        size: 64,
+                        color: Color(0xFF878787),
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'No pizzas found',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.w700,
+                          color: Color(0xFFC6A667),
+                          fontFamily: 'Cinzel',
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        'Try searching with different keywords',
+                        style: const TextStyle(
+                          fontSize: 14,
+                          color: Color(0xFF878787),
+                          fontFamily: 'Inter',
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ...sections.map((section) {
               final sectionTitle = section.$1;
               final sectionItems = section.$2;
+              
+              // Filter items based on search query
+              final filteredItems = _searchQuery.isEmpty
+                  ? sectionItems
+                  : sectionItems.where((item) {
+                      final name = item.$1.toLowerCase();
+                      final description = item.$2.toLowerCase();
+                      return name.contains(_searchQuery) || 
+                             description.contains(_searchQuery) ||
+                             sectionTitle.toLowerCase().contains(_searchQuery);
+                    }).toList();
+              
+              // Skip section if no items match
+              if (filteredItems.isEmpty) {
+                return const SizedBox.shrink();
+              }
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -299,14 +375,14 @@ class MenuListScreen extends StatelessWidget {
                       border: Border.all(color: const Color(0xFFC6A667), width: 2),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFFC6A667).withValues(alpha: 0x66),
-                          blurRadius: 12,
-                          offset: const Offset(0, 4),
-                        ),
-                        BoxShadow(
-                          color: Colors.black.withValues(alpha: 0x4D),
+                          color: const Color(0xFFC6A667).withValues(alpha: 0x33),
                           blurRadius: 6,
                           offset: const Offset(0, 2),
+                        ),
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0x26),
+                          blurRadius: 3,
+                          offset: const Offset(0, 1),
                         ),
                       ],
                     ),
@@ -323,22 +399,19 @@ class MenuListScreen extends StatelessWidget {
                           height: 1.2,
                           shadows: [
                             Shadow(
-                              color: Color(0xFFC6A667),
-                              offset: Offset(0, 0),
-                              blurRadius: 6,
-                            ),
-                            Shadow(
                               color: Color(0xFF000000),
-                              offset: Offset(0.5, 0.5),
-                              blurRadius: 1,
+                              offset: Offset(0, 1),
+                              blurRadius: 2,
                             ),
                           ],
                         ),
                       ),
                     ),
                   ),
-                  ...sectionItems.asMap().entries.map((entry) {
-                    final globalIndex = sections.takeWhile((s) => s.$1 != sectionTitle).fold<int>(0, (sum, s) => sum + s.$2.length) + entry.key;
+                  ...filteredItems.asMap().entries.map((entry) {
+                    // Find the original index in sectionItems
+                    final originalIndexInSection = sectionItems.indexOf(entry.value);
+                    final globalIndex = sections.takeWhile((s) => s.$1 != sectionTitle).fold<int>(0, (sum, s) => sum + s.$2.length) + originalIndexInSection;
                     final spiceLevel = getSpiceLevel(entry.value.$1, entry.value.$2);
                     return GestureDetector(
                       onTap: () => context.go('/menu/$globalIndex'),
@@ -355,19 +428,9 @@ class MenuListScreen extends StatelessWidget {
                           border: Border.all(color: const Color(0xFF878787), width: 2),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFFC6A667).withValues(alpha: 0x26),
-                              blurRadius: 16,
-                              offset: const Offset(0, 8),
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0x80),
-                              blurRadius: 12,
-                              offset: const Offset(0, 6),
-                            ),
-                            BoxShadow(
-                              color: Colors.black.withValues(alpha: 0x4D),
-                              blurRadius: 4,
-                              offset: const Offset(0, 2),
+                              color: Colors.black.withValues(alpha: 0x33),
+                              blurRadius: 6,
+                              offset: const Offset(0, 3),
                             ),
                           ],
                 ),
@@ -419,15 +482,15 @@ class MenuListScreen extends StatelessWidget {
                               style: const TextStyle(
                                 fontFamily: 'Playfair Display',
                                 fontWeight: FontWeight.w900,
-                                fontSize: 16,
-                                color: Color(0xFFF5E8C7),
-                                letterSpacing: 0.2,
+                                fontSize: 17,
+                                color: Color(0xFFFFF8E1),
+                                letterSpacing: 0.3,
                                 height: 1.1,
                                 shadows: [
                                   Shadow(
-                                    color: Color(0xFFC6A667),
-                                    offset: Offset(0, 0),
-                                    blurRadius: 4,
+                                    color: Color(0xFF000000),
+                                    offset: Offset(0.5, 0.5),
+                                    blurRadius: 2,
                                   ),
                                 ],
                               ),
@@ -438,8 +501,8 @@ class MenuListScreen extends StatelessWidget {
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: const TextStyle(
-                                color: Color(0xFFC6A667),
-                                fontSize: 11,
+                                color: Color(0xFFD4AF7A),
+                                fontSize: 12,
                                 fontFamily: 'Inter',
                                 height: 1.3,
                                 fontStyle: FontStyle.italic,
@@ -450,14 +513,22 @@ class MenuListScreen extends StatelessWidget {
                                       const SizedBox(height: 6),
                                       Row(
                                         children: [
-                                          Text(
-                                            'Heat Level: $spiceLevel',
-                                            style: const TextStyle(
-                                              color: Color(0xFFFF6B6B),
-                                              fontSize: 9,
-                                              fontWeight: FontWeight.w700,
-                                              fontFamily: 'Cinzel',
-                                              letterSpacing: 0.2,
+                                          Container(
+                                            padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
+                                            decoration: BoxDecoration(
+                                              color: const Color(0xFFFF6B6B).withValues(alpha: 0x33),
+                                              borderRadius: BorderRadius.circular(8),
+                                              border: Border.all(color: const Color(0xFFFF6B6B), width: 1),
+                                            ),
+                                            child: Text(
+                                              'Heat Level: $spiceLevel',
+                                              style: const TextStyle(
+                                                color: Color(0xFFFFE0E0),
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.w700,
+                                                fontFamily: 'Cinzel',
+                                                letterSpacing: 0.3,
+                                              ),
                                             ),
                                           ),
                                         ],
@@ -471,15 +542,15 @@ class MenuListScreen extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                                     decoration: BoxDecoration(
-                                      color: const Color(0xFFC6A667).withValues(alpha: 0x19),
+                                      color: const Color(0xFFC6A667),
                                       borderRadius: BorderRadius.circular(20),
-                                      border: Border.all(color: const Color(0xFFC6A667), width: 1.5),
+                                      border: Border.all(color: const Color(0xFFF5E8C7), width: 2),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: const Color(0xFFC6A667).withValues(alpha: 0x33),
-                                          blurRadius: 6,
+                                          color: Colors.black.withValues(alpha: 0x33),
+                                          blurRadius: 4,
                                           offset: const Offset(0, 2),
                                         ),
                                       ],
@@ -488,43 +559,36 @@ class MenuListScreen extends StatelessWidget {
                                       '\$${entry.value.$3.toStringAsFixed(2)}',
                                       style: const TextStyle(
                                         fontWeight: FontWeight.w900,
-                                        fontSize: 14,
-                                        color: Color(0xFFC6A667),
+                                        fontSize: 15,
+                                        color: Color(0xFF1C1512),
                                         fontFamily: 'Cinzel',
                                         letterSpacing: 0.5,
-                                        shadows: [
-                                          Shadow(
-                                            color: Color(0xFF000000),
-                                            offset: Offset(0.5, 0.5),
-                                            blurRadius: 2,
-                                          ),
-                                        ],
                                       ),
                                     ),
                                   ),
                                   const SizedBox(height: 8),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
                                     decoration: BoxDecoration(
-                                      color: entry.value.$4 ? Colors.greenAccent.withValues(alpha: 0x19) : Colors.redAccent.withValues(alpha: 0x19),
+                                      color: entry.value.$4 ? const Color(0xFF00E676) : const Color(0xFFFF5252),
                                       borderRadius: BorderRadius.circular(16),
                                       border: Border.all(
-                                        color: entry.value.$4 ? Colors.greenAccent : Colors.redAccent,
-                                        width: 1.5,
+                                        color: entry.value.$4 ? const Color(0xFF69F0AE) : const Color(0xFFFF8A80),
+                                        width: 2,
                                       ),
                                       boxShadow: [
                                         BoxShadow(
-                                          color: (entry.value.$4 ? Colors.greenAccent : Colors.redAccent).withValues(alpha: 0x33),
-                                          blurRadius: 4,
+                                          color: Colors.black.withValues(alpha: 0x26),
+                                          blurRadius: 3,
                                           offset: const Offset(0, 1),
                                         ),
                                       ],
                                     ),
                                     child: Text(
                                       entry.value.$4 ? 'VEG' : 'NON-VEG',
-                                      style: TextStyle(
-                                        color: entry.value.$4 ? Colors.greenAccent : Colors.redAccent,
-                                        fontSize: 8,
+                                      style: const TextStyle(
+                                        color: Color(0xFF000000),
+                                        fontSize: 9,
                                         fontWeight: FontWeight.w900,
                                         letterSpacing: 0.8,
                                         fontFamily: 'Cinzel',
