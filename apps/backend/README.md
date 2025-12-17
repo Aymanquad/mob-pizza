@@ -65,17 +65,21 @@ src/
 └── index.js                 # App entry point
 ```
 
-## 🗄️ Database Collections
+## 🗄️ Database Model (User-Centric)
 
-The API uses MongoDB with the following collections:
+Everything is organized around the **Users** collection. User documents embed their own profile data plus scoped resources, so all user-owned data stays under the user:
 
-- **Users**: Customer, admin, and delivery partner accounts
-- **MenuItems**: Pizza items, sides, drinks with pricing and customization
-- **Orders**: Customer orders with status tracking
-- **Addresses**: Delivery addresses for users
-- **Reviews**: Customer reviews and ratings
-- **Promos**: Discount codes and promotional offers
-- **DeliveryPartners**: Delivery personnel information
+- **Users** (root)
+  - Profile, auth, preferences, loyalty, verification flags
+  - Embedded **addresses** (label, full address, geo coords, default flag)
+  - Embedded **paymentMethods** (brand, last4, expiry, token, default flag)
+  - **favorites** (refs to MenuItems)
+  - Activity fields: `ordersCount`, `lastOrderAt`
+- **Orders** (ref userId) – detailed order records with status tracking
+- **MenuItems** – pizzas, sides, drinks with pricing and customization
+- **Reviews** (ref userId & itemId) – customer feedback and ratings
+- **Promos** – discount codes and promotional offers
+- **DeliveryPartners** – delivery personnel linked back to Users (role `delivery`)
 
 ## 🔧 Environment Variables
 

@@ -1,89 +1,221 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 
-const userSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: [true, 'First name is required'],
-    trim: true,
-    maxlength: [50, 'First name cannot exceed 50 characters']
-  },
-  lastName: {
-    type: String,
-    required: [true, 'Last name is required'],
-    trim: true,
-    maxlength: [50, 'Last name cannot exceed 50 characters']
-  },
-  email: {
-    type: String,
-    required: [true, 'Email is required'],
-    unique: true,
-    lowercase: true,
-    trim: true,
-    match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email']
-  },
-  phone: {
-    type: String,
-    required: [true, 'Phone number is required'],
-    unique: true,
-    trim: true,
-    match: [/^\+?[1-9]\d{1,14}$/, 'Please enter a valid phone number']
-  },
-  passwordHash: {
-    type: String,
-    required: [true, 'Password is required'],
-    minlength: [6, 'Password must be at least 6 characters long']
-  },
-  profileImage: {
-    type: String,
-    default: null
-  },
-  role: {
-    type: String,
-    enum: ['customer', 'admin', 'delivery'],
-    default: 'customer'
-  },
-  preferences: {
-    dietary: [{
+// Embedded address schema (user-scoped)
+const addressSchema = new mongoose.Schema(
+  {
+    label: {
       type: String,
-      enum: ['vegetarian', 'vegan', 'gluten-free', 'halal', 'kosher']
-    }],
-    spiceLevel: {
-      type: String,
-      enum: ['mild', 'medium', 'hot', 'extra-hot'],
-      default: 'medium'
+      required: [true, 'Address label is required'],
+      enum: ['home', 'office', 'other'],
+      default: 'home',
     },
-    allergies: [{
+    street: {
       type: String,
-      trim: true
-    }]
+      required: [true, 'Street address is required'],
+      trim: true,
+      maxlength: [200, 'Street address cannot exceed 200 characters'],
+    },
+    city: {
+      type: String,
+      required: [true, 'City is required'],
+      trim: true,
+      maxlength: [50, 'City cannot exceed 50 characters'],
+    },
+    state: {
+      type: String,
+      required: [true, 'State is required'],
+      trim: true,
+      maxlength: [50, 'State cannot exceed 50 characters'],
+    },
+    zipCode: {
+      type: String,
+      required: [true, 'ZIP code is required'],
+      trim: true,
+      maxlength: [10, 'ZIP code cannot exceed 10 characters'],
+    },
+    coordinates: {
+      type: {
+        type: String,
+        enum: ['Point'],
+        default: 'Point',
+      },
+      coordinates: {
+        type: [Number], // [longitude, latitude]
+        validate: {
+          validator: function (coords) {
+            return (
+              coords.length === 2 &&
+              coords[0] >= -180 &&
+              coords[0] <= 180 &&
+              coords[1] >= -90 &&
+              coords[1] <= 90
+            );
+          },
+          message: 'Invalid coordinates format',
+        },
+      },
+    },
+    instructions: {
+      type: String,
+      trim: true,
+      maxlength: [200, 'Delivery instructions cannot exceed 200 characters'],
+    },
+    isDefault: {
+      type: Boolean,
+      default: false,
+    },
   },
-  loyaltyPoints: {
-    type: Number,
-    default: 0,
-    min: 0
+  { _id: true }
+);
+
+// Embedded payment method schema (user-scoped)
+const paymentMethodSchema = new mongoose.Schema(
+  {
+    brand: {
+      type: String,
+      trim: true,
+    },
+    last4: {
+      type: String,
+      trim: true,
+      minlength: 4,
+      maxlength: 4,
+    },
+    expiryMonth: Number,
+    expiryYear: Number,
+    token: {
+      type: String,
+      trim: true,
+    },
+    isDefault: {
+      type: Boolean,
+      default: false,
+    },
   },
-  isActive: {
-    type: Boolean,
-    default: true
+  { _id: true }
+);
+
+const userSchema = new mongoose.Schema(
+  {
+    firstName: {
+      type: String,
+      required: [true, 'First name is required'],
+      trim: true,
+      maxlength: [50, 'First name cannot exceed 50 characters'],
+    },
+    lastName: {
+      type: String,
+      required: [true, 'Last name is required'],
+      trim: true,
+      maxlength: [50, 'Last name cannot exceed 50 characters'],
+    },
+    email: {
+      type: String,
+      required: [true, 'Email is required'],
+      unique: true,
+      lowercase: true,
+      trim: true,
+      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email'],
+    },
+    phone: {
+      type: String,
+      required: [true, 'Phone number is required'],
+      unique: true,
+      trim: true,
+      match: [/^\+?[1-9]\d{1,14}$/, 'Please enter a valid phone number'],
+    },
+    passwordHash: {
+      type: String,
+      required: [true, 'Password is required'],
+      minlength: [6, 'Password must be at least 6 characters long'],
+    },
+    profileImage: {
+      type: String,
+      default: null,
+    },
+    role: {
+      type: String,
+      enum: ['customer', 'admin', 'delivery'],
+      default: 'customer',
+    },
+    preferences: {
+      dietary: [
+        {
+          type: String,
+          enum: ['vegetarian', 'vegan', 'gluten-free', 'halal', 'kosher'],
+        },
+      ],
+      spiceLevel: {
+        type: String,
+        enum: ['mild', 'medium', 'hot', 'extra-hot'],
+        default: 'medium',
+      },
+      allergies: [
+        {
+          type: String,
+          trim: true,
+        },
+      ],
+    },
+    loyaltyPoints: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    isActive: {
+      type: Boolean,
+      default: true,
+    },
+    emailVerified: {
+      type: Boolean,
+      default: false,
+    },
+    phoneVerified: {
+      type: Boolean,
+      default: false,
+    },
+    // User-scoped nested data
+    addresses: {
+      type: [addressSchema],
+      default: [],
+    },
+    favorites: [
+      {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'MenuItem',
+      },
+    ],
+    paymentMethods: {
+      type: [paymentMethodSchema],
+      default: [],
+    },
+    ordersCount: {
+      type: Number,
+      default: 0,
+      min: 0,
+    },
+    lastOrderAt: {
+      type: Date,
+      default: null,
+    },
   },
-  emailVerified: {
-    type: Boolean,
-    default: false
-  },
-  phoneVerified: {
-    type: Boolean,
-    default: false
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
   }
-}, {
-  timestamps: true,
-  toJSON: { virtuals: true },
-  toObject: { virtuals: true }
-});
+);
 
 // Virtual for full name
-userSchema.virtual('fullName').get(function() {
+userSchema.virtual('fullName').get(function () {
   return `${this.firstName} ${this.lastName}`;
+});
+
+// Virtual to get default address
+userSchema.virtual('defaultAddress').get(function () {
+  if (!this.addresses) return null;
+  return this.addresses.find((addr) => addr.isDefault) || this.addresses[0] || null;
 });
 
 // Index for better query performance
@@ -91,9 +223,11 @@ userSchema.index({ email: 1 });
 userSchema.index({ phone: 1 });
 userSchema.index({ role: 1 });
 userSchema.index({ createdAt: -1 });
+userSchema.index({ 'addresses.isDefault': 1 });
+userSchema.index({ favorites: 1 });
 
 // Hash password before saving
-userSchema.pre('save', async function(next) {
+userSchema.pre('save', async function (next) {
   if (!this.isModified('passwordHash')) return next();
 
   try {
@@ -105,13 +239,29 @@ userSchema.pre('save', async function(next) {
   }
 });
 
+// Ensure only one default address
+userSchema.pre('save', function (next) {
+  if (!this.isModified('addresses')) return next();
+  const defaults = this.addresses?.filter((addr) => addr.isDefault) || [];
+  if (defaults.length > 1) {
+    // Keep the first default, unset others
+    const keepId = defaults[0]._id?.toString?.();
+    this.addresses = this.addresses.map((addr) =>
+      addr.isDefault && keepId && addr._id?.toString?.() !== keepId
+        ? { ...addr.toObject(), isDefault: false }
+        : addr
+    );
+  }
+  next();
+});
+
 // Compare password method
-userSchema.methods.comparePassword = async function(candidatePassword) {
+userSchema.methods.comparePassword = async function (candidatePassword) {
   return bcrypt.compare(candidatePassword, this.passwordHash);
 };
 
 // Remove password from JSON output
-userSchema.methods.toJSON = function() {
+userSchema.methods.toJSON = function () {
   const userObject = this.toObject();
   delete userObject.passwordHash;
   delete userObject.__v;

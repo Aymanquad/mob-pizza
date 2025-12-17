@@ -17,7 +17,29 @@ const users = [
     loyaltyPoints: 150,
     isActive: true,
     emailVerified: true,
-    phoneVerified: true
+    phoneVerified: true,
+    addresses: [
+      {
+        label: 'home',
+        street: '221B Baker Street',
+        city: 'London',
+        state: 'Greater London',
+        zipCode: 'NW16XE',
+        coordinates: { type: 'Point', coordinates: [-0.1586, 51.5238] },
+        isDefault: true
+      }
+    ],
+    favorites: [],
+    paymentMethods: [
+      {
+        brand: 'visa',
+        last4: '4242',
+        expiryMonth: 12,
+        expiryYear: 2026,
+        token: 'tok_test_visa',
+        isDefault: true
+      }
+    ]
   },
   {
     firstName: 'Jane',
@@ -34,7 +56,29 @@ const users = [
     loyaltyPoints: 300,
     isActive: true,
     emailVerified: true,
-    phoneVerified: true
+    phoneVerified: true,
+    addresses: [
+      {
+        label: 'home',
+        street: '742 Evergreen Terrace',
+        city: 'Springfield',
+        state: 'Oregon',
+        zipCode: '97403',
+        coordinates: { type: 'Point', coordinates: [-122.6822, 44.0462] },
+        isDefault: true
+      },
+      {
+        label: 'office',
+        street: '123 Business Ave',
+        city: 'Springfield',
+        state: 'Oregon',
+        zipCode: '97404',
+        coordinates: { type: 'Point', coordinates: [-122.678, 44.05] },
+        isDefault: false
+      }
+    ],
+    favorites: [],
+    paymentMethods: []
   },
   {
     firstName: 'Admin',
@@ -51,7 +95,10 @@ const users = [
     loyaltyPoints: 0,
     isActive: true,
     emailVerified: true,
-    phoneVerified: true
+    phoneVerified: true,
+    addresses: [],
+    favorites: [],
+    paymentMethods: []
   },
   {
     firstName: 'Delivery',
@@ -68,7 +115,10 @@ const users = [
     loyaltyPoints: 0,
     isActive: true,
     emailVerified: true,
-    phoneVerified: true
+    phoneVerified: true,
+    addresses: [],
+    favorites: [],
+    paymentMethods: []
   }
 ];
 

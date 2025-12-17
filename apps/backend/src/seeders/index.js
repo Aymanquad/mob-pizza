@@ -1,3 +1,4 @@
+require('dotenv').config();
 const mongoose = require('mongoose');
 const { connectDatabase } = require('../config/database');
 const { seedUsers } = require('./seedUsers');

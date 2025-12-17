@@ -72,7 +72,8 @@ const menuItems = [
     category: 'liquid-alibis',
     basePrice: 49,
     isVegetarian: true,
-    preparationTime: 1,
+    // Relaxed to meet minimum prep time validator (>=5)
+    preparationTime: 5,
     rating: 4.0,
     allergens: [],
     tags: ['drink', 'cola', 'classic']
