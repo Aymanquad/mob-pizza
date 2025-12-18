@@ -52,15 +52,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     });
 
     try {
-      // Try to reach the backend by making a simple request
-      // We'll try to get a user profile with a test phone number
-      final testUrl = '$apiBaseUrl/users/test123';
-      debugPrint('[onboarding] Testing connection to: $testUrl');
+      // Try the health endpoint first (at root, not under /api/v1)
+      final baseUrl = apiBaseUrl.replaceAll('/api/v1', '');
+      final healthUrl = '$baseUrl/health';
+      debugPrint('[onboarding] Testing connection to: $healthUrl');
       
       final response = await http.get(
-        Uri.parse(testUrl),
+        Uri.parse(healthUrl),
         headers: {'Content-Type': 'application/json'},
-      ).timeout(const Duration(seconds: 5));
+      ).timeout(const Duration(seconds: 10));
 
       if (mounted) {
         setState(() {
@@ -87,14 +87,35 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       if (mounted) {
         setState(() {
           _testingConnection = false;
-          _connectionStatus = '❌ Connection failed: ${e.toString()}';
+          String errorMessage = 'Connection failed';
+          
+          // Provide more helpful error messages
+          if (e.toString().contains('Failed host lookup') || 
+              e.toString().contains('No address associated with hostname')) {
+            errorMessage = '❌ DNS Error: Cannot resolve hostname.\n\n'
+                'Possible causes:\n'
+                '• No internet connection\n'
+                '• Render service may be sleeping (free tier)\n'
+                '• DNS server issue\n\n'
+                'Try: Check internet connection or wait 30 seconds and retry.';
+          } else if (e.toString().contains('timeout')) {
+            errorMessage = '❌ Timeout: Backend took too long to respond.\n\n'
+                'The server may be starting up (free tier takes ~30 seconds).';
+          } else {
+            errorMessage = '❌ Error: ${e.toString()}';
+          }
+          
+          _connectionStatus = errorMessage;
         });
         
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('❌ Cannot reach backend: ${e.toString()}'),
+            content: Text(
+              _connectionStatus!,
+              style: const TextStyle(fontSize: 12),
+            ),
             backgroundColor: Colors.red,
-            duration: const Duration(seconds: 4),
+            duration: const Duration(seconds: 6),
           ),
         );
       }
