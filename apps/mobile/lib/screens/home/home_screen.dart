@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
-import 'package:provider/provider.dart';
 import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
-import 'package:mob_pizza_mobile/providers/locale_provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -29,14 +27,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
-    final localeProvider = Provider.of<LocaleProvider>(context);
-    final isSpanish = localeProvider.locale.languageCode == 'es';
 
     final cards = [
-      (l10n.theHitList, l10n.theHitListDesc, '/menu'),
-      (isSpanish ? l10n.languageToggleSpanish : l10n.languageToggle, l10n.languageToggleDesc, ''),
-      (l10n.pastOrders, l10n.pastOrdersDesc, '/orders'),
-      (l10n.yourFile, l10n.yourFileDesc, '/profile'),
+      (l10n.theHitList, l10n.theHitListDesc, '/menu', Icons.restaurant_menu),
+      (l10n.pastOrders, l10n.pastOrdersDesc, '/orders', Icons.history),
+      (l10n.yourFile, l10n.yourFileDesc, '/profile', Icons.person),
     ];
     final featured = [
       (l10n.bossPick, l10n.margheritaBoss, '\$12', 'Solo • Extra cheese', 0), // Item ID 0
@@ -190,80 +185,44 @@ class _HomeScreenState extends State<HomeScreen> {
             runSpacing: 12,
             children: cards
                 .map(
-                  (c) => c.$3 == '' // Language toggle button
-                    ? GestureDetector(
-                        onTap: () => localeProvider.toggleLocale(),
-                        child: Container(
-                          width: (MediaQuery.of(context).size.width - 64) / 2,
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF0F0F0F),
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: const Color(0xFFC6A667)),
-                            boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 10, offset: Offset(0, 6))],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 60,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: const Color(0xFFC6A667).withValues(alpha: 0x19),
-                                ),
-                                child: const Icon(
-                                  Icons.language,
-                                  color: Color(0xFFC6A667),
-                                  size: 32,
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(c.$1, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFFF5E8C7))),
-                              const SizedBox(height: 4),
-                              Text(c.$2, style: const TextStyle(color: Color(0xFFC6A667))),
-                            ],
-                          ),
-                        ),
-                      )
-                    : GestureDetector(
-                        onTap: () => context.go(c.$3),
-                        child: Container(
-                          width: (MediaQuery.of(context).size.width - 64) / 2,
-                          padding: const EdgeInsets.all(14),
-                          decoration: BoxDecoration(
-                            color: const Color(0xFF0F0F0F),
-                            borderRadius: BorderRadius.circular(14),
-                            border: Border.all(color: const Color(0xFF878787)),
-                            boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 10, offset: Offset(0, 6))],
-                          ),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Container(
-                                height: 60,
-                                width: double.infinity,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  image: const DecorationImage(
-                                    image: NetworkImage('https://images.unsplash.com/photo-1521017432531-fbd92d768814?auto=format&fit=crop&w=800&q=80&sat=-100'),
-                                    fit: BoxFit.cover,
-                                    colorFilter: ColorFilter.mode(Color(0x880F0F0F), BlendMode.darken),
-                                  ),
-                                ),
-                                foregroundDecoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(10),
-                                  color: Colors.black.withValues(alpha: 0x05),
-                                ),
-                              ),
-                              const SizedBox(height: 6),
-                              Text(c.$1, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFFF5E8C7))),
-                              const SizedBox(height: 4),
-                              Text(c.$2, style: const TextStyle(color: Color(0xFFC6A667))),
-                            ],
-                          ),
-                        ),
+                  (c) => GestureDetector(
+                    onTap: () => context.go(c.$3),
+                    child: Container(
+                      width: (MediaQuery.of(context).size.width - 64) / 2,
+                      padding: const EdgeInsets.all(14),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF0F0F0F),
+                        borderRadius: BorderRadius.circular(14),
+                        border: Border.all(color: const Color(0xFF878787)),
+                        boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 10, offset: Offset(0, 6))],
                       ),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            height: 60,
+                            width: double.infinity,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              color: const Color(0xFF1C1512),
+                            ),
+                            child: ColorFiltered(
+                              colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                              child: Icon(
+                                c.$4,
+                                color: Colors.white,
+                                size: 32,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(height: 8),
+                          Text(c.$1, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFFF5E8C7))),
+                          const SizedBox(height: 4),
+                          Text(c.$2, style: const TextStyle(color: Color(0xFFC6A667), fontSize: 12)),
+                        ],
+                      ),
+                    ),
+                  ),
                 )
                 .toList(),
           ),
