@@ -45,8 +45,11 @@ const addressSchema = new mongoose.Schema(
       },
       coordinates: {
         type: [Number], // [longitude, latitude]
+        required: false, // Make coordinates optional
         validate: {
           validator: function (coords) {
+            // If coordinates are provided, validate them
+            if (!coords || coords.length === 0) return true; // Allow empty/undefined
             return (
               coords.length === 2 &&
               coords[0] >= -180 &&

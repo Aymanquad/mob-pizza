@@ -109,6 +109,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         // Save address to MongoDB if provided
         if (addressText.isNotEmpty) {
           // Create or update the default address
+          // Note: coordinates are optional, so we don't include them if not available
           updates['addresses'] = [
             {
               'label': 'home',
@@ -117,6 +118,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               'state': '', // Optional, can be filled later
               'zipCode': '', // Optional, can be filled later
               'isDefault': true,
+              // Don't include coordinates if not available - backend will handle it
             }
           ];
         }

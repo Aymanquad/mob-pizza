@@ -8,6 +8,7 @@ import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart' as http;
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -23,8 +24,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool _allowLocation = false;
   bool _allowNotifications = false;
   bool _submitting = false;
+  bool _testingConnection = false;
   final _service = OnboardingService();
   String? _lastError;
+  String? _connectionStatus;
 
   @override
   void dispose() {
@@ -40,6 +43,63 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       _allowLocation = locStatus.isGranted;
       _allowNotifications = notifStatus.isGranted;
     });
+  }
+
+  Future<void> _testConnection() async {
+    setState(() {
+      _testingConnection = true;
+      _connectionStatus = null;
+    });
+
+    try {
+      // Try to reach the backend by making a simple request
+      // We'll try to get a user profile with a test phone number
+      final testUrl = '$apiBaseUrl/users/test123';
+      debugPrint('[onboarding] Testing connection to: $testUrl');
+      
+      final response = await http.get(
+        Uri.parse(testUrl),
+        headers: {'Content-Type': 'application/json'},
+      ).timeout(const Duration(seconds: 5));
+
+      if (mounted) {
+        setState(() {
+          _testingConnection = false;
+          if (response.statusCode == 200 || response.statusCode == 404) {
+            // 200 = success, 404 = backend is reachable but user not found (which is fine)
+            _connectionStatus = '✅ Connected! Backend is reachable.';
+          } else {
+            _connectionStatus = '⚠️ Backend responded with status: ${response.statusCode}';
+          }
+        });
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(_connectionStatus!),
+            backgroundColor: response.statusCode == 200 || response.statusCode == 404
+                ? Colors.green
+                : Colors.orange,
+            duration: const Duration(seconds: 3),
+          ),
+        );
+      }
+    } catch (e) {
+      if (mounted) {
+        setState(() {
+          _testingConnection = false;
+          _connectionStatus = '❌ Connection failed: ${e.toString()}';
+        });
+        
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('❌ Cannot reach backend: ${e.toString()}'),
+            backgroundColor: Colors.red,
+            duration: const Duration(seconds: 4),
+          ),
+        );
+      }
+      debugPrint('[onboarding] Connection test failed: $e');
+    }
   }
 
   Future<void> _submit() async {
@@ -241,14 +301,54 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   activeColor: const Color(0xFFD9A441),
                 ),
                 const SizedBox(height: 12),
-                OutlinedButton(
-                  onPressed: _requestPermissions,
-                  style: OutlinedButton.styleFrom(
-                    foregroundColor: const Color(0xFFD9A441),
-                    side: const BorderSide(color: Color(0xFFD9A441)),
-                  ),
-                  child: Text(l10n.requestPermissions),
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: _requestPermissions,
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xFFD9A441),
+                          side: const BorderSide(color: Color(0xFFD9A441)),
+                        ),
+                        child: Text(l10n.requestPermissions),
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: _testingConnection ? null : _testConnection,
+                        style: OutlinedButton.styleFrom(
+                          foregroundColor: const Color(0xFFD9A441),
+                          side: const BorderSide(color: Color(0xFFD9A441)),
+                        ),
+                        child: _testingConnection
+                            ? const SizedBox(
+                                height: 16,
+                                width: 16,
+                                child: CircularProgressIndicator(
+                                  strokeWidth: 2,
+                                  color: Color(0xFFD9A441),
+                                ),
+                              )
+                            : const Text('Test Connection'),
+                      ),
+                    ),
+                  ],
                 ),
+                if (_connectionStatus != null) ...[
+                  const SizedBox(height: 8),
+                  Text(
+                    _connectionStatus!,
+                    style: TextStyle(
+                      color: _connectionStatus!.startsWith('✅')
+                          ? Colors.green
+                          : _connectionStatus!.startsWith('⚠️')
+                              ? Colors.orange
+                              : Colors.red,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
                 const Spacer(),
                 SizedBox(
                   width: double.infinity,
