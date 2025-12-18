@@ -19,7 +19,6 @@ flutter pub get
 
 ### 4. Build the .aab file
 ```bash
-flutter build appbundle --release
 ```
 
 ### 5. Find your .aab file

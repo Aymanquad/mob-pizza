@@ -31,4 +31,8 @@ flutter:
     - assets/images/
     - assets/icons/
   generate: true
+  fonts:
+    - family: CupertinoIcons
+      fonts:
+        - asset: packages/cupertino_icons/assets/CupertinoIcons.ttf
 
