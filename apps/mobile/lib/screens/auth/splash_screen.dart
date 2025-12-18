@@ -30,17 +30,17 @@ class _SplashScreenState extends State<SplashScreen> {
             end: Alignment.bottomRight,
           ),
         ),
-        child: const Center(
+        child: Center(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(Icons.local_pizza, size: 78, color: Color(0xFFD9A441)),
-              SizedBox(height: 12),
-              Text(l10n.appName, style: TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
-              SizedBox(height: 6),
-              Text(l10n.homeScreenSubtitle, style: TextStyle(color: Color(0xFFC0B8A8))),
-              SizedBox(height: 8),
-              Text('Cinematic pies, speakeasy service.', style: TextStyle(color: Color(0xFFC0B8A8))),
+              const Icon(Icons.local_pizza, size: 78, color: Color(0xFFD9A441)),
+              const SizedBox(height: 12),
+              Text(l10n.appName, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
+              const SizedBox(height: 6),
+              Text(l10n.homeScreenSubtitle, style: const TextStyle(color: Color(0xFFC0B8A8))),
+              const SizedBox(height: 8),
+              Text(l10n.cinematicPiesSpeakeasy, style: const TextStyle(color: Color(0xFFC0B8A8))),
             ],
           ),
         ),

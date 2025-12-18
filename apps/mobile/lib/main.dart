@@ -5,6 +5,8 @@ import 'package:mob_pizza_mobile/config/theme.dart';
 import 'package:mob_pizza_mobile/config/app_router.dart';
 import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 import 'package:mob_pizza_mobile/providers/locale_provider.dart';
+import 'package:mob_pizza_mobile/providers/cart_provider.dart';
+import 'package:mob_pizza_mobile/providers/order_provider.dart';
 import 'package:mob_pizza_mobile/config/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -16,9 +18,26 @@ Future<void> main() async {
   final storedPhone = prefs.getString(PrefKeys.phone) ?? '';
   final effectiveOnboarded = isOnboarded && storedPhone.isNotEmpty;
 
+  // Create providers and load saved data
+  final cartProvider = CartProvider();
+  await cartProvider.loadCart();
+
+  final orderProvider = OrderProvider();
+  await orderProvider.loadOrders();
+
   runApp(
-    ChangeNotifierProvider(
-      create: (context) => LocaleProvider(initialLocale: Locale(localeCode)),
+    MultiProvider(
+      providers: [
+        ChangeNotifierProvider.value(
+          value: LocaleProvider(initialLocale: Locale(localeCode)),
+        ),
+        ChangeNotifierProvider.value(
+          value: cartProvider,
+        ),
+        ChangeNotifierProvider.value(
+          value: orderProvider,
+        ),
+      ],
       child: MobPizzaApp(isOnboarded: effectiveOnboarded),
     ),
   );

@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_pizza_mobile/config/constants.dart';
 import 'package:mob_pizza_mobile/services/user_service.dart';
 import 'package:mob_pizza_mobile/providers/locale_provider.dart';
+import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
@@ -46,9 +47,12 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       final prefs = await SharedPreferences.getInstance();
       _phone = prefs.getString(PrefKeys.phone) ?? '';
-      _locale = prefs.getString(PrefKeys.localeCode) ?? 'en';
+      
+      // Sync with LocaleProvider's current locale first
+      final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
+      _locale = localeProvider.locale.languageCode;
 
-      // Load from local prefs first
+      // Load from local prefs
       _firstNameController.text = prefs.getString(PrefKeys.firstName) ?? '';
       _lastNameController.text = prefs.getString(PrefKeys.lastName) ?? '';
       _addressController.text = prefs.getString(PrefKeys.address) ?? '';
@@ -66,7 +70,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
             final addr = addresses[0];
             _addressController.text = addr['street'] ?? '';
           }
-          _locale = userData['locale'] ?? 'en';
+          // Update locale from backend if available
+          final backendLocale = userData['locale'] ?? _locale;
+          _locale = backendLocale;
         } catch (e) {
           debugPrint('[profile] Could not fetch from backend: $e');
         }
@@ -104,20 +110,24 @@ class _ProfileScreenState extends State<ProfileScreen> {
         await _userService.updateProfile(_phone, updates);
       }
 
+      // Update LocaleProvider AFTER saving to persist the change
       if (mounted) {
+        Provider.of<LocaleProvider>(context, listen: false).setLocale(Locale(_locale));
         setState(() => _isEditing = false);
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-            content: Text('Profile updated successfully'),
+          SnackBar(
+            content: Text(l10n.profileUpdated),
             backgroundColor: Colors.green,
           ),
         );
       }
     } catch (e) {
       if (mounted) {
+        final l10n = AppLocalizations.of(context)!;
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Failed to update profile: $e'),
+            content: Text('${l10n.profileUpdateFailed}: $e'),
             backgroundColor: Colors.red,
           ),
         );
@@ -130,11 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> _toggleLanguage() async {
     final newLocale = _locale == 'en' ? 'es' : 'en';
     setState(() => _locale = newLocale);
-    
-    // Update provider
-    if (mounted) {
-      Provider.of<LocaleProvider>(context, listen: false).setLocale(Locale(newLocale));
-    }
+    // Don't update LocaleProvider here - only update when saving
   }
 
   Future<void> _logout(BuildContext context) async {
@@ -149,8 +155,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
     await prefs.remove(PrefKeys.address);
 
     if (context.mounted) {
+      final l10n = AppLocalizations.of(context)!;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Logged out')),
+        SnackBar(content: Text(l10n.loggedOut)),
       );
       context.go('/onboarding');
     }
@@ -158,6 +165,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Listen to LocaleProvider changes so the screen rebuilds when locale changes
+    // This ensures the screen updates when locale changes (after save)
+    Provider.of<LocaleProvider>(context);
+    final l10n = AppLocalizations.of(context)!;
     return SafeArea(
       child: Container(
         color: const Color(0xFF1C1512),
@@ -174,7 +185,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'Profile',
+                            l10n.profile,
                             style: GoogleFonts.cinzel(
                               fontSize: 28,
                               fontWeight: FontWeight.bold,
@@ -192,46 +203,46 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 setState(() => _isEditing = false);
                                 _loadProfile(); // Reload original values
                               },
-                              child: const Text('Cancel', style: TextStyle(color: Color(0xFFC6A667))),
+                              child: Text(l10n.cancel, style: const TextStyle(color: Color(0xFFC6A667))),
                             ),
                         ],
                       ),
                       const SizedBox(height: 24),
 
                       // Name Fields
-                      _buildSectionTitle('Name'),
+                      _buildSectionTitle(l10n.name),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _firstNameController,
                         enabled: _isEditing,
                         style: const TextStyle(color: Color(0xFFF5E8C7)),
-                        decoration: _inputDecoration('First Name'),
-                        validator: (v) => (v?.trim().isEmpty ?? true) ? 'Required' : null,
+                        decoration: _inputDecoration(l10n.firstName),
+                        validator: (v) => (v?.trim().isEmpty ?? true) ? l10n.required : null,
                       ),
                       const SizedBox(height: 12),
                       TextFormField(
                         controller: _lastNameController,
                         enabled: _isEditing,
                         style: const TextStyle(color: Color(0xFFF5E8C7)),
-                        decoration: _inputDecoration('Last Name'),
-                        validator: (v) => (v?.trim().isEmpty ?? true) ? 'Required' : null,
+                        decoration: _inputDecoration(l10n.lastName),
+                        validator: (v) => (v?.trim().isEmpty ?? true) ? l10n.required : null,
                       ),
                       const SizedBox(height: 24),
 
                       // Address
-                      _buildSectionTitle('Address'),
+                      _buildSectionTitle(l10n.address),
                       const SizedBox(height: 8),
                       TextFormField(
                         controller: _addressController,
                         enabled: _isEditing,
                         style: const TextStyle(color: Color(0xFFF5E8C7)),
-                        decoration: _inputDecoration('Street Address'),
+                        decoration: _inputDecoration(l10n.streetAddress),
                         maxLines: 2,
                       ),
                       const SizedBox(height: 24),
 
                       // Language Toggle
-                      _buildSectionTitle('Language'),
+                      _buildSectionTitle(l10n.language),
                       const SizedBox(height: 8),
                       Container(
                         decoration: BoxDecoration(
@@ -241,7 +252,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         ),
                         child: ListTile(
                           title: Text(
-                            _locale == 'en' ? 'English' : 'Spanish',
+                            _locale == 'en' ? l10n.english : l10n.spanish,
                             style: const TextStyle(color: Color(0xFFF5E8C7)),
                           ),
                           trailing: Switch(
@@ -254,7 +265,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       const SizedBox(height: 24),
 
                       // Contact Info (Read-only)
-                      _buildSectionTitle('Contact'),
+                      _buildSectionTitle(l10n.contact),
                       const SizedBox(height: 8),
                       Container(
                         padding: const EdgeInsets.all(16),
@@ -267,7 +278,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Phone: $_phone',
+                              '${l10n.phone}: $_phone',
                               style: const TextStyle(color: Color(0xFF878787)),
                             ),
                           ],
@@ -290,7 +301,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                               ),
                             ),
                             onPressed: _saveProfile,
-                            child: const Text('Save Changes'),
+                            child: Text(l10n.saveChanges),
                           ),
                         ),
                         const SizedBox(height: 16),
@@ -307,7 +318,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             textStyle: const TextStyle(fontWeight: FontWeight.w700),
                           ),
                           onPressed: () => _logout(context),
-                          child: const Text('Log out'),
+                          child: Text(l10n.logout),
                         ),
                       ),
                     ],

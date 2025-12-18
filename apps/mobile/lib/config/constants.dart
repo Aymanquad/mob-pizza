@@ -10,5 +10,7 @@ class PrefKeys {
   static const firstName = 'firstName';
   static const lastName = 'lastName';
   static const address = 'address';
+  static const cartItems = 'cartItems';
+  static const orders = 'orders';
 }
 

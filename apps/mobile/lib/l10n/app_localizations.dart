@@ -335,7 +335,7 @@ abstract class AppLocalizations {
   /// No description provided for @checkout.
   ///
   /// In en, this message translates to:
-  /// **'Checkout'**
+  /// **'CHECKOUT'**
   String get checkout;
 
   /// No description provided for @orderHistory.
@@ -605,7 +605,7 @@ abstract class AppLocalizations {
   /// No description provided for @items.
   ///
   /// In en, this message translates to:
-  /// **'Items'**
+  /// **'items'**
   String get items;
 
   /// No description provided for @status.
@@ -659,7 +659,7 @@ abstract class AppLocalizations {
   /// No description provided for @orderSummary.
   ///
   /// In en, this message translates to:
-  /// **'Order Summary'**
+  /// **'ORDER SUMMARY'**
   String get orderSummary;
 
   /// No description provided for @subtotal.
@@ -721,6 +721,924 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Lock In the Order'**
   String get lockInTheOrder;
+
+  /// No description provided for @joinTheFamily.
+  ///
+  /// In en, this message translates to:
+  /// **'Join the Family'**
+  String get joinTheFamily;
+
+  /// No description provided for @language.
+  ///
+  /// In en, this message translates to:
+  /// **'Language'**
+  String get language;
+
+  /// No description provided for @english.
+  ///
+  /// In en, this message translates to:
+  /// **'English'**
+  String get english;
+
+  /// No description provided for @spanish.
+  ///
+  /// In en, this message translates to:
+  /// **'Spanish'**
+  String get spanish;
+
+  /// No description provided for @allowLocation.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Location'**
+  String get allowLocation;
+
+  /// No description provided for @allowNotifications.
+  ///
+  /// In en, this message translates to:
+  /// **'Allow Notifications'**
+  String get allowNotifications;
+
+  /// No description provided for @locationHelps.
+  ///
+  /// In en, this message translates to:
+  /// **'Helps confirm delivery area'**
+  String get locationHelps;
+
+  /// No description provided for @notificationsHelps.
+  ///
+  /// In en, this message translates to:
+  /// **'Order updates & offers'**
+  String get notificationsHelps;
+
+  /// No description provided for @requestPermissions.
+  ///
+  /// In en, this message translates to:
+  /// **'Request Permissions'**
+  String get requestPermissions;
+
+  /// No description provided for @continueButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueButton;
+
+  /// No description provided for @phoneRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone is required'**
+  String get phoneRequired;
+
+  /// No description provided for @enterValidPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter valid phone'**
+  String get enterValidPhone;
+
+  /// No description provided for @onboardingSuccess.
+  ///
+  /// In en, this message translates to:
+  /// **'Onboarding saved'**
+  String get onboardingSuccess;
+
+  /// No description provided for @onboardingSuccessOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Onboarding saved (offline)'**
+  String get onboardingSuccessOffline;
+
+  /// No description provided for @networkIssue.
+  ///
+  /// In en, this message translates to:
+  /// **'Network issue'**
+  String get networkIssue;
+
+  /// No description provided for @networkIssueMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not reach the server. Continue offline? (Data will be stored locally and will sync when online.)'**
+  String get networkIssueMessage;
+
+  /// No description provided for @continueOffline.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue offline'**
+  String get continueOffline;
+
+  /// No description provided for @name.
+  ///
+  /// In en, this message translates to:
+  /// **'Name'**
+  String get name;
+
+  /// No description provided for @firstName.
+  ///
+  /// In en, this message translates to:
+  /// **'First Name'**
+  String get firstName;
+
+  /// No description provided for @lastName.
+  ///
+  /// In en, this message translates to:
+  /// **'Last Name'**
+  String get lastName;
+
+  /// No description provided for @streetAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Street Address'**
+  String get streetAddress;
+
+  /// No description provided for @contact.
+  ///
+  /// In en, this message translates to:
+  /// **'Contact'**
+  String get contact;
+
+  /// No description provided for @phone.
+  ///
+  /// In en, this message translates to:
+  /// **'Phone'**
+  String get phone;
+
+  /// No description provided for @required.
+  ///
+  /// In en, this message translates to:
+  /// **'Required'**
+  String get required;
+
+  /// No description provided for @profileUpdated.
+  ///
+  /// In en, this message translates to:
+  /// **'Profile updated successfully'**
+  String get profileUpdated;
+
+  /// No description provided for @profileUpdateFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Failed to update profile'**
+  String get profileUpdateFailed;
+
+  /// No description provided for @loggedOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Logged out'**
+  String get loggedOut;
+
+  /// No description provided for @noPizzasFound.
+  ///
+  /// In en, this message translates to:
+  /// **'No pizzas found'**
+  String get noPizzasFound;
+
+  /// No description provided for @tryDifferentKeywords.
+  ///
+  /// In en, this message translates to:
+  /// **'Try searching with different keywords'**
+  String get tryDifferentKeywords;
+
+  /// No description provided for @heatLevel.
+  ///
+  /// In en, this message translates to:
+  /// **'Heat Level:'**
+  String get heatLevel;
+
+  /// No description provided for @veg.
+  ///
+  /// In en, this message translates to:
+  /// **'VEG'**
+  String get veg;
+
+  /// No description provided for @nonVeg.
+  ///
+  /// In en, this message translates to:
+  /// **'NON-VEG'**
+  String get nonVeg;
+
+  /// No description provided for @yourCartIsEmpty.
+  ///
+  /// In en, this message translates to:
+  /// **'Your cart is empty'**
+  String get yourCartIsEmpty;
+
+  /// No description provided for @addPizzasToGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Add some delicious pizzas to get started'**
+  String get addPizzasToGetStarted;
+
+  /// No description provided for @browseMenu.
+  ///
+  /// In en, this message translates to:
+  /// **'BROWSE MENU'**
+  String get browseMenu;
+
+  /// No description provided for @size.
+  ///
+  /// In en, this message translates to:
+  /// **'Size:'**
+  String get size;
+
+  /// No description provided for @toppings.
+  ///
+  /// In en, this message translates to:
+  /// **'Toppings:'**
+  String get toppings;
+
+  /// No description provided for @remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
+  /// No description provided for @item.
+  ///
+  /// In en, this message translates to:
+  /// **'item'**
+  String get item;
+
+  /// No description provided for @addMore.
+  ///
+  /// In en, this message translates to:
+  /// **'ADD MORE'**
+  String get addMore;
+
+  /// No description provided for @proceedToDeal.
+  ///
+  /// In en, this message translates to:
+  /// **'PROCEED TO DEAL'**
+  String get proceedToDeal;
+
+  /// No description provided for @orderHistoryWillAppear.
+  ///
+  /// In en, this message translates to:
+  /// **'Your order history will appear here'**
+  String get orderHistoryWillAppear;
+
+  /// No description provided for @orderNotFound.
+  ///
+  /// In en, this message translates to:
+  /// **'ORDER NOT FOUND'**
+  String get orderNotFound;
+
+  /// No description provided for @orderNotFoundMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Order not found'**
+  String get orderNotFoundMessage;
+
+  /// No description provided for @orderItems.
+  ///
+  /// In en, this message translates to:
+  /// **'ORDER ITEMS'**
+  String get orderItems;
+
+  /// No description provided for @orderInformation.
+  ///
+  /// In en, this message translates to:
+  /// **'ORDER INFORMATION'**
+  String get orderInformation;
+
+  /// No description provided for @orderNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Order #'**
+  String get orderNumber;
+
+  /// No description provided for @customer.
+  ///
+  /// In en, this message translates to:
+  /// **'Customer'**
+  String get customer;
+
+  /// No description provided for @deliveryAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery Address'**
+  String get deliveryAddress;
+
+  /// No description provided for @orderDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Date'**
+  String get orderDate;
+
+  /// No description provided for @estimatedDelivery.
+  ///
+  /// In en, this message translates to:
+  /// **'Estimated Delivery'**
+  String get estimatedDelivery;
+
+  /// No description provided for @stripeOnlinePayment.
+  ///
+  /// In en, this message translates to:
+  /// **'Stripe Online Payment'**
+  String get stripeOnlinePayment;
+
+  /// No description provided for @addedToCart.
+  ///
+  /// In en, this message translates to:
+  /// **'Added to Cart'**
+  String get addedToCart;
+
+  /// No description provided for @cartItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Cart items'**
+  String get cartItems;
+
+  /// No description provided for @viewCart.
+  ///
+  /// In en, this message translates to:
+  /// **'VIEW CART'**
+  String get viewCart;
+
+  /// No description provided for @aboutThisPizza.
+  ///
+  /// In en, this message translates to:
+  /// **'ABOUT THIS PIZZA'**
+  String get aboutThisPizza;
+
+  /// No description provided for @ingredients.
+  ///
+  /// In en, this message translates to:
+  /// **'INGREDIENTS'**
+  String get ingredients;
+
+  /// No description provided for @specialToppings.
+  ///
+  /// In en, this message translates to:
+  /// **'SPECIAL TOPPINGS'**
+  String get specialToppings;
+
+  /// No description provided for @sizeOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'SIZE OPTIONS'**
+  String get sizeOptions;
+
+  /// No description provided for @addToCartButton.
+  ///
+  /// In en, this message translates to:
+  /// **'ADD TO CART'**
+  String get addToCartButton;
+
+  /// No description provided for @houseNotes.
+  ///
+  /// In en, this message translates to:
+  /// **'House Notes:'**
+  String get houseNotes;
+
+  /// No description provided for @addTruffleDrizzle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add truffle drizzle for a small upcharge.'**
+  String get addTruffleDrizzle;
+
+  /// No description provided for @bossPicks.
+  ///
+  /// In en, this message translates to:
+  /// **'Boss Picks'**
+  String get bossPicks;
+
+  /// No description provided for @underTheTableDeals.
+  ///
+  /// In en, this message translates to:
+  /// **'Under-the-Table Deals'**
+  String get underTheTableDeals;
+
+  /// No description provided for @familyCombos.
+  ///
+  /// In en, this message translates to:
+  /// **'Family Combos'**
+  String get familyCombos;
+
+  /// No description provided for @cinematicPiesSpeakeasy.
+  ///
+  /// In en, this message translates to:
+  /// **'Cinematic pies, speakeasy service.'**
+  String get cinematicPiesSpeakeasy;
+
+  /// No description provided for @pleaseEnterName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your name'**
+  String get pleaseEnterName;
+
+  /// No description provided for @pleaseEnterPhone.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter your phone number'**
+  String get pleaseEnterPhone;
+
+  /// No description provided for @deliveryAddressRequired.
+  ///
+  /// In en, this message translates to:
+  /// **'Delivery address is required'**
+  String get deliveryAddressRequired;
+
+  /// No description provided for @enterCompleteAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter a complete address'**
+  String get enterCompleteAddress;
+
+  /// No description provided for @enterCompleteDeliveryAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter your complete delivery address'**
+  String get enterCompleteDeliveryAddress;
+
+  /// No description provided for @orderPlacedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Placed Successfully!'**
+  String get orderPlacedSuccessfully;
+
+  /// No description provided for @errorPlacingOrder.
+  ///
+  /// In en, this message translates to:
+  /// **'Error placing order:'**
+  String get errorPlacingOrder;
+
+  /// No description provided for @internationalVariations.
+  ///
+  /// In en, this message translates to:
+  /// **'International Variations'**
+  String get internationalVariations;
+
+  /// No description provided for @specialityAndAlternativeBases.
+  ///
+  /// In en, this message translates to:
+  /// **'Speciality and Alternative Bases'**
+  String get specialityAndAlternativeBases;
+
+  /// No description provided for @americanRegionalStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'American Regional Style'**
+  String get americanRegionalStyle;
+
+  /// No description provided for @italianStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Italian Style'**
+  String get italianStyle;
+
+  /// No description provided for @classicAndWidelySoldPizzas.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic and Widely Sold Pizzas'**
+  String get classicAndWidelySoldPizzas;
+
+  /// No description provided for @solo.
+  ///
+  /// In en, this message translates to:
+  /// **'Solo'**
+  String get solo;
+
+  /// No description provided for @crew.
+  ///
+  /// In en, this message translates to:
+  /// **'Crew'**
+  String get crew;
+
+  /// No description provided for @family.
+  ///
+  /// In en, this message translates to:
+  /// **'Family'**
+  String get family;
+
+  /// No description provided for @pizzaJapaneseInspired.
+  ///
+  /// In en, this message translates to:
+  /// **'Japanese-Inspired'**
+  String get pizzaJapaneseInspired;
+
+  /// No description provided for @pizzaJapaneseInspiredDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Seafood, mayo, teriyaki elements.'**
+  String get pizzaJapaneseInspiredDesc;
+
+  /// No description provided for @pizzaJapaneseInspiredFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A fusion masterpiece blending Japanese flavors with Italian technique. Fresh sushi-grade tuna, creamy mayo, and teriyaki glaze create an unexpected harmony. The nori and sesame seeds add texture and umami depth that will transport your taste buds to new territories.'**
+  String get pizzaJapaneseInspiredFullDesc;
+
+  /// No description provided for @pizzaIndianInspired.
+  ///
+  /// In en, this message translates to:
+  /// **'Indian-Inspired'**
+  String get pizzaIndianInspired;
+
+  /// No description provided for @pizzaIndianInspiredDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Paneer, tandoori toppings, spiced sauces.'**
+  String get pizzaIndianInspiredDesc;
+
+  /// No description provided for @pizzaIndianInspiredFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Experience the vibrant flavors of India reimagined on a crispy crust. Tandoori-marinated paneer, pickled onions, and cilantro chutney create a symphony of spice and freshness. This pizza bridges two culinary worlds with remarkable harmony and bold character.'**
+  String get pizzaIndianInspiredFullDesc;
+
+  /// No description provided for @pizzaTurkishPide.
+  ///
+  /// In en, this message translates to:
+  /// **'Turkish Pide'**
+  String get pizzaTurkishPide;
+
+  /// No description provided for @pizzaTurkishPideDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Boat-shaped flatbread with toppings.'**
+  String get pizzaTurkishPideDesc;
+
+  /// No description provided for @pizzaTurkishPideFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentic Turkish pide featuring a boat-shaped crust filled with seasoned ground lamb, onions, and peppers. The dough is stretched thin and folded to create the perfect vessel for these aromatic fillings. A taste of Istanbul\'s bustling streets in every bite.'**
+  String get pizzaTurkishPideFullDesc;
+
+  /// No description provided for @pizzaBrazilian.
+  ///
+  /// In en, this message translates to:
+  /// **'Brazilian'**
+  String get pizzaBrazilian;
+
+  /// No description provided for @pizzaBrazilianDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Sweet/dessert-style options alongside savory.'**
+  String get pizzaBrazilianDesc;
+
+  /// No description provided for @pizzaBrazilianFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A celebration of Brazilian flavors featuring tropical hearts of palm, corn, and coconut flakes. The unique combination of sweet and savory elements reflects Brazil\'s diverse culinary heritage. Light, refreshing, and utterly unique.'**
+  String get pizzaBrazilianFullDesc;
+
+  /// No description provided for @pizzaGlutenFree.
+  ///
+  /// In en, this message translates to:
+  /// **'Gluten-Free Pizza'**
+  String get pizzaGlutenFree;
+
+  /// No description provided for @pizzaGlutenFreeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Alternative flours, crafted for a lighter base.'**
+  String get pizzaGlutenFreeDesc;
+
+  /// No description provided for @pizzaGlutenFreeFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Our gluten-free crust uses a special blend of rice and tapioca flours for that perfect texture. Topped with fresh vegetables and our signature sauce, this pizza proves that dietary restrictions don\'t mean compromising on flavor.'**
+  String get pizzaGlutenFreeFullDesc;
+
+  /// No description provided for @pizzaVegan.
+  ///
+  /// In en, this message translates to:
+  /// **'Vegan Pizza'**
+  String get pizzaVegan;
+
+  /// No description provided for @pizzaVeganDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Plant-based cheese and toppings; no animal products.'**
+  String get pizzaVeganDesc;
+
+  /// No description provided for @pizzaVeganFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A compassionate creation featuring plant-based cheese, fresh vegetables, and house-made vegan tomato sauce. Every ingredient is carefully selected to ensure both flavor and ethics are satisfied. Delicious food that does good.'**
+  String get pizzaVeganFullDesc;
+
+  /// No description provided for @pizzaStuffedCrust.
+  ///
+  /// In en, this message translates to:
+  /// **'Stuffed Crust'**
+  String get pizzaStuffedCrust;
+
+  /// No description provided for @pizzaStuffedCrustDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Cheese-filled crust edge for the indulgent.'**
+  String get pizzaStuffedCrustDesc;
+
+  /// No description provided for @pizzaStuffedCrustFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The ultimate indulgence featuring a crust stuffed with gooey mozzarella cheese. Every bite includes that extra stretch of melted cheese. Topped with pepperoni and our signature sauce, this is pizza\'s answer to a warm hug.'**
+  String get pizzaStuffedCrustFullDesc;
+
+  /// No description provided for @pizzaWhite.
+  ///
+  /// In en, this message translates to:
+  /// **'White Pizza'**
+  String get pizzaWhite;
+
+  /// No description provided for @pizzaWhiteDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Ricotta, mozzarella, olive oil, garlic—no tomato sauce.'**
+  String get pizzaWhiteDesc;
+
+  /// No description provided for @pizzaWhiteFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A sophisticated departure from the red sauce crowd. Creamy ricotta and mozzarella mingle with roasted garlic and fresh herbs on a perfectly baked crust. The absence of tomato sauce lets the pure, dairy-forward flavors shine through.'**
+  String get pizzaWhiteFullDesc;
+
+  /// No description provided for @pizzaNewYorkStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'New York Style'**
+  String get pizzaNewYorkStyle;
+
+  /// No description provided for @pizzaNewYorkStyleDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Large, foldable slices; thin but sturdy crust.'**
+  String get pizzaNewYorkStyleDesc;
+
+  /// No description provided for @pizzaNewYorkStyleFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The quintessential New York slice that made pizza famous worldwide. Thin, foldable crust with just the right amount of char. Premium pepperoni and our house tomato sauce create that perfect ratio of crust to topping that defines NYC pizza perfection.'**
+  String get pizzaNewYorkStyleFullDesc;
+
+  /// No description provided for @pizzaChicagoDeepDish.
+  ///
+  /// In en, this message translates to:
+  /// **'Chicago Deep Dish'**
+  String get pizzaChicagoDeepDish;
+
+  /// No description provided for @pizzaChicagoDeepDishDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Thick, pie-like crust with layered cheese and sauce.'**
+  String get pizzaChicagoDeepDishDesc;
+
+  /// No description provided for @pizzaChicagoDeepDishFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The king of deep dish pizzas, built in a cast-iron skillet for that perfect buttery crust. Layered cheese and chunky tomato sauce create a hearty, satisfying pie that\'s more casserole than pizza. A Chicago institution worth every calorie.'**
+  String get pizzaChicagoDeepDishFullDesc;
+
+  /// No description provided for @pizzaDetroitStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'Detroit Style'**
+  String get pizzaDetroitStyle;
+
+  /// No description provided for @pizzaDetroitStyleDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Rectangular pan, caramelized cheese edges.'**
+  String get pizzaDetroitStyleDesc;
+
+  /// No description provided for @pizzaDetroitStyleFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Detroit\'s answer to the deep dish, featuring a rectangular pan that creates those legendary caramelized cheese edges. The crispy bottom and cheesy perimeter make this style uniquely addictive. Brick cheese and pepperoni create the perfect Motor City experience.'**
+  String get pizzaDetroitStyleFullDesc;
+
+  /// No description provided for @pizzaCaliforniaStyle.
+  ///
+  /// In en, this message translates to:
+  /// **'California Style'**
+  String get pizzaCaliforniaStyle;
+
+  /// No description provided for @pizzaCaliforniaStyleDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Thin crust with unconventional fresh toppings.'**
+  String get pizzaCaliforniaStyleDesc;
+
+  /// No description provided for @pizzaCaliforniaStyleFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'California dreaming on a crust featuring goat cheese, walnuts, and fresh figs. This innovative style broke all the rules when it debuted, proving that pizza could be both gourmet and approachable. A celebration of fresh, seasonal ingredients.'**
+  String get pizzaCaliforniaStyleFullDesc;
+
+  /// No description provided for @pizzaNeapolitan.
+  ///
+  /// In en, this message translates to:
+  /// **'Neapolitan'**
+  String get pizzaNeapolitan;
+
+  /// No description provided for @pizzaNeapolitanDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Thin, soft, wood-fired with blistered edges.'**
+  String get pizzaNeapolitanDesc;
+
+  /// No description provided for @pizzaNeapolitanFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentic Neapolitan pizza as it\'s meant to be eaten. High-hydration dough creates that perfect leopard spotting when cooked at 900°F in our wood-fired oven. Fresh, simple ingredients that capture the essence of Naples in every tender bite.'**
+  String get pizzaNeapolitanFullDesc;
+
+  /// No description provided for @pizzaRomanAlTaglio.
+  ///
+  /// In en, this message translates to:
+  /// **'Roman al Taglio'**
+  String get pizzaRomanAlTaglio;
+
+  /// No description provided for @pizzaRomanAlTaglioDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Rectangular, thin, crisp; sold by the slice.'**
+  String get pizzaRomanAlTaglioDesc;
+
+  /// No description provided for @pizzaRomanAlTaglioFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Roman-style pizza that\'s all about sharing. Thin, crisp crust topped with seasonal ingredients and cut into rectangles. The perfect canvas for creative toppings and communal dining. Each slice tells its own story of Roman culinary tradition.'**
+  String get pizzaRomanAlTaglioFullDesc;
+
+  /// No description provided for @pizzaSicilian.
+  ///
+  /// In en, this message translates to:
+  /// **'Sicilian (Sfinciuni)'**
+  String get pizzaSicilian;
+
+  /// No description provided for @pizzaSicilianDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Thick, airy crust; onion-forward sauce.'**
+  String get pizzaSicilianDesc;
+
+  /// No description provided for @pizzaSicilianFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Thick, focaccia-like crust topped with sweet onions, anchovies, and herbs. This Sicilian classic features a bread-like base that\'s perfect for soaking up the savory tomato sauce. A hearty, flavorful experience that\'s uniquely Sicilian.'**
+  String get pizzaSicilianFullDesc;
+
+  /// No description provided for @pizzaMargherita.
+  ///
+  /// In en, this message translates to:
+  /// **'Margherita – The Mistress'**
+  String get pizzaMargherita;
+
+  /// No description provided for @pizzaMargheritaDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Thin crust trusted by the Don.'**
+  String get pizzaMargheritaDesc;
+
+  /// No description provided for @pizzaMargheritaFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A masterpiece of simplicity, this classic Margherita combines the freshest San Marzano tomatoes, creamy mozzarella di bufala, and fragrant basil leaves. Each bite tells a story of Italian tradition, where the perfect balance of flavors creates an unforgettable experience that has stood the test of time.'**
+  String get pizzaMargheritaFullDesc;
+
+  /// No description provided for @pizzaPepperoniClassic.
+  ///
+  /// In en, this message translates to:
+  /// **'Pepperoni Classic'**
+  String get pizzaPepperoniClassic;
+
+  /// No description provided for @pizzaPepperoniClassicDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomato sauce, mozzarella, pepperoni slices.'**
+  String get pizzaPepperoniClassicDesc;
+
+  /// No description provided for @pizzaPepperoniClassicFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The pizza that started it all. Simple, perfect, and utterly satisfying. Our house tomato sauce, premium mozzarella, and classic pepperoni slices come together in perfect harmony. Sometimes the classics are classics for a reason.'**
+  String get pizzaPepperoniClassicFullDesc;
+
+  /// No description provided for @pizzaCheeseClassic.
+  ///
+  /// In en, this message translates to:
+  /// **'Cheese Classic'**
+  String get pizzaCheeseClassic;
+
+  /// No description provided for @pizzaCheeseClassicDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tomato sauce and mozzarella; minimalist and comforting.'**
+  String get pizzaCheeseClassicDesc;
+
+  /// No description provided for @pizzaCheeseClassicFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Pure, unadulterated pizza perfection. Just our house tomato sauce, premium mozzarella, and a kiss of olive oil. This minimalist approach lets the quality of our ingredients shine through. Simple ingredients, simply extraordinary.'**
+  String get pizzaCheeseClassicFullDesc;
+
+  /// No description provided for @pizzaVeggieClassic.
+  ///
+  /// In en, this message translates to:
+  /// **'Veggie Classic'**
+  String get pizzaVeggieClassic;
+
+  /// No description provided for @pizzaVeggieClassicDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Peppers, onions, olives, mushrooms.'**
+  String get pizzaVeggieClassicDesc;
+
+  /// No description provided for @pizzaVeggieClassicFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A garden-fresh celebration of vegetables done right. Crisp bell peppers, sweet onions, briny olives, and earthy mushrooms create a symphony of textures and flavors. Our vegetarian masterpiece proves that meat isn\'t necessary for extraordinary pizza.'**
+  String get pizzaVeggieClassicFullDesc;
+
+  /// No description provided for @pizzaCapreseHitman.
+  ///
+  /// In en, this message translates to:
+  /// **'Caprese Hitman'**
+  String get pizzaCapreseHitman;
+
+  /// No description provided for @pizzaCapreseHitmanDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Fresh mozz, basil, olive mafia drizzle.'**
+  String get pizzaCapreseHitmanDesc;
+
+  /// No description provided for @pizzaCapreseHitmanFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A Sicilian-inspired masterpiece featuring the classic Caprese combination elevated to perfection. Juicy heirloom tomatoes, creamy fresh mozzarella, and fragrant basil come together with our signature olive oil reduction. Each slice captures the essence of Mediterranean sunshine.'**
+  String get pizzaCapreseHitmanFullDesc;
+
+  /// No description provided for @pizzaTruffleWhiteHit.
+  ///
+  /// In en, this message translates to:
+  /// **'Truffle White Hit'**
+  String get pizzaTruffleWhiteHit;
+
+  /// No description provided for @pizzaTruffleWhiteHitDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'White sauce, parmesan rain.'**
+  String get pizzaTruffleWhiteHitDesc;
+
+  /// No description provided for @pizzaTruffleWhiteHitFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Indulge in luxury with our truffle-infused white pizza. Creamy ricotta and parmesan create a velvety canvas for earthy black truffles and fresh herbs. This sophisticated creation elevates the simple white pizza to a gourmet experience worthy of the finest Italian trattorias.'**
+  String get pizzaTruffleWhiteHitFullDesc;
+
+  /// No description provided for @pizzaBrickOvenDon.
+  ///
+  /// In en, this message translates to:
+  /// **'Brick Oven Don'**
+  String get pizzaBrickOvenDon;
+
+  /// No description provided for @pizzaBrickOvenDonDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Fire-kissed crust, basil oil.'**
+  String get pizzaBrickOvenDonDesc;
+
+  /// No description provided for @pizzaBrickOvenDonFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Experience the authentic taste of Naples with our wood-fired pizza baked in a traditional brick oven. The high-heat cooking creates that perfect leopard spotting on the crust while preserving the delicate balance of fresh ingredients and aromatic basil-infused olive oil.'**
+  String get pizzaBrickOvenDonFullDesc;
+
+  /// No description provided for @pizzaSmokyCapoBBQ.
+  ///
+  /// In en, this message translates to:
+  /// **'Smoky Capo BBQ'**
+  String get pizzaSmokyCapoBBQ;
+
+  /// No description provided for @pizzaSmokyCapoBBQDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Brick oven, sweet heat.'**
+  String get pizzaSmokyCapoBBQDesc;
+
+  /// No description provided for @pizzaSmokyCapoBBQFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Our signature BBQ pizza brings together the smoky depth of slow-cooked brisket with tangy house-made BBQ sauce and caramelized onions. The perfect marriage of Southern comfort and Italian tradition creates a flavor profile that\'s equal parts comforting and crave-worthy.'**
+  String get pizzaSmokyCapoBBQFullDesc;
+
+  /// No description provided for @pizzaVelvetPepperoni.
+  ///
+  /// In en, this message translates to:
+  /// **'Velvet Pepperoni'**
+  String get pizzaVelvetPepperoni;
+
+  /// No description provided for @pizzaVelvetPepperoniDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Loaded curls, velvet cheese pull.'**
+  String get pizzaVelvetPepperoniDesc;
+
+  /// No description provided for @pizzaVelvetPepperoniFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Our take on the classic pepperoni pizza features premium pepperoni cups that curl perfectly during baking, creating crispy edges and juicy centers. Combined with our house tomato sauce and stretchy mozzarella, this is comfort food at its finest.'**
+  String get pizzaVelvetPepperoniFullDesc;
 }
 
 class _AppLocalizationsDelegate

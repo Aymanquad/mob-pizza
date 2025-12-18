@@ -5,9 +5,12 @@ import 'package:mob_pizza_mobile/screens/home/home_screen.dart';
 import 'package:mob_pizza_mobile/screens/menu/menu_list_screen.dart';
 import 'package:mob_pizza_mobile/screens/menu/item_detail_screen.dart';
 import 'package:mob_pizza_mobile/screens/cart/cart_screen.dart';
+import 'package:mob_pizza_mobile/screens/checkout/checkout_screen.dart';
 import 'package:mob_pizza_mobile/screens/orders/orders_screen.dart';
 import 'package:mob_pizza_mobile/screens/orders/order_detail_screen.dart';
+import 'package:mob_pizza_mobile/screens/manage_orders/manage_orders_screen.dart';
 import 'package:mob_pizza_mobile/screens/profile/profile_screen.dart';
+import 'package:mob_pizza_mobile/services/auth_service.dart';
 import 'package:mob_pizza_mobile/widgets/bottom_nav_bar.dart';
 import 'package:mob_pizza_mobile/screens/onboarding/onboarding_screen.dart';
 
@@ -20,6 +23,10 @@ class AppRouter {
         GoRoute(
           path: '/onboarding',
           builder: (context, state) => const OnboardingScreen(),
+        ),
+        GoRoute(
+          path: '/checkout',
+          builder: (context, state) => const CheckoutScreen(),
         ),
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {
@@ -89,6 +96,15 @@ class AppRouter {
                 ),
               ],
             ),
+            // Index 5: Manage Orders (Host only)
+            StatefulShellBranch(
+              routes: [
+                GoRoute(
+                  path: '/manage-orders',
+                  builder: (context, state) => const ManageOrdersScreen(),
+                ),
+              ],
+            ),
           ],
         ),
       ],
@@ -99,7 +115,7 @@ class AppRouter {
   }
 }
 
-class ScaffoldWithBottomNavBar extends StatelessWidget {
+class ScaffoldWithBottomNavBar extends StatefulWidget {
   const ScaffoldWithBottomNavBar({
     required this.navigationShell,
     Key? key,
@@ -108,12 +124,34 @@ class ScaffoldWithBottomNavBar extends StatelessWidget {
   final StatefulNavigationShell navigationShell;
 
   @override
+  State<ScaffoldWithBottomNavBar> createState() => _ScaffoldWithBottomNavBarState();
+}
+
+class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
+  bool _isHost = false;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkHostStatus();
+  }
+
+  Future<void> _checkHostStatus() async {
+    final isHost = await AuthService.isHost();
+    setState(() {
+      _isHost = isHost;
+      _isLoading = false;
+    });
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color(0xFF1C1512),
         elevation: 0,
-        leading: navigationShell.currentIndex != 0
+        leading: widget.navigationShell.currentIndex != 0
             ? IconButton(
                 icon: const Icon(Icons.arrow_back, color: Color(0xFFF5E8C7)),
                 onPressed: () {
@@ -122,7 +160,7 @@ class ScaffoldWithBottomNavBar extends StatelessWidget {
                     context.pop();
                   } else {
                     // If no page to pop, go back to home tab
-                    navigationShell.goBranch(0);
+                    widget.navigationShell.goBranch(0);
                   }
                 },
                 tooltip: 'Back',
@@ -150,11 +188,19 @@ class ScaffoldWithBottomNavBar extends StatelessWidget {
           ),
         ],
       ),
-      body: navigationShell,
-      bottomNavigationBar: BottomNavBar(
-        currentIndex: navigationShell.currentIndex,
-        onTap: (index) => navigationShell.goBranch(index),
-      ),
+      body: widget.navigationShell,
+      bottomNavigationBar: _isLoading
+          ? const SizedBox(height: 56)
+          : BottomNavBar(
+              currentIndex: widget.navigationShell.currentIndex,
+              isHost: _isHost,
+              onTap: (index) {
+                // If host has 6 tabs, index 5 is manage-orders
+                // If regular user has 5 tabs, index 4 is profile
+                // We need to map correctly
+                widget.navigationShell.goBranch(index);
+              },
+            ),
     );
   }
 }

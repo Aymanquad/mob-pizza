@@ -4,6 +4,7 @@ import 'package:go_router/go_router.dart';
 import 'package:mob_pizza_mobile/config/constants.dart';
 import 'package:mob_pizza_mobile/providers/locale_provider.dart';
 import 'package:mob_pizza_mobile/services/onboarding_service.dart';
+import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -62,11 +63,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
       debugPrint('[onboarding_ui] saved locally, navigating home');
       if (mounted) {
-        context.read<LocaleProvider>().setLocale(Locale(_locale));
         context.go('/');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Onboarding saved')),
-        );
+        // Apply locale after navigation so onboarding screen doesn't change language
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            context.read<LocaleProvider>().setLocale(Locale(_locale));
+            final l10n = AppLocalizations.of(context)!;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.onboardingSuccess)),
+            );
+          }
+        });
       }
     } catch (e) {
       _lastError = e.toString();
@@ -74,22 +81,25 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       if (!mounted) return;
       final proceed = await showDialog<bool>(
         context: context,
-        builder: (ctx) => AlertDialog(
-          title: const Text('Network issue'),
-          content: Text(
-            'Could not reach the server. Continue offline? (Data will be stored locally and will sync when online.)\n\nDetails: $_lastError',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(ctx).pop(false),
-              child: const Text('Cancel'),
+        builder: (ctx) {
+          final ctxL10n = AppLocalizations.of(ctx)!;
+          return AlertDialog(
+            title: Text(ctxL10n.networkIssue),
+            content: Text(
+              '${ctxL10n.networkIssueMessage}\n\nDetails: $_lastError',
             ),
-            ElevatedButton(
-              onPressed: () => Navigator.of(ctx).pop(true),
-              child: const Text('Continue offline'),
-            ),
-          ],
-        ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(false),
+                child: Text(ctxL10n.cancel),
+              ),
+              ElevatedButton(
+                onPressed: () => Navigator.of(ctx).pop(true),
+                child: Text(ctxL10n.continueOffline),
+              ),
+            ],
+          );
+        },
       );
 
       if (proceed != true) {
@@ -107,11 +117,17 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
       debugPrint('[onboarding_ui] offline path saved, navigating home');
       if (mounted) {
-        context.read<LocaleProvider>().setLocale(Locale(_locale));
         context.go('/');
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Onboarding saved (offline)')),
-        );
+        // Apply locale after navigation so onboarding screen doesn't change language
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          if (mounted) {
+            context.read<LocaleProvider>().setLocale(Locale(_locale));
+            final l10n = AppLocalizations.of(context)!;
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(content: Text(l10n.onboardingSuccessOffline)),
+            );
+          }
+        });
       }
     } finally {
       if (mounted) setState(() => _submitting = false);
@@ -120,6 +136,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: const Color(0xFF0B0C10),
       body: SafeArea(
@@ -131,9 +148,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 16),
-                const Text(
-                  'Join the Family',
-                  style: TextStyle(
+                Text(
+                  l10n.joinTheFamily,
+                  style: const TextStyle(
                     color: Color(0xFFF5E8C7),
                     fontSize: 28,
                     fontWeight: FontWeight.bold,
@@ -151,7 +168,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: const Color(0xFFF5E8C7),
-                    labelText: 'Phone Number',
+                    labelText: l10n.phoneNumber,
                     labelStyle: const TextStyle(color: Colors.black87),
                     hintText: '+15551234567 or 9876543210',
                     hintStyle: const TextStyle(color: Colors.black54),
@@ -175,8 +192,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   validator: (value) {
                     final v = value?.trim() ?? '';
                     final regex = RegExp(r'^\+?[0-9]{10,15}$');
-                    if (v.isEmpty) return 'Phone is required';
-                    if (!regex.hasMatch(v)) return 'Enter valid phone';
+                    if (v.isEmpty) return l10n.phoneRequired;
+                    if (!regex.hasMatch(v)) return l10n.enterValidPhone;
                     return null;
                   },
                 ),
@@ -184,42 +201,43 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 DropdownButtonFormField<String>(
                   value: _locale,
                   dropdownColor: const Color(0xFF1C1512),
-                  decoration: const InputDecoration(
-                    labelText: 'Language',
-                    labelStyle: TextStyle(color: Color(0xFF919F89)),
-                    enabledBorder: UnderlineInputBorder(
+                  decoration: InputDecoration(
+                    labelText: l10n.language,
+                    labelStyle: const TextStyle(color: Color(0xFF919F89)),
+                    enabledBorder: const UnderlineInputBorder(
                       borderSide: BorderSide(color: Color(0xFF3A3A3A)),
                     ),
                   ),
-                  items: const [
+                  items: [
                     DropdownMenuItem(
                       value: 'en',
-                      child: Text('English', style: TextStyle(color: Colors.white)),
+                      child: Text(l10n.english, style: const TextStyle(color: Colors.white)),
                     ),
                     DropdownMenuItem(
                       value: 'es',
-                      child: Text('Español', style: TextStyle(color: Colors.white)),
+                      child: Text(l10n.spanish, style: const TextStyle(color: Colors.white)),
                     ),
                   ],
                   onChanged: (value) {
                     setState(() {
                       _locale = value ?? 'en';
                     });
+                    // Locale will be applied when user clicks Continue and onboarding is saved
                   },
                 ),
                 const SizedBox(height: 24),
                 SwitchListTile(
                   value: _allowLocation,
                   onChanged: (val) => setState(() => _allowLocation = val),
-                  title: const Text('Allow Location', style: TextStyle(color: Colors.white)),
-                  subtitle: const Text('Helps confirm delivery area', style: TextStyle(color: Color(0xFF919F89))),
+                  title: Text(l10n.allowLocation, style: const TextStyle(color: Colors.white)),
+                  subtitle: Text(l10n.locationHelps, style: const TextStyle(color: Color(0xFF919F89))),
                   activeColor: const Color(0xFFD9A441),
                 ),
                 SwitchListTile(
                   value: _allowNotifications,
                   onChanged: (val) => setState(() => _allowNotifications = val),
-                  title: const Text('Allow Notifications', style: TextStyle(color: Colors.white)),
-                  subtitle: const Text('Order updates & offers', style: TextStyle(color: Color(0xFF919F89))),
+                  title: Text(l10n.allowNotifications, style: const TextStyle(color: Colors.white)),
+                  subtitle: Text(l10n.notificationsHelps, style: const TextStyle(color: Color(0xFF919F89))),
                   activeColor: const Color(0xFFD9A441),
                 ),
                 const SizedBox(height: 12),
@@ -229,7 +247,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     foregroundColor: const Color(0xFFD9A441),
                     side: const BorderSide(color: Color(0xFFD9A441)),
                   ),
-                  child: const Text('Request Permissions'),
+                  child: Text(l10n.requestPermissions),
                 ),
                 const Spacer(),
                 SizedBox(
@@ -247,7 +265,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                             width: 20,
                             child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFF0B0C10)),
                           )
-                        : const Text('Continue'),
+                        : Text(l10n.continueButton),
                   ),
                 ),
                 const SizedBox(height: 16),

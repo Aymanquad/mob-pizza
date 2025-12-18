@@ -47,32 +47,32 @@ class _MenuListScreenState extends State<MenuListScreen> {
     final l10n = AppLocalizations.of(context)!;
     final sections = [
       (
-        'International Variations',
+        l10n.internationalVariations,
         [
       (
-        'Japanese-Inspired',
-        'Seafood, mayo, teriyaki elements.',
+        l10n.pizzaJapaneseInspired,
+        l10n.pizzaJapaneseInspiredDesc,
         16.5,
         false,
         'assets/images/japanese-inspired-pizza.jpg'
       ),
       (
-        'Indian-Inspired',
-        'Paneer, tandoori toppings, spiced sauces.',
+        l10n.pizzaIndianInspired,
+        l10n.pizzaIndianInspiredDesc,
         15.0,
         true,
         'assets/images/indian-inspired-pizza.jpg'
       ),
       (
-        'Turkish Pide',
-        'Boat-shaped flatbread with toppings.',
+        l10n.pizzaTurkishPide,
+        l10n.pizzaTurkishPideDesc,
         17.5,
         false,
         'assets/images/turkish-pide-pizza.webp'
       ),
       (
-        'Brazilian',
-        'Sweet/dessert-style options alongside savory.',
+        l10n.pizzaBrazilian,
+        l10n.pizzaBrazilianDesc,
         14.5,
         false,
         'assets/images/Brazilian-inspired-Pizza.jpg'
@@ -80,32 +80,32 @@ class _MenuListScreenState extends State<MenuListScreen> {
         ]
       ),
       (
-        'Speciality and Alternative Bases',
+        l10n.specialityAndAlternativeBases,
         [
           (
-            'Gluten-Free Pizza',
-            'Alternative flours, crafted for a lighter base.',
+            l10n.pizzaGlutenFree,
+            l10n.pizzaGlutenFreeDesc,
             16.0,
             true,
             'assets/images/gluten-free-pizza.jpg'
           ),
           (
-            'Vegan Pizza',
-            'Plant-based cheese and toppings; no animal products.',
+            l10n.pizzaVegan,
+            l10n.pizzaVeganDesc,
             15.5,
             true,
             'assets/images/vegan-pizza.jpg'
           ),
           (
-            'Stuffed Crust',
-            'Cheese-filled crust edge for the indulgent.',
+            l10n.pizzaStuffedCrust,
+            l10n.pizzaStuffedCrustDesc,
             17.0,
             false,
             'assets/images/stuffed-crust-pizza.jpg'
           ),
           (
-            'White Pizza',
-            'Ricotta, mozzarella, olive oil, garlic—no tomato sauce.',
+            l10n.pizzaWhite,
+            l10n.pizzaWhiteDesc,
             15.0,
             true,
             'assets/images/white-pizza.jpg'
@@ -113,32 +113,32 @@ class _MenuListScreenState extends State<MenuListScreen> {
         ]
       ),
       (
-        'American Regional Style',
+        l10n.americanRegionalStyle,
         [
           (
-            'New York Style',
-            'Large, foldable slices; thin but sturdy crust.',
+            l10n.pizzaNewYorkStyle,
+            l10n.pizzaNewYorkStyleDesc,
             14.0,
             false,
             'assets/images/new-york-style-pizza.jpg'
           ),
           (
-            'Chicago Deep Dish',
-            'Thick, pie-like crust with layered cheese and sauce.',
+            l10n.pizzaChicagoDeepDish,
+            l10n.pizzaChicagoDeepDishDesc,
             18.0,
             false,
             'assets/images/chicago-style-pizza.jpg'
           ),
           (
-            'Detroit Style',
-            'Rectangular pan, caramelized cheese edges.',
+            l10n.pizzaDetroitStyle,
+            l10n.pizzaDetroitStyleDesc,
             17.5,
             false,
             'assets/images/detroit-style-pizza.jpg'
           ),
           (
-            'California Style',
-            'Thin crust with unconventional fresh toppings.',
+            l10n.pizzaCaliforniaStyle,
+            l10n.pizzaCaliforniaStyleDesc,
             15.0,
             false,
             'assets/images/california-style-pizza.jpg'
@@ -146,25 +146,25 @@ class _MenuListScreenState extends State<MenuListScreen> {
         ]
       ),
       (
-        'Italian Style',
+        l10n.italianStyle,
         [
           (
-            'Neapolitan',
-            'Thin, soft, wood-fired with blistered edges.',
+            l10n.pizzaNeapolitan,
+            l10n.pizzaNeapolitanDesc,
             15.5,
             true,
             'assets/images/neapolitan-style-pizza.webp'
           ),
           (
-            'Roman al Taglio',
-            'Rectangular, thin, crisp; sold by the slice.',
+            l10n.pizzaRomanAlTaglio,
+            l10n.pizzaRomanAlTaglioDesc,
             16.0,
             false,
             'assets/images/Romanaltaglio-Style-Pizza.webp'
           ),
           (
-            'Sicilian (Sfinciuni)',
-            'Thick, airy crust; onion-forward sauce.',
+            l10n.pizzaSicilian,
+            l10n.pizzaSicilianDesc,
             16.5,
             false,
             'assets/images/Sicilian-Pizza.webp'
@@ -172,67 +172,67 @@ class _MenuListScreenState extends State<MenuListScreen> {
         ]
       ),
       (
-        'Classic and Widely Sold Pizzas',
+        l10n.classicAndWidelySoldPizzas,
         [
           (
-            'Margherita – The Mistress',
-            'Thin crust trusted by the Don.',
+            l10n.pizzaMargherita,
+            l10n.pizzaMargheritaDesc,
             12.0,
             true,
             'assets/images/margherita-pizza.jpg'
           ),
           (
-            'Pepperoni Classic',
-            'Tomato sauce, mozzarella, pepperoni slices.',
+            l10n.pizzaPepperoniClassic,
+            l10n.pizzaPepperoniClassicDesc,
             13.0,
             false,
             'assets/images/Classic-Pepperoni-Pizza.jpg'
           ),
           (
-            'Cheese Classic',
-            'Tomato sauce and mozzarella; minimalist and comforting.',
+            l10n.pizzaCheeseClassic,
+            l10n.pizzaCheeseClassicDesc,
             11.0,
             true,
             'assets/images/Cheese_Classic_Pizza.jpg'
           ),
           (
-            'Veggie Classic',
-            'Peppers, onions, olives, mushrooms.',
+            l10n.pizzaVeggieClassic,
+            l10n.pizzaVeggieClassicDesc,
             12.5,
             true,
             'assets/images/veggie-pizza.png'
           ),
           (
-            'Caprese Hitman',
-            'Fresh mozz, basil, olive mafia drizzle.',
+            l10n.pizzaCapreseHitman,
+            l10n.pizzaCapreseHitmanDesc,
             14.0,
             true,
             'assets/images/caprese-pizza.jpeg'
           ),
           (
-            'Truffle White Hit',
-            'White sauce, parmesan rain.',
+            l10n.pizzaTruffleWhiteHit,
+            l10n.pizzaTruffleWhiteHitDesc,
             16.0,
             true,
             'assets/images/Truffle-White-Pizza.jpg'
           ),
           (
-            'Brick Oven Don',
-            'Fire-kissed crust, basil oil.',
+            l10n.pizzaBrickOvenDon,
+            l10n.pizzaBrickOvenDonDesc,
             17.0,
             false,
             'assets/images/brick-oven-pizza.webp'
           ),
           (
-            'Smoky Capo BBQ',
-            'Brick oven, sweet heat.',
+            l10n.pizzaSmokyCapoBBQ,
+            l10n.pizzaSmokyCapoBBQDesc,
             15.0,
             false,
             'assets/images/smoke-bbq-pizza.jpg'
           ),
           (
-            'Velvet Pepperoni',
-            'Loaded curls, velvet cheese pull.',
+            l10n.pizzaVelvetPepperoni,
+            l10n.pizzaVelvetPepperoniDesc,
             15.5,
             false,
             'assets/images/velvet-pepperoni-pizza.jpg'
@@ -319,7 +319,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'No pizzas found',
+                        l10n.noPizzasFound,
                         style: const TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.w700,
@@ -329,7 +329,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Try searching with different keywords',
+                        l10n.tryDifferentKeywords,
                         style: const TextStyle(
                           fontSize: 14,
                           color: Color(0xFF878787),
@@ -521,7 +521,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
                                               border: Border.all(color: const Color(0xFFFF6B6B), width: 1),
                                             ),
                                             child: Text(
-                                              'Heat Level: $spiceLevel',
+                                              '${l10n.heatLevel} $spiceLevel',
                                               style: const TextStyle(
                                                 color: Color(0xFFFFE0E0),
                                                 fontSize: 10,
@@ -585,7 +585,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
                                       ],
                                     ),
                                     child: Text(
-                                      entry.value.$4 ? 'VEG' : 'NON-VEG',
+                                      entry.value.$4 ? l10n.veg : l10n.nonVeg,
                                       style: const TextStyle(
                                         color: Color(0xFF000000),
                                         fontSize: 9,

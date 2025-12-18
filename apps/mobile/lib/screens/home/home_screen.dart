@@ -130,15 +130,15 @@ class _HomeScreenState extends State<HomeScreen> {
                       runSpacing: 8,
                       children: [
                         ActionChip(
-                          label: const Text('Boss Picks'),
+                          label: Text(l10n.bossPicks),
                           onPressed: _scrollToFamilyBulletin,
                         ),
                         ActionChip(
-                          label: const Text('Under-the-Table Deals'),
+                          label: Text(l10n.underTheTableDeals),
                           onPressed: _scrollToFamilyBulletin,
                         ),
                         ActionChip(
-                          label: const Text('Family Combos'),
+                          label: Text(l10n.familyCombos),
                           onPressed: _scrollToFamilyBulletin,
                         ),
                       ],

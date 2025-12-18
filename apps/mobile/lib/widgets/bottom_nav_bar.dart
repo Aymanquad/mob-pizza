@@ -4,16 +4,63 @@ import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 class BottomNavBar extends StatelessWidget {
   final int currentIndex;
   final Function(int) onTap;
+  final bool isHost;
 
   const BottomNavBar({
     super.key,
     required this.currentIndex,
     required this.onTap,
+    this.isHost = false,
   });
 
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final items = <BottomNavigationBarItem>[
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.home_outlined),
+        activeIcon: const Icon(Icons.home, size: 28),
+        label: l10n.navHome,
+        tooltip: l10n.navHomeTooltip,
+      ),
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.restaurant_menu_outlined),
+        activeIcon: const Icon(Icons.restaurant_menu, size: 28),
+        label: l10n.navMenu,
+        tooltip: l10n.navMenuTooltip,
+      ),
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.shopping_cart_outlined),
+        activeIcon: const Icon(Icons.shopping_cart, size: 28),
+        label: l10n.navCart,
+        tooltip: l10n.navCartTooltip,
+      ),
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.history),
+        activeIcon: const Icon(Icons.history, size: 28),
+        label: l10n.navOrders,
+        tooltip: l10n.navOrdersTooltip,
+      ),
+      BottomNavigationBarItem(
+        icon: const Icon(Icons.person_outline),
+        activeIcon: const Icon(Icons.person, size: 28),
+        label: l10n.navProfile,
+        tooltip: l10n.navProfileTooltip,
+      ),
+    ];
+
+    // Add Manage Orders tab if user is host
+    if (isHost) {
+      items.add(
+        BottomNavigationBarItem(
+          icon: const Icon(Icons.manage_accounts_outlined),
+          activeIcon: const Icon(Icons.manage_accounts, size: 28),
+          label: 'Manage',
+          tooltip: 'Manage Orders',
+        ),
+      );
+    }
+
     return Container(
       decoration: BoxDecoration(
         color: const Color(0xFF0F0F0F),
@@ -47,38 +94,7 @@ class BottomNavBar extends StatelessWidget {
           fontWeight: FontWeight.w500,
           fontSize: 12,
         ),
-        items: [
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.home_outlined),
-            activeIcon: const Icon(Icons.home, size: 28),
-            label: l10n.navHome,
-            tooltip: l10n.navHomeTooltip,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.restaurant_menu_outlined),
-            activeIcon: const Icon(Icons.restaurant_menu, size: 28),
-            label: l10n.navMenu,
-            tooltip: l10n.navMenuTooltip,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.shopping_cart_outlined),
-            activeIcon: const Icon(Icons.shopping_cart, size: 28),
-            label: l10n.navCart,
-            tooltip: l10n.navCartTooltip,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.history),
-            activeIcon: const Icon(Icons.history, size: 28),
-            label: l10n.navOrders,
-            tooltip: l10n.navOrdersTooltip,
-          ),
-          BottomNavigationBarItem(
-            icon: const Icon(Icons.person_outline),
-            activeIcon: const Icon(Icons.person, size: 28),
-            label: l10n.navProfile,
-            tooltip: l10n.navProfileTooltip,
-          ),
-        ],
+        items: items,
       ),
     );
   }
