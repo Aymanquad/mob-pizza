@@ -18,21 +18,24 @@ const addressSchema = new mongoose.Schema(
     },
     city: {
       type: String,
-      required: [true, 'City is required'],
+      required: false, // Made optional for simple address entry
       trim: true,
       maxlength: [50, 'City cannot exceed 50 characters'],
+      default: '',
     },
     state: {
       type: String,
-      required: [true, 'State is required'],
+      required: false, // Made optional for simple address entry
       trim: true,
       maxlength: [50, 'State cannot exceed 50 characters'],
+      default: '',
     },
     zipCode: {
       type: String,
-      required: [true, 'ZIP code is required'],
+      required: false, // Made optional for simple address entry
       trim: true,
       maxlength: [10, 'ZIP code cannot exceed 10 characters'],
+      default: '',
     },
     coordinates: {
       type: {
@@ -112,11 +115,13 @@ const userSchema = new mongoose.Schema(
     },
     email: {
       type: String,
-      required: [true, 'Email is required'],
+      required: false, // Optional for now - no email input in app yet
       unique: true,
+      sparse: true, // Allow multiple null emails
       lowercase: true,
       trim: true,
-      match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please enter a valid email'],
+      match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email'],
+      default: null,
     },
     phone: {
       type: String,
@@ -221,6 +226,45 @@ const userSchema = new mongoose.Schema(
     lastOrderAt: {
       type: Date,
       default: null,
+    },
+    // Cart items (embedded array)
+    cart: {
+      type: [
+        {
+          id: {
+            type: String,
+            required: true,
+          },
+          name: {
+            type: String,
+            required: true,
+          },
+          description: String,
+          basePrice: {
+            type: Number,
+            required: true,
+            min: 0,
+          },
+          isVegetarian: {
+            type: Boolean,
+            default: false,
+          },
+          imagePath: String,
+          selectedSize: {
+            type: String,
+            required: true,
+            enum: ['Solo', 'Crew', 'Family'],
+          },
+          selectedToppings: [String],
+          quantity: {
+            type: Number,
+            required: true,
+            min: 1,
+            default: 1,
+          },
+        },
+      ],
+      default: [],
     },
   },
   {

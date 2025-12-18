@@ -98,14 +98,28 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
       // Update backend
       if (_phone.isNotEmpty) {
+        final addressText = _addressController.text.trim();
+        
         final updates = <String, dynamic>{
           'firstName': _firstNameController.text.trim(),
           'lastName': _lastNameController.text.trim(),
           'locale': _locale,
         };
 
-        // Note: Address is only saved locally for now
-        // Full address (city, state, zip) will be added during checkout
+        // Save address to MongoDB if provided
+        if (addressText.isNotEmpty) {
+          // Create or update the default address
+          updates['addresses'] = [
+            {
+              'label': 'home',
+              'street': addressText,
+              'city': '', // Optional, can be filled later
+              'state': '', // Optional, can be filled later
+              'zipCode': '', // Optional, can be filled later
+              'isDefault': true,
+            }
+          ];
+        }
 
         await _userService.updateProfile(_phone, updates);
       }

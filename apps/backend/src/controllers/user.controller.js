@@ -55,9 +55,28 @@ exports.updateProfile = async (req, res) => {
       });
     }
 
+    // Handle addresses update - if addresses array is provided, replace the entire array
+    // Otherwise, just update other fields
+    const updateQuery = {};
+    if (updates.addresses && Array.isArray(updates.addresses)) {
+      // Replace addresses array
+      updateQuery.$set = {
+        firstName: updates.firstName,
+        lastName: updates.lastName,
+        locale: updates.locale,
+        addresses: updates.addresses,
+      };
+    } else {
+      // Just update other fields
+      updateQuery.$set = {};
+      if (updates.firstName) updateQuery.$set.firstName = updates.firstName;
+      if (updates.lastName) updateQuery.$set.lastName = updates.lastName;
+      if (updates.locale) updateQuery.$set.locale = updates.locale;
+    }
+
     const user = await User.findOneAndUpdate(
       { phone },
-      { $set: updates },
+      updateQuery,
       { new: true, runValidators: true }
     );
 

@@ -54,7 +54,7 @@ const onboarding = async (req, res, next) => {
         $setOnInsert: {
           firstName: defaultFirst,
           lastName: defaultLast,
-          email: `${phone.replace(/\\D/g, '')}@placeholder.local`,
+          // email: `${phone.replace(/\\D/g, '')}@placeholder.local`, // Commented out - no email input yet
           passwordHash,
           isActive: true,
         },

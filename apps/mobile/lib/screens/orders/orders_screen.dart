@@ -7,8 +7,30 @@ import 'package:mob_pizza_mobile/models/order.dart';
 import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 import 'package:intl/intl.dart';
 
-class OrdersScreen extends StatelessWidget {
+class OrdersScreen extends StatefulWidget {
   const OrdersScreen({super.key});
+
+  @override
+  State<OrdersScreen> createState() => _OrdersScreenState();
+}
+
+class _OrdersScreenState extends State<OrdersScreen> {
+  bool _hasLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Load orders once when screen opens
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_hasLoaded) {
+        final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+        if (orderProvider.orders.isEmpty) {
+          orderProvider.loadOrders(forceReload: true);
+          _hasLoaded = true;
+        }
+      }
+    });
+  }
 
   String _formatDate(DateTime date) {
     return DateFormat('MMM dd, yyyy • hh:mm a').format(date);
@@ -141,32 +163,42 @@ class OrdersScreen extends StatelessWidget {
                       contentPadding: const EdgeInsets.all(16),
                       title: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          Text(
-                            order.orderNumber,
-                            style: GoogleFonts.cinzel(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: const Color(0xFFFFF8E1),
+                          Expanded(
+                            child: Text(
+                              order.orderNumber,
+                              style: GoogleFonts.cinzel(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: const Color(0xFFFFF8E1),
+                              ),
+                              overflow: TextOverflow.ellipsis,
                             ),
                           ),
-                          Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                            decoration: BoxDecoration(
-                              color: Color(int.parse(_getStatusColor(order.status))),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
+                          const SizedBox(width: 8),
+                          Flexible(
+                            child: Container(
+                              padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                              decoration: BoxDecoration(
                                 color: Color(int.parse(_getStatusColor(order.status))),
-                                width: 1.5,
+                                borderRadius: BorderRadius.circular(12),
+                                border: Border.all(
+                                  color: Color(int.parse(_getStatusColor(order.status))),
+                                  width: 1.5,
+                                ),
                               ),
-                            ),
-                            child: Text(
-                              order.status.displayName.toUpperCase(),
-                              style: TextStyle(
-                                color: _getStatusTextColor(order.status),
-                                fontSize: 11,
-                                fontWeight: FontWeight.w900,
-                                letterSpacing: 0.8,
+                              child: Text(
+                                order.status.displayName.toUpperCase(),
+                                style: TextStyle(
+                                  color: _getStatusTextColor(order.status),
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w900,
+                                  letterSpacing: 0.5,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                softWrap: false,
                               ),
                             ),
                           ),

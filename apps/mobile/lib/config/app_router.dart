@@ -195,9 +195,10 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
               currentIndex: widget.navigationShell.currentIndex,
               isHost: _isHost,
               onTap: (index) {
-                // If host has 6 tabs, index 5 is manage-orders
-                // If regular user has 5 tabs, index 4 is profile
-                // We need to map correctly
+                // Navigation mapping:
+                // Regular user (5 tabs): 0=Home, 1=Menu, 2=Cart, 3=Orders, 4=Profile
+                // Host user (6 tabs): 0=Home, 1=Menu, 2=Cart, 3=Orders, 4=Profile, 5=Manage Orders
+                // The BottomNavBar handles the tab count automatically based on isHost
                 widget.navigationShell.goBranch(index);
               },
             ),

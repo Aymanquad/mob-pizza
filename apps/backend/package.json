@@ -7,6 +7,7 @@
     "dev": "node server.js",
     "start": "NODE_ENV=production node server.js",
     "seed": "node src/seeders/index.js",
+    "create-hosts": "node src/scripts/create-host-users.js",
     "lint": "echo \"add linter\""
   },
   "dependencies": {

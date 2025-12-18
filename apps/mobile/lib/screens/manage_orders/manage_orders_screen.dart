@@ -15,6 +15,20 @@ class ManageOrdersScreen extends StatefulWidget {
 class _ManageOrdersScreenState extends State<ManageOrdersScreen> {
   final TextEditingController _securityAnswerController = TextEditingController();
   bool _securityVerified = false;
+  bool _hasLoaded = false;
+
+  @override
+  void initState() {
+    super.initState();
+    // Reload orders once when screen opens to get all orders (for hosts)
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (mounted && !_hasLoaded) {
+        final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+        orderProvider.loadOrders(forceReload: true);
+        _hasLoaded = true;
+      }
+    });
+  }
 
   String _formatDate(DateTime date) {
     return DateFormat('MMM dd, yyyy • hh:mm a').format(date);
