@@ -9,6 +9,7 @@ import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:http/http.dart' as http;
+import 'package:google_sign_in/google_sign_in.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({super.key});
@@ -25,7 +26,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   bool _allowNotifications = false;
   bool _submitting = false;
   bool _testingConnection = false;
+  bool _signingInWithGoogle = false;
   final _service = OnboardingService();
+  // Configure Google Sign-In with proper scopes
+  final _googleSignIn = GoogleSignIn(
+    scopes: ['email', 'profile'],
+  );
   String? _lastError;
   String? _connectionStatus;
 
@@ -123,13 +129,118 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     }
   }
 
+  Future<void> _signInWithGoogle() async {
+    setState(() => _signingInWithGoogle = true);
+    try {
+      final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
+      if (googleUser == null) {
+        // User cancelled sign-in
+        setState(() => _signingInWithGoogle = false);
+        return;
+      }
+      
+      // Extract user info
+      final email = googleUser.email;
+      final googleId = googleUser.id;
+      final displayName = googleUser.displayName ?? '';
+      final nameParts = displayName.split(' ');
+      final firstName = nameParts.isNotEmpty ? nameParts.first : 'User';
+      final lastName = nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
+
+      // Submit onboarding with OAuth data
+      await _submitOnboarding(
+        email: email,
+        googleId: googleId,
+        firstName: firstName,
+        lastName: lastName,
+        phone: _phoneController.text.trim().isNotEmpty ? _phoneController.text.trim() : null,
+      );
+    } catch (e) {
+      debugPrint('[onboarding_ui] Google sign-in error: $e');
+      if (mounted) {
+        String errorMessage = 'Google Sign-In failed';
+        String details = '';
+        
+        // Parse error code 10 (DEVELOPER_ERROR)
+        if (e.toString().contains('ApiException: 10') || 
+            e.toString().contains('sign_In_falled')) {
+          errorMessage = 'Google Sign-In Configuration Error';
+          details = 'The app needs to be configured in Google Cloud Console. '
+              'Please check:\n'
+              '1. Package name: com.mobpizza.app\n'
+              '2. SHA-1 fingerprint is added\n'
+              '3. OAuth client ID is configured';
+        } else if (e.toString().contains('12500')) {
+          errorMessage = 'Sign-In Cancelled';
+          details = 'You cancelled the sign-in process';
+        } else {
+          details = e.toString();
+        }
+        
+        showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text(errorMessage),
+            content: SingleChildScrollView(
+              child: Text(details),
+            ),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.of(ctx).pop(),
+                child: const Text('OK'),
+              ),
+            ],
+          ),
+        );
+      }
+    } finally {
+      if (mounted) setState(() => _signingInWithGoogle = false);
+    }
+  }
+
   Future<void> _submit() async {
+    // For phone-based onboarding, phone is required
+    final phone = _phoneController.text.trim();
+    if (phone.isEmpty) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('Please enter a phone number or sign in with Google'),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+      return;
+    }
+    
+    // Validate phone format if provided
     if (!(_formKey.currentState?.validate() ?? false)) return;
+    
     setState(() => _submitting = true);
+    try {
+      await _submitOnboarding(
+        phone: phone,
+      );
+    } finally {
+      if (mounted) setState(() => _submitting = false);
+    }
+  }
+
+  Future<void> _submitOnboarding({
+    String? email,
+    String? googleId,
+    String? firstName,
+    String? lastName,
+    String? phone,
+  }) async {
     try {
       debugPrint('[onboarding_ui] submitting...');
       await _service.submitOnboarding(
-        phone: _phoneController.text.trim(),
+        phone: phone,
+        email: email,
+        googleId: googleId,
+        firstName: firstName,
+        lastName: lastName,
         locale: _locale,
         allowLocation: _allowLocation,
         allowNotifications: _allowNotifications,
@@ -138,7 +249,18 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool(PrefKeys.onboardingCompleted, true);
       await prefs.setString(PrefKeys.localeCode, _locale);
-      await prefs.setString(PrefKeys.phone, _phoneController.text.trim());
+      if (phone != null && phone.isNotEmpty) {
+        await prefs.setString(PrefKeys.phone, phone);
+      }
+      if (email != null && email.isNotEmpty) {
+        await prefs.setString('userEmail', email);
+      }
+      if (firstName != null && firstName.isNotEmpty) {
+        await prefs.setString(PrefKeys.firstName, firstName);
+      }
+      if (lastName != null && lastName.isNotEmpty) {
+        await prefs.setString(PrefKeys.lastName, lastName);
+      }
       await prefs.setBool(PrefKeys.allowLocation, _allowLocation);
       await prefs.setBool(PrefKeys.allowNotifications, _allowNotifications);
 
@@ -184,7 +306,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       );
 
       if (proceed != true) {
-        setState(() => _submitting = false);
         return;
       }
 
@@ -192,7 +313,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setBool(PrefKeys.onboardingCompleted, true);
       await prefs.setString(PrefKeys.localeCode, _locale);
-      await prefs.setString(PrefKeys.phone, _phoneController.text.trim());
+      if (phone != null && phone.isNotEmpty) {
+        await prefs.setString(PrefKeys.phone, phone);
+      }
+      if (email != null && email.isNotEmpty) {
+        await prefs.setString('userEmail', email);
+      }
       await prefs.setBool(PrefKeys.allowLocation, _allowLocation);
       await prefs.setBool(PrefKeys.allowNotifications, _allowNotifications);
 
@@ -210,8 +336,6 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           }
         });
       }
-    } finally {
-      if (mounted) setState(() => _submitting = false);
     }
   }
 
@@ -238,6 +362,52 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                 ),
                 const SizedBox(height: 24),
+                // Google Sign-In Button
+                SizedBox(
+                  width: double.infinity,
+                  child: OutlinedButton.icon(
+                    onPressed: _signingInWithGoogle || _submitting ? null : _signInWithGoogle,
+                    icon: _signingInWithGoogle
+                        ? const SizedBox(
+                            height: 20,
+                            width: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2, color: Color(0xFFD9A441)),
+                          )
+                        : Image.asset(
+                            'assets/icons/google_logo.png',
+                            height: 20,
+                            errorBuilder: (context, error, stackTrace) => const Icon(
+                              Icons.login,
+                              color: Color(0xFFD9A441),
+                            ),
+                          ),
+                    label: Text(
+                      _signingInWithGoogle ? 'Signing in...' : 'Continue with Google',
+                      style: const TextStyle(color: Color(0xFFD9A441)),
+                    ),
+                    style: OutlinedButton.styleFrom(
+                      side: const BorderSide(color: Color(0xFFD9A441)),
+                      padding: const EdgeInsets.symmetric(vertical: 16),
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // Divider with "OR"
+                Row(
+                  children: [
+                    const Expanded(child: Divider(color: Color(0xFF3A3A3A))),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: Text(
+                        'OR',
+                        style: TextStyle(color: Colors.grey[600], fontSize: 12),
+                      ),
+                    ),
+                    const Expanded(child: Divider(color: Color(0xFF3A3A3A))),
+                  ],
+                ),
+                const SizedBox(height: 16),
+                // Phone Number Field (Optional)
                 TextFormField(
                   controller: _phoneController,
                   keyboardType: TextInputType.phone,
@@ -249,7 +419,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: const Color(0xFFF5E8C7),
-                    labelText: l10n.phoneNumber,
+                    labelText: '${l10n.phoneNumber} (Optional)',
                     labelStyle: const TextStyle(color: Colors.black87),
                     hintText: '+15551234567 or 9876543210',
                     hintStyle: const TextStyle(color: Colors.black54),
@@ -272,9 +442,11 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   ),
                   validator: (value) {
                     final v = value?.trim() ?? '';
-                    final regex = RegExp(r'^\+?[0-9]{10,15}$');
-                    if (v.isEmpty) return l10n.phoneRequired;
-                    if (!regex.hasMatch(v)) return l10n.enterValidPhone;
+                    // Phone is optional, but if provided, validate it
+                    if (v.isNotEmpty) {
+                      final regex = RegExp(r'^\+?[0-9]{10,15}$');
+                      if (!regex.hasMatch(v)) return l10n.enterValidPhone;
+                    }
                     return null;
                   },
                 ),
@@ -374,7 +546,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 SizedBox(
                   width: double.infinity,
                   child: ElevatedButton(
-                    onPressed: _submitting ? null : _submit,
+                    onPressed: (_submitting || _signingInWithGoogle) ? null : _submit,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: const Color(0xFFD9A441),
                       foregroundColor: const Color(0xFF0B0C10),

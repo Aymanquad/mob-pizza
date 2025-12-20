@@ -128,15 +128,25 @@ const userSchema = new mongoose.Schema(
     },
     phone: {
       type: String,
-      required: [true, 'Phone number is required'],
+      required: false, // Made optional to support OAuth users
       unique: true,
+      sparse: true, // Allow multiple null phones
       trim: true,
       match: [/^\+?[1-9]\d{1,14}$/, 'Please enter a valid phone number'],
+      default: null,
+    },
+    googleId: {
+      type: String,
+      unique: true,
+      sparse: true, // Allow multiple null googleIds
+      trim: true,
+      default: null,
     },
     passwordHash: {
       type: String,
-      required: [true, 'Password is required'],
+      required: false, // Made optional for OAuth users
       minlength: [6, 'Password must be at least 6 characters long'],
+      default: null,
     },
     profileImage: {
       type: String,
@@ -291,14 +301,16 @@ userSchema.virtual('defaultAddress').get(function () {
 // Index for better query performance
 userSchema.index({ email: 1 });
 userSchema.index({ phone: 1 });
+userSchema.index({ googleId: 1 });
 userSchema.index({ role: 1 });
 userSchema.index({ createdAt: -1 });
 userSchema.index({ 'addresses.isDefault': 1 });
 userSchema.index({ favorites: 1 });
 
-// Hash password before saving
+// Hash password before saving (only if passwordHash is provided and modified)
 userSchema.pre('save', async function (next) {
-  if (!this.isModified('passwordHash')) return next();
+  // Skip if passwordHash is not modified or is null/undefined (OAuth users)
+  if (!this.isModified('passwordHash') || !this.passwordHash) return next();
 
   try {
     const salt = await bcrypt.genSalt(12);
@@ -325,8 +337,9 @@ userSchema.pre('save', function (next) {
   next();
 });
 
-// Compare password method
+// Compare password method (only for users with passwordHash)
 userSchema.methods.comparePassword = async function (candidatePassword) {
+  if (!this.passwordHash) return false; // OAuth users don't have passwords
   return bcrypt.compare(candidatePassword, this.passwordHash);
 };
 

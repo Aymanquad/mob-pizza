@@ -12,20 +12,40 @@ const normalizeLocale = (locale) => {
 
 const onboarding = async (req, res, next) => {
   try {
-    const { phone, locale, allowLocation, allowNotifications } = req.body || {};
+    const { phone, email, googleId, firstName, lastName, locale, allowLocation, allowNotifications } = req.body || {};
 
     // Debug log incoming payload
     // eslint-disable-next-line no-console
     console.log('[onboarding] payload', {
       phone,
+      email,
+      googleId,
+      firstName,
+      lastName,
       locale,
       allowLocation,
       allowNotifications,
       ts: new Date().toISOString(),
     });
 
-    if (!phone || !phoneRegex.test(phone)) {
-      return res.status(400).json({ success: false, message: 'Valid phone is required' });
+    // Validate: Either phone OR (email + googleId) must be provided
+    const isOAuthFlow = Boolean(email && googleId);
+    const isPhoneFlow = Boolean(phone && phoneRegex.test(phone));
+
+    // eslint-disable-next-line no-console
+    console.log('[onboarding] validation check', {
+      isOAuthFlow,
+      isPhoneFlow,
+      hasEmail: Boolean(email),
+      hasGoogleId: Boolean(googleId),
+      hasPhone: Boolean(phone),
+    });
+
+    if (!isOAuthFlow && !isPhoneFlow) {
+      return res.status(400).json({ 
+        success: false, 
+        message: 'Either phone number OR (email + googleId) is required' 
+      });
     }
 
     const normalizedLocale = normalizeLocale(locale);
@@ -35,30 +55,50 @@ const onboarding = async (req, res, next) => {
     };
 
     // Default names for quick onboarding; can be updated later
-    const defaultFirst = 'Guest';
-    const defaultLast = 'User';
-    const randomPassword = `Temp!${Math.random().toString(36).slice(-8)}`;
-    const passwordHash = await bcrypt.hash(randomPassword, 12);
+    const defaultFirst = firstName || 'Guest';
+    const defaultLast = lastName || 'User';
+
+    // Build query and update object
+    let query = {};
+    let updateData = {
+      $set: {
+        locale: normalizedLocale,
+        consents,
+        onboardingCompleted: true,
+        onboardingAt: new Date(),
+      },
+      $setOnInsert: {
+        firstName: defaultFirst,
+        lastName: defaultLast,
+        isActive: true,
+      },
+    };
+
+    if (isOAuthFlow) {
+      // OAuth flow: use email + googleId
+      query = { googleId };
+      updateData.$set.email = email.toLowerCase();
+      updateData.$set.googleId = googleId;
+      updateData.$set.emailVerified = true;
+      if (phone && phoneRegex.test(phone)) {
+        updateData.$set.phone = phone;
+        updateData.$set.phoneVerified = true;
+      }
+      // OAuth users don't need passwordHash
+    } else {
+      // Phone flow: use phone
+      query = { phone };
+      updateData.$set.phone = phone;
+      updateData.$set.phoneVerified = true;
+      // Generate password for phone-based users
+      const randomPassword = `Temp!${Math.random().toString(36).slice(-8)}`;
+      const passwordHash = await bcrypt.hash(randomPassword, 12);
+      updateData.$setOnInsert.passwordHash = passwordHash;
+    }
 
     const user = await User.findOneAndUpdate(
-      { phone },
-      {
-        $set: {
-          phone,
-          phoneVerified: true, // since user confirmed phone entry at onboarding step
-          locale: normalizedLocale,
-          consents,
-          onboardingCompleted: true,
-          onboardingAt: new Date(),
-        },
-        $setOnInsert: {
-          firstName: defaultFirst,
-          lastName: defaultLast,
-          // email: `${phone.replace(/\\D/g, '')}@placeholder.local`, // Commented out - no email input yet
-          passwordHash,
-          isActive: true,
-        },
-      },
+      query,
+      updateData,
       { new: true, upsert: true }
     ).select('-passwordHash -__v');
 
