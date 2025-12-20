@@ -84,6 +84,12 @@ const onboarding = async (req, res, next) => {
       updateData.$set.email = email.trim().toLowerCase();
       updateData.$set.googleId = googleId.trim();
       updateData.$set.emailVerified = true;
+      
+      // Always set firstName/lastName (for both new and existing users)
+      // This ensures existing users get updated names, and new users get defaults
+      updateData.$set.firstName = defaultFirst;
+      updateData.$set.lastName = defaultLast;
+      
       if (phone && phoneRegex.test(phone)) {
         updateData.$set.phone = phone.trim();
         updateData.$set.phoneVerified = true;
