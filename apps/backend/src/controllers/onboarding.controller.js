@@ -86,10 +86,16 @@ const onboarding = async (req, res, next) => {
       updateData.$set.googleId = googleId.trim();
       updateData.$set.emailVerified = true;
       
+      // Only set phone if provided and valid
+      // Don't set phone at all if not provided - this avoids duplicate key errors
+      // on phone: null when the index isn't properly sparse
       if (phone && phoneRegex.test(phone)) {
         updateData.$set.phone = phone.trim();
         updateData.$set.phoneVerified = true;
       }
+      // If phone is not provided, we don't set it at all
+      // This way existing users keep their phone (if any), and new users
+      // won't have phone field set (not null, just missing)
       // OAuth users don't need passwordHash
     } else {
       // Phone flow: use phone
