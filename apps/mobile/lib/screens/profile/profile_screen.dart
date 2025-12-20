@@ -7,6 +7,7 @@ import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -25,6 +26,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   bool _isLoading = false;
   bool _isEditing = false;
   String _phone = '';
+  String _email = '';
   String _locale = 'en';
 
   @override
@@ -47,6 +49,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       final prefs = await SharedPreferences.getInstance();
       _phone = prefs.getString(PrefKeys.phone) ?? '';
+      _email = prefs.getString(PrefKeys.email) ?? '';
       
       // Sync with LocaleProvider's current locale first
       final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
@@ -57,12 +60,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _lastNameController.text = prefs.getString(PrefKeys.lastName) ?? '';
       _addressController.text = prefs.getString(PrefKeys.address) ?? '';
 
-      // Try to fetch from backend if phone exists
-      if (_phone.isNotEmpty) {
+      // Try to fetch from backend if phone or email exists
+      final identifier = _phone.isNotEmpty ? _phone : (_email.isNotEmpty ? _email : null);
+      if (identifier != null) {
         try {
-          final userData = await _userService.getProfile(_phone);
+          final userData = await _userService.getProfile(identifier);
           _firstNameController.text = userData['firstName'] ?? '';
           _lastNameController.text = userData['lastName'] ?? '';
+          
+          // Update email from backend if available
+          if (userData['email'] != null) {
+            _email = userData['email'] as String;
+            await prefs.setString(PrefKeys.email, _email);
+          }
+          
+          // Update phone from backend if available
+          if (userData['phone'] != null) {
+            _phone = userData['phone'] as String;
+            await prefs.setString(PrefKeys.phone, _phone);
+          }
           
           // Get first address if exists
           final addresses = userData['addresses'] as List?;
@@ -96,8 +112,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await prefs.setString(PrefKeys.address, _addressController.text.trim());
       await prefs.setString(PrefKeys.localeCode, _locale);
 
-      // Update backend
-      if (_phone.isNotEmpty) {
+      // Update backend - use phone or email as identifier
+      final identifier = _phone.isNotEmpty ? _phone : (_email.isNotEmpty ? _email : null);
+      if (identifier != null) {
         final addressText = _addressController.text.trim();
         
         final updates = <String, dynamic>{
@@ -123,7 +140,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ];
         }
 
-        await _userService.updateProfile(_phone, updates);
+        await _userService.updateProfile(identifier, updates);
       }
 
       // Update LocaleProvider AFTER saving to persist the change
@@ -164,11 +181,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
     await prefs.remove(PrefKeys.onboardingCompleted);
     await prefs.remove(PrefKeys.localeCode);
     await prefs.remove(PrefKeys.phone);
+    await prefs.remove(PrefKeys.email);
+    await prefs.remove(PrefKeys.googleId);
     await prefs.remove(PrefKeys.allowLocation);
     await prefs.remove(PrefKeys.allowNotifications);
     await prefs.remove(PrefKeys.firstName);
     await prefs.remove(PrefKeys.lastName);
     await prefs.remove(PrefKeys.address);
+    
+    // Also sign out from Google
+    try {
+      final googleSignIn = GoogleSignIn();
+      await googleSignIn.signOut();
+    } catch (e) {
+      debugPrint('[profile] Error signing out from Google: $e');
+    }
 
     if (context.mounted) {
       final l10n = AppLocalizations.of(context)!;
@@ -293,10 +320,39 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              '${l10n.phone}: $_phone',
-                              style: const TextStyle(color: Color(0xFF878787)),
-                            ),
+                            if (_email.isNotEmpty) ...[
+                              Row(
+                                children: [
+                                  const Icon(Icons.email, color: Color(0xFF878787), size: 16),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      _email,
+                                      style: const TextStyle(color: Color(0xFFF5E8C7)),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              if (_phone.isNotEmpty) const SizedBox(height: 12),
+                            ],
+                            if (_phone.isNotEmpty)
+                              Row(
+                                children: [
+                                  const Icon(Icons.phone, color: Color(0xFF878787), size: 16),
+                                  const SizedBox(width: 8),
+                                  Expanded(
+                                    child: Text(
+                                      _phone,
+                                      style: const TextStyle(color: Color(0xFF878787)),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            if (_phone.isEmpty && _email.isEmpty)
+                              Text(
+                                'No contact information',
+                                style: const TextStyle(color: Color(0xFF878787)),
+                              ),
                           ],
                         ),
                       ),

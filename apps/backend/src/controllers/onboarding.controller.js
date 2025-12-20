@@ -29,7 +29,10 @@ const onboarding = async (req, res, next) => {
     });
 
     // Validate: Either phone OR (email + googleId) must be provided
-    const isOAuthFlow = Boolean(email && googleId);
+    // For OAuth, ensure email and googleId are non-empty strings
+    const hasValidEmail = email && typeof email === 'string' && email.trim().length > 0;
+    const hasValidGoogleId = googleId && typeof googleId === 'string' && googleId.trim().length > 0;
+    const isOAuthFlow = hasValidEmail && hasValidGoogleId;
     const isPhoneFlow = Boolean(phone && phoneRegex.test(phone));
 
     // eslint-disable-next-line no-console
@@ -55,8 +58,9 @@ const onboarding = async (req, res, next) => {
     };
 
     // Default names for quick onboarding; can be updated later
-    const defaultFirst = firstName || 'Guest';
-    const defaultLast = lastName || 'User';
+    // Handle empty strings as well as null/undefined
+    const defaultFirst = (firstName && firstName.trim()) || 'Guest';
+    const defaultLast = (lastName && lastName.trim()) || 'User';
 
     // Build query and update object
     let query = {};
@@ -76,12 +80,12 @@ const onboarding = async (req, res, next) => {
 
     if (isOAuthFlow) {
       // OAuth flow: use email + googleId
-      query = { googleId };
-      updateData.$set.email = email.toLowerCase();
-      updateData.$set.googleId = googleId;
+      query = { googleId: googleId.trim() };
+      updateData.$set.email = email.trim().toLowerCase();
+      updateData.$set.googleId = googleId.trim();
       updateData.$set.emailVerified = true;
       if (phone && phoneRegex.test(phone)) {
-        updateData.$set.phone = phone;
+        updateData.$set.phone = phone.trim();
         updateData.$set.phoneVerified = true;
       }
       // OAuth users don't need passwordHash
@@ -99,7 +103,7 @@ const onboarding = async (req, res, next) => {
     const user = await User.findOneAndUpdate(
       query,
       updateData,
-      { new: true, upsert: true }
+      { new: true, upsert: true, runValidators: true }
     ).select('-passwordHash -__v');
 
     return res.status(200).json({
@@ -110,6 +114,17 @@ const onboarding = async (req, res, next) => {
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error('[onboarding] error', err);
+    
+    // Return more detailed error for debugging
+    if (err.name === 'ValidationError') {
+      return res.status(400).json({
+        success: false,
+        message: 'Validation error',
+        error: err.message,
+        details: err.errors,
+      });
+    }
+    
     return next(err);
   }
 };

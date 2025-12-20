@@ -132,6 +132,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   Future<void> _signInWithGoogle() async {
     setState(() => _signingInWithGoogle = true);
     try {
+      // Sign out first to force account selection and clear any cached account
+      await _googleSignIn.signOut();
+      
+      // Clear any old phone number from previous sessions
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(PrefKeys.phone);
+      _phoneController.clear();
+      
+      // Now sign in - this will show account picker
       final GoogleSignInAccount? googleUser = await _googleSignIn.signIn();
       if (googleUser == null) {
         // User cancelled sign-in
@@ -142,17 +151,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       // Extract user info
       final email = googleUser.email;
       final googleId = googleUser.id;
+      
+      // Validate required OAuth fields (email and googleId should always be present, but check for empty)
+      if (email.isEmpty || googleId.isEmpty) {
+        throw Exception('Google Sign-In did not provide required information (email or ID)');
+      }
+      
       final displayName = googleUser.displayName ?? '';
-      final nameParts = displayName.split(' ');
+      final nameParts = displayName.trim().split(' ').where((part) => part.isNotEmpty).toList();
       final firstName = nameParts.isNotEmpty ? nameParts.first : 'User';
+      // If only one name part, use empty string (backend will default to 'User')
       final lastName = nameParts.length > 1 ? nameParts.sublist(1).join(' ') : '';
 
-      // Submit onboarding with OAuth data
+      // Submit onboarding with OAuth data (phone is optional)
       await _submitOnboarding(
         email: email,
         googleId: googleId,
         firstName: firstName,
-        lastName: lastName,
+        lastName: lastName.isEmpty ? null : lastName, // Send null instead of empty string
         phone: _phoneController.text.trim().isNotEmpty ? _phoneController.text.trim() : null,
       );
     } catch (e) {
@@ -253,7 +269,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         await prefs.setString(PrefKeys.phone, phone);
       }
       if (email != null && email.isNotEmpty) {
-        await prefs.setString('userEmail', email);
+        await prefs.setString(PrefKeys.email, email);
+      }
+      if (googleId != null && googleId.isNotEmpty) {
+        await prefs.setString(PrefKeys.googleId, googleId);
       }
       if (firstName != null && firstName.isNotEmpty) {
         await prefs.setString(PrefKeys.firstName, firstName);
@@ -317,7 +336,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
         await prefs.setString(PrefKeys.phone, phone);
       }
       if (email != null && email.isNotEmpty) {
-        await prefs.setString('userEmail', email);
+        await prefs.setString(PrefKeys.email, email);
+      }
+      if (googleId != null && googleId.isNotEmpty) {
+        await prefs.setString(PrefKeys.googleId, googleId);
       }
       await prefs.setBool(PrefKeys.allowLocation, _allowLocation);
       await prefs.setBool(PrefKeys.allowNotifications, _allowNotifications);

@@ -33,9 +33,11 @@ class OnboardingService {
       if (firstName != null && firstName.isNotEmpty) {
         payload['firstName'] = firstName;
       }
+      // Only include lastName if it's not null and not empty
       if (lastName != null && lastName.isNotEmpty) {
         payload['lastName'] = lastName;
       }
+      // If lastName is null or empty, backend will use default 'User'
     }
     
     debugPrint('[onboarding] POST $uri payload=$payload');

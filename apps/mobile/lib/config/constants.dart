@@ -5,6 +5,8 @@ class PrefKeys {
   static const onboardingCompleted = 'onboardingCompleted';
   static const localeCode = 'localeCode';
   static const phone = 'onboardingPhone';
+  static const email = 'userEmail';
+  static const googleId = 'userGoogleId';
   static const allowLocation = 'onboardingAllowLocation';
   static const allowNotifications = 'onboardingAllowNotifications';
   static const firstName = 'firstName';

@@ -1,15 +1,29 @@
 const User = require('../models/User');
 
 /**
- * Get user profile by phone
+ * Get user profile by phone, email, or googleId
+ * Supports: /users/:identifier where identifier can be phone, email, or googleId
  */
 exports.getProfile = async (req, res) => {
   try {
-    const { phone } = req.params;
+    const { phone } = req.params; // Actually can be phone, email, or googleId
     // eslint-disable-next-line no-console
-    console.log('[user] fetching profile for phone:', phone);
+    console.log('[user] fetching profile for identifier:', phone);
 
-    const user = await User.findOne({ phone });
+    // Try to find user by phone, email, or googleId
+    let user = await User.findOne({ phone });
+    
+    // If not found by phone, try email or googleId
+    if (!user) {
+      // Check if it looks like an email
+      if (phone.includes('@')) {
+        user = await User.findOne({ email: phone.toLowerCase() });
+      } else {
+        // Try as googleId
+        user = await User.findOne({ googleId: phone });
+      }
+    }
+    
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -33,15 +47,15 @@ exports.getProfile = async (req, res) => {
 };
 
 /**
- * Update user profile
+ * Update user profile by phone, email, or googleId
  */
 exports.updateProfile = async (req, res) => {
   try {
-    const { phone } = req.params;
+    const { phone } = req.params; // Actually can be phone, email, or googleId
     const updates = req.body;
 
     // eslint-disable-next-line no-console
-    console.log('[user] updating profile for phone:', phone, 'with:', updates);
+    console.log('[user] updating profile for identifier:', phone, 'with:', updates);
 
     // Validate allowed fields
     const allowedUpdates = ['firstName', 'lastName', 'locale', 'addresses'];
@@ -53,6 +67,19 @@ exports.updateProfile = async (req, res) => {
         success: false,
         message: 'Invalid updates. Allowed fields: firstName, lastName, locale, addresses'
       });
+    }
+
+    // Build query - try phone, email, or googleId
+    let query = { phone };
+    
+    // If not found by phone, try email or googleId
+    let existingUser = await User.findOne(query);
+    if (!existingUser) {
+      if (phone.includes('@')) {
+        query = { email: phone.toLowerCase() };
+      } else {
+        query = { googleId: phone };
+      }
     }
 
     // Handle addresses update - if addresses array is provided, replace the entire array
@@ -75,7 +102,7 @@ exports.updateProfile = async (req, res) => {
     }
 
     const user = await User.findOneAndUpdate(
-      { phone },
+      query,
       updateQuery,
       { new: true, runValidators: true }
     );
