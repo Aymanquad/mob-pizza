@@ -300,8 +300,8 @@ userSchema.virtual('defaultAddress').get(function () {
 
 // Index for better query performance
 userSchema.index({ email: 1 });
-userSchema.index({ phone: 1 });
-userSchema.index({ googleId: 1 });
+userSchema.index({ phone: 1 }, { sparse: true }); // Sparse index to allow multiple null phones
+userSchema.index({ googleId: 1 }, { sparse: true }); // Sparse index to allow multiple null googleIds
 userSchema.index({ role: 1 });
 userSchema.index({ createdAt: -1 });
 userSchema.index({ 'addresses.isDefault': 1 });

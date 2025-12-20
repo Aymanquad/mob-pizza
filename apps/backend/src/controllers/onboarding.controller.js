@@ -70,10 +70,11 @@ const onboarding = async (req, res, next) => {
         consents,
         onboardingCompleted: true,
         onboardingAt: new Date(),
-      },
-      $setOnInsert: {
+        // Always set firstName/lastName in $set (for both new and existing users)
         firstName: defaultFirst,
         lastName: defaultLast,
+      },
+      $setOnInsert: {
         isActive: true,
       },
     };
@@ -85,11 +86,6 @@ const onboarding = async (req, res, next) => {
       updateData.$set.googleId = googleId.trim();
       updateData.$set.emailVerified = true;
       
-      // Always set firstName/lastName (for both new and existing users)
-      // This ensures existing users get updated names, and new users get defaults
-      updateData.$set.firstName = defaultFirst;
-      updateData.$set.lastName = defaultLast;
-      
       if (phone && phoneRegex.test(phone)) {
         updateData.$set.phone = phone.trim();
         updateData.$set.phoneVerified = true;
@@ -100,7 +96,7 @@ const onboarding = async (req, res, next) => {
       query = { phone };
       updateData.$set.phone = phone;
       updateData.$set.phoneVerified = true;
-      // Generate password for phone-based users
+      // Generate password for phone-based users (only on insert)
       const randomPassword = `Temp!${Math.random().toString(36).slice(-8)}`;
       const passwordHash = await bcrypt.hash(randomPassword, 12);
       updateData.$setOnInsert.passwordHash = passwordHash;
