@@ -177,8 +177,12 @@ exports.createOrder = async (req, res) => {
  */
 exports.getOrders = async (req, res) => {
   try {
-    const { phone } = req.params; // Can be phone, email, or googleId
+    // Express automatically URL decodes params, but let's be explicit
+    let { phone } = req.params; // Can be phone, email, or googleId
+    phone = decodeURIComponent(phone);
     const { status, limit = 50 } = req.query;
+
+    console.log('[order] Getting orders for identifier:', phone);
 
     // Find user by phone, email, or googleId
     let user = null;
@@ -187,33 +191,42 @@ exports.getOrders = async (req, res) => {
     // Check if identifier is an email
     if (phone.includes('@')) {
       query = { email: phone.toLowerCase() };
+      console.log('[order] Looking up user by email:', phone.toLowerCase());
       user = await User.findOne(query);
     }
     
     // If not found and not an email, try phone
     if (!user && !phone.includes('@')) {
       query = { phone };
+      console.log('[order] Looking up user by phone:', phone);
       user = await User.findOne(query);
     }
     
     // If still not found, try googleId (for long numeric strings)
     if (!user && phone.length > 15 && /^\d+$/.test(phone)) {
       query = { googleId: phone };
+      console.log('[order] Looking up user by googleId:', phone);
       user = await User.findOne(query);
     }
     
     if (!user) {
+      console.error('[order] User not found for identifier:', phone);
       return res.status(404).json({
         success: false,
         message: 'User not found',
       });
     }
+    
+    console.log('[order] Found user:', user._id, 'role:', user.role);
 
     // Build query - if user is admin or delivery, show ALL orders
     // Otherwise, show only user's orders
     const orderQuery = {};
     if (user.role === 'customer') {
       orderQuery.customer = user._id; // Only show customer's own orders
+      console.log(`[order] Customer user - filtering by customer._id: ${user._id}`);
+    } else {
+      console.log(`[order] Admin/Delivery user (${user.role}) - showing ALL orders`);
     }
     // If admin or delivery, orderQuery is empty (shows all orders)
     

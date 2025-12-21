@@ -64,33 +64,38 @@ class OrderProvider with ChangeNotifier {
         
         // Check if user is host/admin - if not, filter to only their orders
         final isHost = await AuthService.isHost();
-        final userPhone = await AuthService.getCurrentUserPhone();
-        final prefs = await SharedPreferences.getInstance();
-        final userEmail = prefs.getString(PrefKeys.email) ?? '';
         
         List<Map<String, dynamic>> filteredOrders = ordersData;
         
         // If not a host, filter orders to only show user's own orders
+        // Use the same identifier we used to fetch orders to match
         if (!isHost) {
           filteredOrders = ordersData.where((json) {
-            // Check if order belongs to current user
+            // Check if order belongs to current user by matching the identifier
             final customer = json['customer'] as Map<String, dynamic>?;
+            
             if (customer != null) {
-              final customerPhone = customer['phone'] as String? ?? '';
-              final customerEmail = customer['email'] as String? ?? '';
+              final customerPhone = (customer['phone'] as String? ?? '').trim();
+              final customerEmail = (customer['email'] as String? ?? '').trim().toLowerCase();
               
-              // Match by phone or email
-              final matchesPhone = userPhone.isNotEmpty && customerPhone == userPhone;
-              final matchesEmail = userEmail.isNotEmpty && customerEmail.toLowerCase() == userEmail.toLowerCase();
+              // Match identifier (which could be phone or email)
+              final identifierLower = identifier.trim().toLowerCase();
+              final matchesPhone = customerPhone.isNotEmpty && customerPhone == identifier;
+              final matchesEmail = customerEmail.isNotEmpty && customerEmail == identifierLower;
+              
+              debugPrint('[OrderProvider] Checking order: customerPhone=$customerPhone, customerEmail=$customerEmail, identifier=$identifier, matches=${matchesPhone || matchesEmail}');
               
               return matchesPhone || matchesEmail;
             }
-            // Fallback: check phoneNumber field directly
-            final orderPhone = json['phoneNumber'] as String? ?? '';
-            return userPhone.isNotEmpty && orderPhone == userPhone;
+            
+            // Fallback: check phoneNumber field directly if customer object is missing
+            final orderPhone = (json['phoneNumber'] as String? ?? '').trim();
+            final matches = orderPhone.isNotEmpty && orderPhone == identifier;
+            debugPrint('[OrderProvider] Fallback check: orderPhone=$orderPhone, identifier=$identifier, matches=$matches');
+            return matches;
           }).toList();
           
-          debugPrint('[OrderProvider] Filtered to ${filteredOrders.length} orders for regular user');
+          debugPrint('[OrderProvider] Filtered ${ordersData.length} orders to ${filteredOrders.length} orders for user (identifier: $identifier)');
         } else {
           debugPrint('[OrderProvider] Showing all ${filteredOrders.length} orders for host/admin');
         }
