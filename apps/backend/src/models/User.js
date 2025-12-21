@@ -124,7 +124,7 @@ const userSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
       match: [/^[^\s@]+@[^\s@]+\.[^\s@]+$/, 'Please enter a valid email'],
-      default: null,
+      // NO default - OAuth users will have email, phone users might not
     },
     phone: {
       type: String,
@@ -133,14 +133,15 @@ const userSchema = new mongoose.Schema(
       sparse: true, // Allow multiple null phones
       trim: true,
       match: [/^\+?[1-9]\d{1,14}$/, 'Please enter a valid phone number'],
-      default: null,
+      // NO default - this prevents MongoDB from setting phone: null on new documents
+      // If phone is not provided, the field simply won't exist (undefined, not null)
     },
     googleId: {
       type: String,
       unique: true,
       sparse: true, // Allow multiple null googleIds
       trim: true,
-      default: null,
+      // NO default - this prevents MongoDB from setting googleId: null on new documents
     },
     passwordHash: {
       type: String,

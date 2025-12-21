@@ -87,15 +87,14 @@ const onboarding = async (req, res, next) => {
       updateData.$set.emailVerified = true;
       
       // Only set phone if provided and valid
-      // Don't set phone at all if not provided - this avoids duplicate key errors
-      // on phone: null when the index isn't properly sparse
+      // CRITICAL: Don't set phone at all if not provided
+      // This prevents MongoDB from setting phone: null which causes duplicate key errors
       if (phone && phoneRegex.test(phone)) {
         updateData.$set.phone = phone.trim();
         updateData.$set.phoneVerified = true;
       }
       // If phone is not provided, we don't set it at all
-      // This way existing users keep their phone (if any), and new users
-      // won't have phone field set (not null, just missing)
+      // The schema no longer has default: null, so phone won't be set to null on new documents
       // OAuth users don't need passwordHash
     } else {
       // Phone flow: use phone
@@ -108,11 +107,37 @@ const onboarding = async (req, res, next) => {
       updateData.$setOnInsert.passwordHash = passwordHash;
     }
 
-    const user = await User.findOneAndUpdate(
-      query,
-      updateData,
-      { new: true, upsert: true, runValidators: true }
-    ).select('-passwordHash -__v');
+    // ROBUST FIX: Check if user exists first to avoid phone: null on new documents
+    let user = await User.findOne(query).select('-passwordHash -__v');
+    
+    if (user) {
+      // User exists - update them (phone won't be set to null since we don't include it)
+      user = await User.findOneAndUpdate(
+        query,
+        updateData,
+        { new: true, runValidators: true }
+      ).select('-passwordHash -__v');
+    } else {
+      // User doesn't exist - create new one
+      // For OAuth users without phone, explicitly don't include phone field
+      const newUserData = {
+        ...updateData.$set,
+        ...updateData.$setOnInsert,
+      };
+      
+      // Remove phone if it's not provided for OAuth users
+      if (isOAuthFlow && (!phone || !phoneRegex.test(phone))) {
+        delete newUserData.phone;
+        delete newUserData.phoneVerified;
+      }
+      
+      user = await User.create(newUserData);
+      // Convert to plain object and remove sensitive fields
+      const userObj = user.toObject();
+      delete userObj.passwordHash;
+      delete userObj.__v;
+      user = userObj;
+    }
 
     return res.status(200).json({
       success: true,
