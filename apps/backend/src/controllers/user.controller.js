@@ -69,17 +69,34 @@ exports.updateProfile = async (req, res) => {
       });
     }
 
-    // Build query - try phone, email, or googleId
-    let query = { phone };
+    // Build query - try email first (if contains @), then phone, then googleId
+    let query = {};
+    let existingUser = null;
     
-    // If not found by phone, try email or googleId
-    let existingUser = await User.findOne(query);
+    // Check if identifier is an email
+    if (phone.includes('@')) {
+      query = { email: phone.toLowerCase() };
+      existingUser = await User.findOne(query);
+    }
+    
+    // If not found and not an email, try phone
+    if (!existingUser && !phone.includes('@')) {
+      query = { phone };
+      existingUser = await User.findOne(query);
+    }
+    
+    // If still not found, try googleId (for long numeric strings)
+    if (!existingUser && phone.length > 15 && /^\d+$/.test(phone)) {
+      query = { googleId: phone };
+      existingUser = await User.findOne(query);
+    }
+    
+    // If still not found, return 404
     if (!existingUser) {
-      if (phone.includes('@')) {
-        query = { email: phone.toLowerCase() };
-      } else {
-        query = { googleId: phone };
-      }
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
     }
 
     // Handle addresses update - if addresses array is provided, replace the entire array

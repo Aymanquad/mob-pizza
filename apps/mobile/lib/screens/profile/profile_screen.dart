@@ -2,12 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_pizza_mobile/config/constants.dart';
 import 'package:mob_pizza_mobile/services/user_service.dart';
+import 'package:mob_pizza_mobile/services/auth_service.dart';
 import 'package:mob_pizza_mobile/providers/locale_provider.dart';
 import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter/foundation.dart';
 
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
@@ -60,9 +62,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
       _lastNameController.text = prefs.getString(PrefKeys.lastName) ?? '';
       _addressController.text = prefs.getString(PrefKeys.address) ?? '';
 
-      // Try to fetch from backend if phone or email exists
-      final identifier = _phone.isNotEmpty ? _phone : (_email.isNotEmpty ? _email : null);
-      if (identifier != null) {
+      // Try to fetch from backend using current identifier
+      final identifier = await AuthService.getUserIdentifier();
+      if (identifier.isNotEmpty) {
         try {
           final userData = await _userService.getProfile(identifier);
           _firstNameController.text = userData['firstName'] ?? '';
@@ -112,36 +114,41 @@ class _ProfileScreenState extends State<ProfileScreen> {
       await prefs.setString(PrefKeys.address, _addressController.text.trim());
       await prefs.setString(PrefKeys.localeCode, _locale);
 
-      // Update backend - use phone or email as identifier
-      final identifier = _phone.isNotEmpty ? _phone : (_email.isNotEmpty ? _email : null);
-      if (identifier != null) {
-        final addressText = _addressController.text.trim();
-        
-        final updates = <String, dynamic>{
-          'firstName': _firstNameController.text.trim(),
-          'lastName': _lastNameController.text.trim(),
-          'locale': _locale,
-        };
-
-        // Save address to MongoDB if provided
-        if (addressText.isNotEmpty) {
-          // Create or update the default address
-          // Note: coordinates are optional, so we don't include them if not available
-          updates['addresses'] = [
-            {
-              'label': 'home',
-              'street': addressText,
-              'city': '', // Optional, can be filled later
-              'state': '', // Optional, can be filled later
-              'zipCode': '', // Optional, can be filled later
-              'isDefault': true,
-              // Don't include coordinates if not available - backend will handle it
-            }
-          ];
-        }
-
-        await _userService.updateProfile(identifier, updates);
+      // Update backend - use getUserIdentifier to get current identifier (phone or email)
+      final identifier = await AuthService.getUserIdentifier();
+      if (identifier.isEmpty) {
+        throw Exception('No user identifier found. Please complete onboarding.');
       }
+      
+      final addressText = _addressController.text.trim();
+      
+      final updates = <String, dynamic>{
+        'firstName': _firstNameController.text.trim(),
+        'lastName': _lastNameController.text.trim(),
+        'locale': _locale,
+      };
+
+      // Save address to MongoDB if provided
+      if (addressText.isNotEmpty) {
+        // Create or update the default address
+        // Note: coordinates are optional, so we don't include them if not available
+        updates['addresses'] = [
+          {
+            'label': 'home',
+            'street': addressText,
+            'city': '', // Optional, can be filled later
+            'state': '', // Optional, can be filled later
+            'zipCode': '', // Optional, can be filled later
+            'isDefault': true,
+            // Don't include coordinates if not available - backend will handle it
+          }
+        ];
+      }
+
+      await _userService.updateProfile(identifier, updates);
+      
+      // Reload profile to get updated data from backend
+      await _loadProfile();
 
       // Update LocaleProvider AFTER saving to persist the change
       if (mounted) {

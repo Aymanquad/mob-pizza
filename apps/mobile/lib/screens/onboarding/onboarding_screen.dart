@@ -441,7 +441,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: const Color(0xFFF5E8C7),
-                    labelText: '${l10n.phoneNumber} (Optional)',
+                    labelText: l10n.phoneNumber,
                     labelStyle: const TextStyle(color: Colors.black87),
                     hintText: '+15551234567 or 9876543210',
                     hintStyle: const TextStyle(color: Colors.black54),

@@ -47,10 +47,10 @@ class OrderProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final phone = await AuthService.getCurrentUserPhone();
+      final identifier = await AuthService.getUserIdentifier();
       
-      if (phone.isEmpty) {
-        // No phone = not onboarded, load from local storage
+      if (identifier.isEmpty) {
+        // No identifier = not onboarded, load from local storage
         await _loadFromLocalStorage();
         return;
       }
@@ -58,8 +58,8 @@ class OrderProvider with ChangeNotifier {
       try {
         // Try to load from API
         // Backend automatically returns all orders if user is admin/host
-        debugPrint('[OrderProvider] Fetching orders from API for phone: $phone');
-        final ordersData = await _orderService.getOrders(phone);
+        debugPrint('[OrderProvider] Fetching orders from API for identifier: $identifier');
+        final ordersData = await _orderService.getOrders(identifier);
         debugPrint('[OrderProvider] Received ${ordersData.length} orders from API');
         _orders = ordersData.map((json) {
           try {
@@ -222,10 +222,10 @@ class OrderProvider with ChangeNotifier {
 
   // Add new order (create via API)
   Future<void> addOrder(Order order) async {
-    final phone = await AuthService.getCurrentUserPhone();
+    final identifier = await AuthService.getUserIdentifier();
     
-    if (phone.isEmpty) {
-      // No phone = not onboarded, save locally only
+    if (identifier.isEmpty) {
+      // No identifier = not onboarded, save locally only
       _orders.add(order);
       await _saveToLocalStorage();
       notifyListeners();
@@ -235,7 +235,7 @@ class OrderProvider with ChangeNotifier {
     try {
       // Create order via API
       final orderData = await _orderService.createOrder(
-        phone,
+        identifier,
         items: order.items,
         customerName: order.customerName,
         phoneNumber: order.phoneNumber,
@@ -262,7 +262,7 @@ class OrderProvider with ChangeNotifier {
 
   // Update order status
   Future<void> updateOrderStatus(String orderId, OrderStatus newStatus) async {
-    final phone = await AuthService.getCurrentUserPhone();
+    final identifier = await AuthService.getUserIdentifier();
     
     // Map OrderStatus to API status string
     String apiStatus = 'pending';
@@ -294,10 +294,10 @@ class OrderProvider with ChangeNotifier {
     }
 
     try {
-      if (phone.isNotEmpty) {
+      if (identifier.isNotEmpty) {
         try {
           // Update via API
-          final updatedData = await _orderService.updateOrderStatus(phone, orderId, apiStatus);
+          final updatedData = await _orderService.updateOrderStatus(identifier, orderId, apiStatus);
           final updatedOrder = _orderFromApi(updatedData);
           _orders[index] = updatedOrder;
           await _saveToLocalStorage();

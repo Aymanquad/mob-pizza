@@ -27,17 +27,17 @@ class CartProvider with ChangeNotifier {
     notifyListeners();
 
     try {
-      final phone = await AuthService.getCurrentUserPhone();
+      final identifier = await AuthService.getUserIdentifier();
       
-      if (phone.isEmpty) {
-        // No phone = not onboarded, load from local storage
+      if (identifier.isEmpty) {
+        // No identifier = not onboarded, load from local storage
         await _loadFromLocalStorage();
         return;
       }
 
       try {
         // Try to load from API
-        _items = await _cartService.getCart(phone);
+        _items = await _cartService.getCart(identifier);
         // Sync to local storage as cache
         await _saveToLocalStorage();
         debugPrint('[CartProvider] Cart loaded from API (${_items.length} items)');
@@ -86,13 +86,13 @@ class CartProvider with ChangeNotifier {
   }
 
   Future<void> addItem(CartItem item) async {
-    final phone = await AuthService.getCurrentUserPhone();
+    final identifier = await AuthService.getUserIdentifier();
     
     try {
-      if (phone.isNotEmpty) {
+      if (identifier.isNotEmpty) {
         // Try to sync with API
         try {
-          _items = await _cartService.addItem(phone, item);
+          _items = await _cartService.addItem(identifier, item);
           await _saveToLocalStorage();
           debugPrint('[CartProvider] Item added via API');
         } catch (e) {
@@ -131,12 +131,12 @@ class CartProvider with ChangeNotifier {
   }
 
   Future<void> removeItem(String id) async {
-    final phone = await AuthService.getCurrentUserPhone();
+    final identifier = await AuthService.getUserIdentifier();
     
     try {
-      if (phone.isNotEmpty) {
+      if (identifier.isNotEmpty) {
         try {
-          _items = await _cartService.removeItem(phone, id);
+          _items = await _cartService.removeItem(identifier, id);
           await _saveToLocalStorage();
           debugPrint('[CartProvider] Item removed via API');
         } catch (e) {
@@ -158,15 +158,15 @@ class CartProvider with ChangeNotifier {
   }
 
   Future<void> updateQuantity(String id, int quantity) async {
-    final phone = await AuthService.getCurrentUserPhone();
+    final identifier = await AuthService.getUserIdentifier();
     
     try {
-      if (phone.isNotEmpty) {
+      if (identifier.isNotEmpty) {
         try {
           if (quantity <= 0) {
-            _items = await _cartService.removeItem(phone, id);
+            _items = await _cartService.removeItem(identifier, id);
           } else {
-            _items = await _cartService.updateQuantity(phone, id, quantity);
+            _items = await _cartService.updateQuantity(identifier, id, quantity);
           }
           await _saveToLocalStorage();
           debugPrint('[CartProvider] Quantity updated via API');

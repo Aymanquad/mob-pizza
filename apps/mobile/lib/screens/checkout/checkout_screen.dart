@@ -8,6 +8,9 @@ import 'package:mob_pizza_mobile/providers/order_provider.dart';
 import 'package:mob_pizza_mobile/models/order.dart';
 import 'package:mob_pizza_mobile/config/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:mob_pizza_mobile/services/user_service.dart';
+import 'package:mob_pizza_mobile/services/auth_service.dart';
+import 'package:flutter/foundation.dart';
 
 class CheckoutScreen extends StatefulWidget {
   const CheckoutScreen({super.key});
@@ -96,8 +99,29 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         }
       }
       await prefs.setString(PrefKeys.address, _addressController.text.trim());
-      if (_phoneController.text.trim().isNotEmpty) {
-        await prefs.setString(PrefKeys.phone, _phoneController.text.trim());
+      
+      // If phone number is entered, save it to backend profile
+      final phoneNumber = _phoneController.text.trim();
+      if (phoneNumber.isNotEmpty) {
+        await prefs.setString(PrefKeys.phone, phoneNumber);
+        
+        // Update backend profile with phone number (for OAuth users who didn't have phone)
+        try {
+          final userService = UserService();
+          // Get current identifier (email if OAuth user, phone if already exists)
+          final currentIdentifier = await AuthService.getUserIdentifier();
+          if (currentIdentifier.isNotEmpty && currentIdentifier != phoneNumber) {
+            // Update profile with phone number
+            await userService.updateProfile(currentIdentifier, {
+              'phone': phoneNumber,
+              'phoneVerified': true,
+            });
+            debugPrint('[checkout] Updated backend profile with phone number');
+          }
+        } catch (e) {
+          // Don't fail checkout if profile update fails
+          debugPrint('[checkout] Error updating profile with phone: $e');
+        }
       }
 
       // Generate order number

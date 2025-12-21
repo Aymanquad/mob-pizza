@@ -63,5 +63,18 @@ class AuthService {
     final prefs = await SharedPreferences.getInstance();
     return prefs.getString(PrefKeys.phone) ?? '';
   }
+
+  // Get user identifier (phone OR email) for API calls
+  // Returns phone if available, otherwise email (for OAuth users)
+  static Future<String> getUserIdentifier() async {
+    final prefs = await SharedPreferences.getInstance();
+    final phone = prefs.getString(PrefKeys.phone) ?? '';
+    if (phone.isNotEmpty) {
+      return phone;
+    }
+    // For OAuth users, use email as identifier
+    final email = prefs.getString(PrefKeys.email) ?? '';
+    return email;
+  }
 }
 
