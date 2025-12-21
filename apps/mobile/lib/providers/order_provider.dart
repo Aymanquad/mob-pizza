@@ -61,7 +61,41 @@ class OrderProvider with ChangeNotifier {
         debugPrint('[OrderProvider] Fetching orders from API for identifier: $identifier');
         final ordersData = await _orderService.getOrders(identifier);
         debugPrint('[OrderProvider] Received ${ordersData.length} orders from API');
-        _orders = ordersData.map((json) {
+        
+        // Check if user is host/admin - if not, filter to only their orders
+        final isHost = await AuthService.isHost();
+        final userPhone = await AuthService.getCurrentUserPhone();
+        final prefs = await SharedPreferences.getInstance();
+        final userEmail = prefs.getString(PrefKeys.email) ?? '';
+        
+        List<Map<String, dynamic>> filteredOrders = ordersData;
+        
+        // If not a host, filter orders to only show user's own orders
+        if (!isHost) {
+          filteredOrders = ordersData.where((json) {
+            // Check if order belongs to current user
+            final customer = json['customer'] as Map<String, dynamic>?;
+            if (customer != null) {
+              final customerPhone = customer['phone'] as String? ?? '';
+              final customerEmail = customer['email'] as String? ?? '';
+              
+              // Match by phone or email
+              final matchesPhone = userPhone.isNotEmpty && customerPhone == userPhone;
+              final matchesEmail = userEmail.isNotEmpty && customerEmail.toLowerCase() == userEmail.toLowerCase();
+              
+              return matchesPhone || matchesEmail;
+            }
+            // Fallback: check phoneNumber field directly
+            final orderPhone = json['phoneNumber'] as String? ?? '';
+            return userPhone.isNotEmpty && orderPhone == userPhone;
+          }).toList();
+          
+          debugPrint('[OrderProvider] Filtered to ${filteredOrders.length} orders for regular user');
+        } else {
+          debugPrint('[OrderProvider] Showing all ${filteredOrders.length} orders for host/admin');
+        }
+        
+        _orders = filteredOrders.map((json) {
           try {
             return _orderFromApi(json);
           } catch (e) {

@@ -7,11 +7,31 @@ const MenuItem = require('../models/MenuItem');
  */
 exports.createOrder = async (req, res) => {
   try {
-    const { phone } = req.params;
+    const { phone } = req.params; // Can be phone, email, or googleId
     const orderData = req.body;
 
-    // Find user
-    const user = await User.findOne({ phone });
+    // Find user by phone, email, or googleId
+    let user = null;
+    let query = {};
+    
+    // Check if identifier is an email
+    if (phone.includes('@')) {
+      query = { email: phone.toLowerCase() };
+      user = await User.findOne(query);
+    }
+    
+    // If not found and not an email, try phone
+    if (!user && !phone.includes('@')) {
+      query = { phone };
+      user = await User.findOne(query);
+    }
+    
+    // If still not found, try googleId (for long numeric strings)
+    if (!user && phone.length > 15 && /^\d+$/.test(phone)) {
+      query = { googleId: phone };
+      user = await User.findOne(query);
+    }
+    
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -141,11 +161,31 @@ exports.createOrder = async (req, res) => {
  */
 exports.getOrders = async (req, res) => {
   try {
-    const { phone } = req.params;
+    const { phone } = req.params; // Can be phone, email, or googleId
     const { status, limit = 50 } = req.query;
 
-    // Find user
-    const user = await User.findOne({ phone });
+    // Find user by phone, email, or googleId
+    let user = null;
+    let query = {};
+    
+    // Check if identifier is an email
+    if (phone.includes('@')) {
+      query = { email: phone.toLowerCase() };
+      user = await User.findOne(query);
+    }
+    
+    // If not found and not an email, try phone
+    if (!user && !phone.includes('@')) {
+      query = { phone };
+      user = await User.findOne(query);
+    }
+    
+    // If still not found, try googleId (for long numeric strings)
+    if (!user && phone.length > 15 && /^\d+$/.test(phone)) {
+      query = { googleId: phone };
+      user = await User.findOne(query);
+    }
+    
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -155,20 +195,20 @@ exports.getOrders = async (req, res) => {
 
     // Build query - if user is admin or delivery, show ALL orders
     // Otherwise, show only user's orders
-    const query = {};
+    const orderQuery = {};
     if (user.role === 'customer') {
-      query.customer = user._id; // Only show customer's own orders
+      orderQuery.customer = user._id; // Only show customer's own orders
     }
-    // If admin or delivery, query is empty (shows all orders)
+    // If admin or delivery, orderQuery is empty (shows all orders)
     
     if (status) {
-      query.orderStatus = status;
+      orderQuery.orderStatus = status;
     }
 
-    console.log(`[order] Fetching orders for user: ${user.phone}, role: ${user.role}, query:`, JSON.stringify(query));
+    console.log(`[order] Fetching orders for user: ${user.phone || user.email}, role: ${user.role}, query:`, JSON.stringify(orderQuery));
 
-    const orders = await Order.find(query)
-      .populate('customer', 'firstName lastName phone')
+    const orders = await Order.find(orderQuery)
+      .populate('customer', 'firstName lastName phone email')
       .populate('items.menuItem', 'name image')
       .sort({ createdAt: -1 })
       .limit(parseInt(limit));
@@ -194,10 +234,30 @@ exports.getOrders = async (req, res) => {
  */
 exports.getOrder = async (req, res) => {
   try {
-    const { phone, orderId } = req.params;
+    const { phone, orderId } = req.params; // phone can be phone, email, or googleId
 
-    // Find user
-    const user = await User.findOne({ phone });
+    // Find user by phone, email, or googleId
+    let user = null;
+    let query = {};
+    
+    // Check if identifier is an email
+    if (phone.includes('@')) {
+      query = { email: phone.toLowerCase() };
+      user = await User.findOne(query);
+    }
+    
+    // If not found and not an email, try phone
+    if (!user && !phone.includes('@')) {
+      query = { phone };
+      user = await User.findOne(query);
+    }
+    
+    // If still not found, try googleId (for long numeric strings)
+    if (!user && phone.length > 15 && /^\d+$/.test(phone)) {
+      query = { googleId: phone };
+      user = await User.findOne(query);
+    }
+    
     if (!user) {
       return res.status(404).json({
         success: false,
@@ -205,17 +265,21 @@ exports.getOrder = async (req, res) => {
       });
     }
 
-    const order = await Order.findOne({
-      _id: orderId,
-      customer: user._id,
-    })
+    // Build order query - customers can only see their own orders, admins/delivery can see any
+    const orderQuery = { _id: orderId };
+    if (user.role === 'customer') {
+      orderQuery.customer = user._id; // Customers can only see their own orders
+    }
+    // Admin and delivery can see any order (no customer filter)
+
+    const order = await Order.findOne(orderQuery)
       .populate('items.menuItem', 'name image')
       .populate('deliveryAddress');
 
     if (!order) {
       return res.status(404).json({
         success: false,
-        message: 'Order not found',
+        message: 'Order not found or you do not have permission to view this order',
       });
     }
 
@@ -256,8 +320,28 @@ exports.updateOrderStatus = async (req, res) => {
       });
     }
 
-    // Find user
-    const user = await User.findOne({ phone });
+    // Find user by phone, email, or googleId
+    let user = null;
+    let query = {};
+    
+    // Check if identifier is an email
+    if (phone.includes('@')) {
+      query = { email: phone.toLowerCase() };
+      user = await User.findOne(query);
+    }
+    
+    // If not found and not an email, try phone
+    if (!user && !phone.includes('@')) {
+      query = { phone };
+      user = await User.findOne(query);
+    }
+    
+    // If still not found, try googleId (for long numeric strings)
+    if (!user && phone.length > 15 && /^\d+$/.test(phone)) {
+      query = { googleId: phone };
+      user = await User.findOne(query);
+    }
+    
     if (!user) {
       return res.status(404).json({
         success: false,
