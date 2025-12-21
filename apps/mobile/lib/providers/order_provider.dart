@@ -268,6 +268,7 @@ class OrderProvider with ChangeNotifier {
 
     try {
       // Create order via API
+      debugPrint('[OrderProvider] Creating order via API with identifier: $identifier');
       final orderData = await _orderService.createOrder(
         identifier,
         items: order.items,
@@ -283,12 +284,12 @@ class OrderProvider with ChangeNotifier {
       final newOrder = _orderFromApi(orderData);
       _orders.add(newOrder);
       await _saveToLocalStorage();
-      debugPrint('[OrderProvider] Order created via API');
+      debugPrint('[OrderProvider] Order created successfully via API, orderId: ${newOrder.id}');
     } catch (e) {
-      debugPrint('[OrderProvider] API error, saving locally: $e');
-      // Fallback: save locally
-      _orders.add(order);
-      await _saveToLocalStorage();
+      debugPrint('[OrderProvider] API error creating order: $e');
+      // Don't save locally if API fails - this ensures orders are only in DB
+      // Re-throw the error so the UI can show it
+      rethrow;
     }
     
     notifyListeners();

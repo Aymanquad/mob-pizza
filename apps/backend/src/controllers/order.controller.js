@@ -7,8 +7,18 @@ const MenuItem = require('../models/MenuItem');
  */
 exports.createOrder = async (req, res) => {
   try {
-    const { phone } = req.params; // Can be phone, email, or googleId
+    // Express automatically URL decodes params, but let's be explicit
+    let { phone } = req.params; // Can be phone, email, or googleId
+    phone = decodeURIComponent(phone);
     const orderData = req.body;
+
+    console.log('[order] Creating order for identifier:', phone);
+    console.log('[order] Order data:', JSON.stringify({
+      itemsCount: orderData.items?.length || 0,
+      customerName: orderData.customerName,
+      phoneNumber: orderData.phoneNumber,
+      totalPrice: orderData.totalPrice,
+    }));
 
     // Find user by phone, email, or googleId
     let user = null;
@@ -17,27 +27,33 @@ exports.createOrder = async (req, res) => {
     // Check if identifier is an email
     if (phone.includes('@')) {
       query = { email: phone.toLowerCase() };
+      console.log('[order] Looking up user by email:', phone.toLowerCase());
       user = await User.findOne(query);
     }
     
     // If not found and not an email, try phone
     if (!user && !phone.includes('@')) {
       query = { phone };
+      console.log('[order] Looking up user by phone:', phone);
       user = await User.findOne(query);
     }
     
     // If still not found, try googleId (for long numeric strings)
     if (!user && phone.length > 15 && /^\d+$/.test(phone)) {
       query = { googleId: phone };
+      console.log('[order] Looking up user by googleId:', phone);
       user = await User.findOne(query);
     }
     
     if (!user) {
+      console.error('[order] User not found for identifier:', phone);
       return res.status(404).json({
         success: false,
         message: 'User not found',
       });
     }
+    
+    console.log('[order] Found user:', user._id, 'role:', user.role);
 
     // Validate required fields
     if (!orderData.items || !Array.isArray(orderData.items) || orderData.items.length === 0) {

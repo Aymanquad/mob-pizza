@@ -10,7 +10,7 @@ class OrderService {
   OrderService({String? baseUrl}) : baseUrl = baseUrl ?? apiBaseUrl;
 
   /// Create new order
-  Future<Map<String, dynamic>> createOrder(String phone, {
+  Future<Map<String, dynamic>> createOrder(String identifier, {
     required List<CartItem> items,
     required String customerName,
     required String phoneNumber,
@@ -24,8 +24,10 @@ class OrderService {
     String? customerNotes,
     DateTime? estimatedDelivery,
   }) async {
-    final url = '$baseUrl/orders/$phone';
-    debugPrint('[order_service] POST $url');
+    // URL encode the identifier in case it's an email
+    final encodedIdentifier = Uri.encodeComponent(identifier);
+    final url = '$baseUrl/orders/$encodedIdentifier';
+    debugPrint('[order_service] POST $url (identifier: $identifier)');
 
     final orderData = {
       'items': items.map((item) => {
@@ -67,8 +69,16 @@ class OrderService {
         if (data['success'] == true) {
           return data['data'] as Map<String, dynamic>;
         }
+        throw Exception('Failed to create order: ${data['message'] ?? 'Unknown error'}');
       }
-      throw Exception('Failed to create order: ${response.statusCode}');
+      
+      // Try to parse error message from response
+      try {
+        final errorData = jsonDecode(response.body);
+        throw Exception('Failed to create order: ${errorData['message'] ?? 'Unknown error'} (${response.statusCode})');
+      } catch (_) {
+        throw Exception('Failed to create order: ${response.statusCode} - ${response.body}');
+      }
     } catch (e) {
       debugPrint('[order_service] error creating order: $e');
       rethrow;
@@ -77,11 +87,13 @@ class OrderService {
 
   /// Get user's orders (or all orders if user is admin/host)
   /// The backend automatically returns all orders if user role is admin/delivery
-  Future<List<Map<String, dynamic>>> getOrders(String phone, {String? status}) async {
+  Future<List<Map<String, dynamic>>> getOrders(String identifier, {String? status}) async {
+    // URL encode the identifier in case it's an email
+    final encodedIdentifier = Uri.encodeComponent(identifier);
     final url = status != null
-        ? '$baseUrl/orders/$phone?status=$status'
-        : '$baseUrl/orders/$phone';
-    debugPrint('[order_service] GET $url');
+        ? '$baseUrl/orders/$encodedIdentifier?status=$status'
+        : '$baseUrl/orders/$encodedIdentifier';
+    debugPrint('[order_service] GET $url (identifier: $identifier)');
 
     try {
       final response = await http.get(
@@ -106,9 +118,11 @@ class OrderService {
   }
 
   /// Get single order
-  Future<Map<String, dynamic>> getOrder(String phone, String orderId) async {
-    final url = '$baseUrl/orders/$phone/$orderId';
-    debugPrint('[order_service] GET $url');
+  Future<Map<String, dynamic>> getOrder(String identifier, String orderId) async {
+    // URL encode the identifier in case it's an email
+    final encodedIdentifier = Uri.encodeComponent(identifier);
+    final url = '$baseUrl/orders/$encodedIdentifier/$orderId';
+    debugPrint('[order_service] GET $url (identifier: $identifier)');
 
     try {
       final response = await http.get(
@@ -133,12 +147,14 @@ class OrderService {
 
   /// Update order status
   Future<Map<String, dynamic>> updateOrderStatus(
-    String phone,
+    String identifier,
     String orderId,
     String status,
   ) async {
-    final url = '$baseUrl/orders/$phone/$orderId/status';
-    debugPrint('[order_service] PUT $url with status: $status');
+    // URL encode the identifier in case it's an email
+    final encodedIdentifier = Uri.encodeComponent(identifier);
+    final url = '$baseUrl/orders/$encodedIdentifier/$orderId/status';
+    debugPrint('[order_service] PUT $url with status: $status (identifier: $identifier)');
 
     try {
       final response = await http.put(

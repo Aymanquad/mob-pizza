@@ -144,9 +144,24 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       );
 
       // Save order
-      await orderProvider.addOrder(order);
+      try {
+        await orderProvider.addOrder(order);
+      } catch (e) {
+        // If order creation fails, show error and don't clear cart
+        if (mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Failed to create order: ${e.toString()}'),
+              backgroundColor: Colors.red,
+              duration: const Duration(seconds: 5),
+            ),
+          );
+        }
+        setState(() => _isLoading = false);
+        return; // Don't proceed if order creation failed
+      }
 
-      // Clear cart
+      // Clear cart only if order was created successfully
       await cartProvider.clearCart();
 
       // Show success message
