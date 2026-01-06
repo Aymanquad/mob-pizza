@@ -100,27 +100,34 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
       }
       await prefs.setString(PrefKeys.address, _addressController.text.trim());
       
-      // If phone number is entered, save it to backend profile
+      // Get identifier BEFORE saving phone to SharedPreferences
+      // This ensures we use email for OAuth users, not the new phone number
+      final originalIdentifier = await AuthService.getUserIdentifier();
+      if (originalIdentifier.isEmpty) {
+        throw Exception('User not found. Please complete onboarding first.');
+      }
+      
+      // If phone number is entered, save it to backend profile FIRST
       final phoneNumber = _phoneController.text.trim();
       if (phoneNumber.isNotEmpty) {
-        await prefs.setString(PrefKeys.phone, phoneNumber);
-        
-        // Update backend profile with phone number (for OAuth users who didn't have phone)
+        // Update backend profile with phone number BEFORE saving to SharedPreferences
+        // This ensures the phone is in the database before we use it as identifier
         try {
           final userService = UserService();
-          // Get current identifier (email if OAuth user, phone if already exists)
-          final currentIdentifier = await AuthService.getUserIdentifier();
-          if (currentIdentifier.isNotEmpty && currentIdentifier != phoneNumber) {
-            // Update profile with phone number
-            await userService.updateProfile(currentIdentifier, {
-              'phone': phoneNumber,
-              'phoneVerified': true,
-            });
-            debugPrint('[checkout] Updated backend profile with phone number');
-          }
+          // Use original identifier (email for OAuth users) to update profile
+          await userService.updateProfile(originalIdentifier, {
+            'phone': phoneNumber,
+            'phoneVerified': true,
+          });
+          debugPrint('[checkout] Updated backend profile with phone number: $phoneNumber');
+          
+          // Only save to SharedPreferences AFTER backend update succeeds
+          await prefs.setString(PrefKeys.phone, phoneNumber);
         } catch (e) {
-          // Don't fail checkout if profile update fails
+          // If profile update fails, still save phone locally but log the error
           debugPrint('[checkout] Error updating profile with phone: $e');
+          await prefs.setString(PrefKeys.phone, phoneNumber);
+          // Continue anyway - we'll use original identifier for order creation
         }
       }
 

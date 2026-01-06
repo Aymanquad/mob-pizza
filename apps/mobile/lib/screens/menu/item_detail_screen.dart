@@ -15,8 +15,140 @@ class ItemDetailScreen extends StatefulWidget {
 }
 
 class _ItemDetailScreenState extends State<ItemDetailScreen> {
-  String selectedSize = 'Solo';
+  String selectedSize = '10"'; // Default to 10" for pizzas
   Set<String> selectedToppings = {};
+  List<String> selectedPizzaSlices = []; // For combos with slices
+
+  // 5 pizzas available for slice selection in combos
+  List<String> getAvailableSlicePizzas(AppLocalizations l10n) {
+    return [
+      l10n.pizzaPepperoniClassic,
+      l10n.pizzaSupreme,
+      l10n.pizzaMargherita,
+      l10n.pizzaCheeseClassic,
+      l10n.pizzaVeggieClassic,
+    ];
+  }
+
+  bool isComboWithSlices(String itemName, AppLocalizations l10n) {
+    final lowerName = itemName.toLowerCase();
+    return lowerName.contains(l10n.combo2SlicesDrink.toLowerCase()) ||
+           lowerName.contains(l10n.comboSliceDrink.toLowerCase()) ||
+           lowerName.contains(l10n.comboSliceWingsSoda.toLowerCase());
+  }
+
+  // Helper function to check if item should show size options (ONLY pizzas)
+  bool shouldShowSizeOptions(String itemName, AppLocalizations l10n, List toppings) {
+    final lowerName = itemName.toLowerCase();
+    
+    // Check against actual localized names (exact match) OR check if toppings array is empty (indicates dip/drink)
+    final isDip = itemName == l10n.dipHoneyMustard ||
+                  itemName == l10n.dipItalianDressing ||
+                  itemName == l10n.dipGarlic ||
+                  itemName == l10n.dipParmesan ||
+                  lowerName.contains('dip') ||
+                  lowerName.contains('honey mustard') ||
+                  lowerName.contains('italian dressing') ||
+                  (toppings.isEmpty && (lowerName.contains('mustard') || lowerName.contains('dressing') || lowerName.contains('parmesan')));
+    
+    final isDrink = itemName == l10n.drink2Liter ||
+                    itemName == l10n.drink16oz ||
+                    lowerName.contains('drink') ||
+                    lowerName.contains('liter') ||
+                    (toppings.isEmpty && lowerName.contains('oz'));
+    
+    final isDessert = itemName == l10n.dessertChocolateChipCookiePizza ||
+                      itemName == l10n.dessertChocolateChurros ||
+                      itemName == l10n.dessertCheesecake ||
+                      lowerName.contains('dessert') ||
+                      lowerName.contains('churros') ||
+                      lowerName.contains('cheesecake') ||
+                      lowerName.contains('cookie pizza') ||
+                      lowerName.contains('chocolate chip cookie');
+    
+    final isPasta = itemName == l10n.pastaChickenAlfredo ||
+                    lowerName.contains('pasta') ||
+                    lowerName.contains('alfredo');
+    
+    final isCombo = isComboWithSlices(itemName, l10n) ||
+                    lowerName.contains('combo') ||
+                    lowerName.contains('slice') && lowerName.contains('drink');
+    
+    final isSalad = lowerName.contains('salad');
+    final isFries = lowerName.contains('fries');
+    
+    final isWings = itemName == l10n.wingsBuffalo ||
+                    itemName == l10n.wingsGarlicParmesan ||
+                    itemName == l10n.wingsBBQ ||
+                    itemName == l10n.wingsMangoHabanero ||
+                    itemName == l10n.wingsLemonPepper ||
+                    itemName == l10n.wingsHotHoney ||
+                    lowerName.contains('wings');
+    
+    // If it's any of these categories, don't show size options
+    if (isDip || isDrink || isDessert || isPasta || isCombo || isSalad || isFries || isWings) {
+      return false;
+    }
+    
+    // Only pizzas should show size options
+    return true;
+  }
+
+  // Helper function to check if item should show special toppings
+  bool shouldShowSpecialToppings(String itemName, AppLocalizations l10n, List toppings) {
+    final lowerName = itemName.toLowerCase();
+    
+    // Check against actual localized names (exact match) OR check if toppings array is empty (indicates dip/drink/dessert)
+    final isDip = itemName == l10n.dipHoneyMustard ||
+                  itemName == l10n.dipItalianDressing ||
+                  itemName == l10n.dipGarlic ||
+                  itemName == l10n.dipParmesan ||
+                  lowerName.contains('dip') ||
+                  lowerName.contains('honey mustard') ||
+                  lowerName.contains('italian dressing') ||
+                  (toppings.isEmpty && (lowerName.contains('mustard') || lowerName.contains('dressing') || lowerName.contains('parmesan')));
+    
+    final isDrink = itemName == l10n.drink2Liter ||
+                    itemName == l10n.drink16oz ||
+                    lowerName.contains('drink') ||
+                    lowerName.contains('liter') ||
+                    (toppings.isEmpty && lowerName.contains('oz'));
+    
+    final isDessert = itemName == l10n.dessertChocolateChipCookiePizza ||
+                      itemName == l10n.dessertChocolateChurros ||
+                      itemName == l10n.dessertCheesecake ||
+                      lowerName.contains('dessert') ||
+                      lowerName.contains('churros') ||
+                      lowerName.contains('cheesecake') ||
+                      lowerName.contains('cookie pizza') ||
+                      lowerName.contains('chocolate chip cookie');
+    
+    final isCombo = isComboWithSlices(itemName, l10n) ||
+                    lowerName.contains('combo') ||
+                    (lowerName.contains('slice') && lowerName.contains('drink'));
+    
+    // If it's any of these categories, don't show toppings
+    if (isDip || isDrink || isDessert || isCombo) {
+      return false;
+    }
+    
+    // Show toppings for pizzas, salads, fries, pasta, wings
+    return true;
+  }
+
+  int getRequiredSliceCount(String itemName, AppLocalizations l10n) {
+    final lowerName = itemName.toLowerCase();
+    if (lowerName.contains(l10n.combo2SlicesDrink.toLowerCase())) {
+      return 2;
+    }
+    return 1; // For slice + drink or slice + wings
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    // Size will be initialized based on item type in build method
+  }
 
   String getSpiceLevel(String name, String description) {
     final lowerName = name.toLowerCase();
@@ -230,6 +362,16 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       ['Extra Pepperoni (+2.50)', 'Hot Honey (+1.50)', 'Red Onions (+1.00)']
     ),
     (
+      l10n.pizzaSupreme,
+      l10n.pizzaSupremeDesc,
+      14.5,
+      false,
+      'assets/images/Supreme-Pizza.jpg',
+      l10n.pizzaSupremeFullDesc,
+      ['Pepperoni', 'Italian Sausage', 'Bell Peppers', 'Onions', 'Mushrooms', 'Tomato Sauce', 'Mozzarella'],
+      ['Extra Pepperoni (+2.50)', 'Extra Sausage (+2.50)', 'Hot Peppers (+1.00)']
+    ),
+    (
       l10n.pizzaCheeseClassic,
       l10n.pizzaCheeseClassicDesc,
       11.0,
@@ -299,26 +441,321 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       ['House Tomato Sauce', 'Premium Pepperoni', 'Mozzarella', 'Oregano', 'Garlic'],
       ['Extra Pepperoni (+2.50)', 'Hot Honey (+1.50)', 'Red Pepper Flakes (+1.00)']
     ),
+    (
+      l10n.pizzaHawaiianBacon,
+      l10n.pizzaHawaiianBaconDesc,
+      14.5,
+      false,
+      'assets/images/hawaiin-bacon-pizza.jpg',
+      l10n.pizzaHawaiianBaconFullDesc,
+      ['Diced Ham', 'Crispy Bacon', 'Pineapple', 'Green Onions', 'Mozzarella', 'Tomato Sauce'],
+      ['Extra Bacon (+2.50)', 'Extra Pineapple (+2.00)', 'Jalapeños (+1.00)']
+    ),
+
+    // Combos / Deals
+    (
+      l10n.combo2SlicesDrink,
+      l10n.combo2SlicesDrinkDesc,
+      15.99,
+      false,
+      'assets/images/combo-1-img.jpg',
+      l10n.combo2SlicesDrinkFullDesc,
+      ['2 Pizza Slices', '1 Drink'],
+      []
+    ),
+    (
+      l10n.comboSliceDrink,
+      l10n.comboSliceDrinkDesc,
+      10.99,
+      false,
+      'assets/images/combo-1-img.jpg',
+      l10n.comboSliceDrinkFullDesc,
+      ['1 Pizza Slice', '1 Drink'],
+      []
+    ),
+    (
+      l10n.comboSliceWingsSoda,
+      l10n.comboSliceWingsSodaDesc,
+      16.99,
+      false,
+      'assets/images/combo-3.jpg',
+      l10n.comboSliceWingsSodaFullDesc,
+      ['1 Pizza Slice', 'Wings', '1 Soda'],
+      []
+    ),
+    (
+      l10n.combo10WingsDrink,
+      l10n.combo10WingsDrinkDesc,
+      19.99,
+      false,
+      'assets/images/combo-4.jpg',
+      l10n.combo10WingsDrinkFullDesc,
+      ['10 Wings', '1 Drink'],
+      []
+    ),
+
+    // Wings / Boneless
+    (
+      l10n.wingsBuffalo,
+      l10n.wingsBuffaloDesc,
+      12.99,
+      false,
+      'assets/images/buffalo-wings.jpg',
+      l10n.wingsBuffaloFullDesc,
+      ['Chicken Wings', 'Buffalo Sauce', 'Butter', 'Vinegar', 'Hot Sauce'],
+      ['Extra Hot Sauce (+1.00)', 'Ranch Dressing (+0.50)', 'Blue Cheese (+0.50)']
+    ),
+    (
+      l10n.wingsGarlicParmesan,
+      l10n.wingsGarlicParmesanDesc,
+      13.99,
+      false,
+      'assets/images/garlic-parmesan-wings.jpg',
+      l10n.wingsGarlicParmesanFullDesc,
+      ['Chicken Wings', 'Garlic', 'Parmesan Cheese', 'Butter', 'Parsley'],
+      ['Extra Parmesan (+1.00)', 'Lemon Wedges (+0.50)', 'Hot Sauce (+0.50)']
+    ),
+    (
+      l10n.wingsBBQ,
+      l10n.wingsBBQDesc,
+      12.99,
+      false,
+      'assets/images/bbq-wings.jpg',
+      l10n.wingsBBQFullDesc,
+      ['Chicken Wings', 'BBQ Sauce', 'Brown Sugar', 'Garlic', 'Smoked Paprika'],
+      ['Extra BBQ Sauce (+1.00)', 'Pickles (+0.50)', 'Onions (+0.50)']
+    ),
+    (
+      l10n.wingsMangoHabanero,
+      l10n.wingsMangoHabaneroDesc,
+      13.99,
+      false,
+      'assets/images/Mango-Habanero-Hot-Wings.jpg',
+      l10n.wingsMangoHabaneroFullDesc,
+      ['Chicken Wings', 'Mango Puree', 'Habanero Peppers', 'Honey', 'Lime'],
+      ['Extra Spicy (+1.00)', 'Cooling Ranch (+0.50)', 'Lime Wedges (+0.50)']
+    ),
+    (
+      l10n.wingsLemonPepper,
+      l10n.wingsLemonPepperDesc,
+      12.99,
+      false,
+      'assets/images/lemon-pepper-wings.jpg',
+      l10n.wingsLemonPepperFullDesc,
+      ['Chicken Wings', 'Lemon Zest', 'Black Pepper', 'Garlic', 'Butter'],
+      ['Extra Lemon (+0.50)', 'Garlic Butter (+1.00)', 'Hot Sauce (+0.50)']
+    ),
+    (
+      l10n.wingsHotHoney,
+      l10n.wingsHotHoneyDesc,
+      13.99,
+      false,
+      'assets/images/hot-honey-wings.jpg',
+      l10n.wingsHotHoneyFullDesc,
+      ['Chicken Wings', 'Honey', 'Hot Sauce', 'Butter', 'Red Pepper Flakes'],
+      ['Extra Hot Honey (+1.00)', 'Ranch Dressing (+0.50)', 'Blue Cheese (+0.50)']
+    ),
+
+    // Dips
+    (
+      l10n.dipHoneyMustard,
+      l10n.dipHoneyMustardDesc,
+      2.99,
+      true,
+      'assets/images/honey-mustard.jpg',
+      l10n.dipHoneyMustardFullDesc,
+      ['Honey', 'Dijon Mustard', 'Mayonnaise', 'Vinegar', 'Spices'],
+      []
+    ),
+    (
+      l10n.dipGarlic,
+      l10n.dipGarlicDesc,
+      2.99,
+      true,
+      'assets/images/garlic-dip.webp',
+      l10n.dipGarlicFullDesc,
+      ['Fresh Garlic', 'Sour Cream', 'Mayonnaise', 'Herbs', 'Lemon Juice'],
+      []
+    ),
+    (
+      l10n.dipParmesan,
+      l10n.dipParmesanDesc,
+      3.49,
+      true,
+      'assets/images/parmesan-dip.jpg',
+      l10n.dipParmesanFullDesc,
+      ['Parmesan Cheese', 'Cream Cheese', 'Mayonnaise', 'Garlic', 'Herbs'],
+      []
+    ),
+    (
+      l10n.dipItalianDressing,
+      l10n.dipItalianDressingDesc,
+      2.99,
+      true,
+      'assets/images/Italian-dressing.jpg',
+      l10n.dipItalianDressingFullDesc,
+      ['Olive Oil', 'Vinegar', 'Italian Herbs', 'Garlic', 'Spices'],
+      []
+    ),
+
+    // Fries
+    (
+      l10n.friesGarlic,
+      l10n.friesGarlicDesc,
+      7.99,
+      true,
+      'assets/images/garlic-fries.jpg',
+      l10n.friesGarlicFullDesc,
+      ['Potatoes', 'Fresh Garlic', 'Parsley', 'Parmesan Cheese', 'Olive Oil'],
+      ['Extra Garlic (+1.00)', 'Add Cheese (+2.00)', 'Bacon Bits (+2.50)']
+    ),
+    (
+      l10n.friesPlain,
+      l10n.friesPlainDesc,
+      7.99,
+      true,
+      'assets/images/plain-fries.jpg',
+      l10n.friesPlainFullDesc,
+      ['Potatoes', 'Salt', 'Vegetable Oil'],
+      ['Cheese Sauce (+1.50)', 'Gravy (+1.50)', 'Ketchup (Free)']
+    ),
+
+    // Salads
+    (
+      l10n.saladCaesar,
+      l10n.saladCaesarDesc,
+      7.99,
+      true,
+      'assets/images/Caesar-Salad.jpg',
+      l10n.saladCaesarFullDesc,
+      ['Romaine Lettuce', 'Caesar Dressing', 'Parmesan Cheese', 'Croutons', 'Black Pepper'],
+      ['Extra Dressing (+0.50)', 'Grilled Chicken (+4.00)', 'Anchovies (+2.00)']
+    ),
+    (
+      l10n.saladGreen,
+      l10n.saladGreenDesc,
+      7.99,
+      true,
+      'assets/images/green-salad.jpg',
+      l10n.saladGreenFullDesc,
+      ['Mixed Greens', 'Cherry Tomatoes', 'Cucumbers', 'Carrots', 'House Dressing'],
+      ['Extra Dressing (+0.50)', 'Grilled Chicken (+4.00)', 'Avocado (+2.50)']
+    ),
+
+    // Pasta
+    (
+      l10n.pastaChickenAlfredo,
+      l10n.pastaChickenAlfredoDesc,
+      15.99,
+      false,
+      'assets/images/Chicken-Alfredo-pasta.webp',
+      l10n.pastaChickenAlfredoFullDesc,
+      ['Fettuccine Pasta', 'Grilled Chicken', 'Alfredo Sauce', 'Parmesan Cheese', 'Parsley'],
+      ['Extra Chicken (+4.00)', 'Mushrooms (+2.00)', 'Broccoli (+2.00)']
+    ),
+
+    // Desserts
+    (
+      l10n.dessertChocolateChipCookiePizza,
+      l10n.dessertChocolateChipCookiePizzaDesc,
+      7.99,
+      true,
+      'assets/images/chocolate-chip-cookie-pizza.jpg',
+      l10n.dessertChocolateChipCookiePizzaFullDesc,
+      ['Cookie Dough', 'Chocolate Chips', 'Butter', 'Brown Sugar', 'Vanilla'],
+      ['Ice Cream (+2.00)', 'Caramel Drizzle (+1.50)', 'Whipped Cream (+1.00)']
+    ),
+    (
+      l10n.dessertChocolateChurros,
+      l10n.dessertChocolateChurrosDesc,
+      7.99,
+      true,
+      'assets/images/choc-churros.jpg',
+      l10n.dessertChocolateChurrosFullDesc,
+      ['Choux Pastry', 'Cinnamon Sugar', 'Dark Chocolate Sauce', 'Vegetable Oil'],
+      ['Extra Chocolate (+1.00)', 'Caramel Sauce (+1.50)', 'Strawberries (+2.00)']
+    ),
+    (
+      l10n.dessertCheesecake,
+      l10n.dessertCheesecakeDesc,
+      7.99,
+      true,
+      'assets/images/Cherry-Cheesecake.jpg',
+      l10n.dessertCheesecakeFullDesc,
+      ['Cream Cheese', 'Graham Cracker Crust', 'Sugar', 'Vanilla', 'Eggs'],
+      ['Strawberry Topping (+2.00)', 'Caramel Sauce (+1.50)', 'Cherry Topping (+1.50)']
+    ),
+
+    // Drinks
+    (
+      l10n.drink2Liter,
+      l10n.drink2LiterDesc,
+      4.99,
+      true,
+      'assets/images/2litrre-softdrink.jpg',
+      l10n.drink2LiterFullDesc,
+      ['Carbonated Water', 'High Fructose Corn Syrup', 'Natural Flavors'],
+      []
+    ),
+    (
+      l10n.drink16oz,
+      l10n.drink16ozDesc,
+      2.99,
+      true,
+      'assets/images/16oz-drink.jpg',
+      l10n.drink16ozFullDesc,
+      ['Carbonated Water', 'High Fructose Corn Syrup', 'Natural Flavors'],
+      []
+    ),
     ];
   }
 
   double getTotalPrice() {
     final l10n = AppLocalizations.of(context)!;
     final items = _getItems(l10n);
-    double basePrice = widget.itemIndex < items.length ? items[widget.itemIndex].$3 : items.first.$3;
+    final item = widget.itemIndex < items.length ? items[widget.itemIndex] : items.first;
+    
+    // Check if it's a pizza (pizzas have 10"/18" sizing)
+    final isPizza = !item.$1.toLowerCase().contains('salad') && 
+                    !item.$1.toLowerCase().contains('combo') &&
+                    !item.$1.toLowerCase().contains('dip') &&
+                    !item.$1.toLowerCase().contains('fries') &&
+                    !item.$1.toLowerCase().contains('pasta') &&
+                    !item.$1.toLowerCase().contains('dessert') &&
+                    !item.$1.toLowerCase().contains('drink');
 
-    // Size multiplier
-    double sizeMultiplier = selectedSize == 'Solo' ? 1.0 :
-                           selectedSize == 'Crew' ? 1.5 : 2.0;
+    double basePrice = item.$3;
+    double sizeMultiplier = 1.0;
 
-    // Toppings cost
+    // Size multiplier ONLY for pizzas
+    if (isPizza) {
+      // Pizzas: 10" = base price, 18" = $21.99 / $11.99 ≈ 1.84x
+      if (selectedSize == '18"') {
+        sizeMultiplier = 21.99 / 11.99; // ≈ 1.83
+      } else {
+        sizeMultiplier = 1.0; // 10" is default/base
+      }
+    }
+    // For all other items (salads, dips, drinks, desserts, fries, pasta, combos), no size multiplier
+
+    // Toppings cost - $4.50 per extra topping after first 2 included
     double toppingsCost = 0.0;
-    for (String topping in selectedToppings) {
-      // Extract price from topping string (format: "Name (+price)")
-      RegExp priceRegex = RegExp(r'\(\+\$(\d+\.?\d*)\)');
-      Match? match = priceRegex.firstMatch(topping);
-      if (match != null) {
-        toppingsCost += double.parse(match.group(1)!);
+    final includedToppings = isPizza ? 2 : 0; // 2 toppings included for pizzas
+    final extraToppingsCount = selectedToppings.length > includedToppings 
+        ? selectedToppings.length - includedToppings 
+        : 0;
+    
+    if (isPizza && extraToppingsCount > 0) {
+      // For pizzas, charge $4.50 per extra topping
+      toppingsCost = extraToppingsCount * 4.50;
+    } else {
+      // For other items, use the price from topping string
+      for (String topping in selectedToppings) {
+        RegExp priceRegex = RegExp(r'\(\+\$?(\d+\.?\d*)\)');
+        Match? match = priceRegex.firstMatch(topping);
+        if (match != null) {
+          toppingsCost += double.parse(match.group(1)!);
+        }
       }
     }
 
@@ -331,14 +768,32 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     final item = widget.itemIndex < items.length ? items[widget.itemIndex] : items.first;
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
 
+    // Check if it's a pizza (only pizzas have size options)
+    final isPizza = !item.$1.toLowerCase().contains('salad') && 
+                    !item.$1.toLowerCase().contains('combo') &&
+                    !item.$1.toLowerCase().contains('dip') &&
+                    !item.$1.toLowerCase().contains('fries') &&
+                    !item.$1.toLowerCase().contains('pasta') &&
+                    !item.$1.toLowerCase().contains('dessert') &&
+                    !item.$1.toLowerCase().contains('drink');
+
+    // For combos with slices, include selected pizza names in description
+    String description = item.$2;
+    if (isComboWithSlices(item.$1, l10n) && selectedPizzaSlices.isNotEmpty) {
+      description = '$description\nSelected slices: ${selectedPizzaSlices.join(', ')}';
+    }
+
+    // Only use selectedSize for pizzas, otherwise use empty string
+    final sizeForCart = isPizza ? selectedSize : '';
+
     final cartItem = CartItem(
       id: '${item.$1}_${DateTime.now().millisecondsSinceEpoch}',
       name: item.$1,
-      description: item.$2,
+      description: description,
       basePrice: item.$3,
       isVegetarian: item.$4,
       imagePath: item.$5,
-      selectedSize: selectedSize,
+      selectedSize: sizeForCart,
       selectedToppings: selectedToppings.toList(),
     );
 
@@ -425,6 +880,26 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     final l10n = AppLocalizations.of(context)!;
     final items = _getItems(l10n);
     final item = widget.itemIndex < items.length ? items[widget.itemIndex] : items.first;
+    
+    // Initialize size ONLY for pizzas (10" default)
+    final isPizza = !item.$1.toLowerCase().contains('salad') && 
+                    !item.$1.toLowerCase().contains('combo') &&
+                    !item.$1.toLowerCase().contains('dip') &&
+                    !item.$1.toLowerCase().contains('fries') &&
+                    !item.$1.toLowerCase().contains('pasta') &&
+                    !item.$1.toLowerCase().contains('dessert') &&
+                    !item.$1.toLowerCase().contains('drink');
+    
+    // Only initialize size for pizzas
+    if (isPizza && selectedSize != '10"' && selectedSize != '18"') {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          setState(() {
+            selectedSize = '10"';
+          });
+        }
+      });
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -549,36 +1024,196 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     ),
                   ],
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      l10n.aboutThisPizza,
-                      style: GoogleFonts.cinzel(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 14,
-                        color: const Color(0xFFD4AF7A),
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      item.$6,
-                      textAlign: TextAlign.center,
-                      style: const TextStyle(
-                        color: Color(0xFFFFF8E1),
-                        fontSize: 14,
-                        fontFamily: 'Lato',
-                        height: 1.6,
-                      ),
-                    ),
-                  ],
+                child: Builder(
+                  builder: (context) {
+                    // Dynamic title based on item type
+                    final isWings = item.$1.toLowerCase().contains('wings');
+                    final isPizza = !item.$1.toLowerCase().contains('salad') && 
+                                    !item.$1.toLowerCase().contains('combo') &&
+                                    !item.$1.toLowerCase().contains('dip') &&
+                                    !item.$1.toLowerCase().contains('fries') &&
+                                    !item.$1.toLowerCase().contains('pasta') &&
+                                    !item.$1.toLowerCase().contains('dessert') &&
+                                    !item.$1.toLowerCase().contains('drink') &&
+                                    !item.$1.toLowerCase().contains('wings');
+                    
+                    final sectionTitle = isWings 
+                        ? l10n.aboutTheseWings 
+                        : isPizza 
+                        ? l10n.aboutThisPizza 
+                        : l10n.aboutThisItem;
+                    
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text(
+                          sectionTitle,
+                          style: GoogleFonts.cinzel(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 14,
+                            color: const Color(0xFFD4AF7A),
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Text(
+                          item.$6,
+                          textAlign: TextAlign.center,
+                          style: const TextStyle(
+                            color: Color(0xFFFFF8E1),
+                            fontSize: 14,
+                            fontFamily: 'Lato',
+                            height: 1.6,
+                          ),
+                        ),
+                      ],
+                    );
+                  },
                 ),
               ),
               const SizedBox(height: 16),
 
-              // Ingredients Section
-              Container(
+              // Pizza Slice Selection for Combos
+              Builder(
+                builder: (context) {
+                  final isCombo = isComboWithSlices(item.$1, l10n);
+                  if (!isCombo) {
+                    return const SizedBox.shrink();
+                  }
+                  
+                  final requiredSlices = getRequiredSliceCount(item.$1, l10n);
+                  final availablePizzas = getAvailableSlicePizzas(l10n);
+                  
+                  return Container(
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF0F0F0F).withValues(alpha: 0xCC),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(color: const Color(0xFFC6A667), width: 1.5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0x33),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          l10n.selectPizzaSlice,
+                          style: GoogleFonts.cinzel(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 14,
+                            color: const Color(0xFFD4AF7A),
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          '${l10n.chooseFromOptions} (${l10n.slice} $requiredSlices)',
+                          style: const TextStyle(
+                            color: Color(0xFFC6A667),
+                            fontSize: 12,
+                            fontFamily: 'Inter',
+                            fontStyle: FontStyle.italic,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        ...availablePizzas.asMap().entries.map((entry) {
+                          final pizzaName = entry.value;
+                          final isSelected = selectedPizzaSlices.contains(pizzaName);
+                          
+                          return Padding(
+                            padding: const EdgeInsets.only(bottom: 8),
+                            child: GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  if (isSelected) {
+                                    selectedPizzaSlices.remove(pizzaName);
+                                  } else {
+                                    if (selectedPizzaSlices.length < requiredSlices) {
+                                      selectedPizzaSlices.add(pizzaName);
+                                    } else {
+                                      // Replace first selected if max reached
+                                      selectedPizzaSlices.removeAt(0);
+                                      selectedPizzaSlices.add(pizzaName);
+                                    }
+                                  }
+                                });
+                              },
+                              child: Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                decoration: BoxDecoration(
+                                  color: isSelected
+                                      ? const Color(0xFFC6A667)
+                                      : const Color(0xFF1C1512).withValues(alpha: 0x80),
+                                  borderRadius: BorderRadius.circular(12),
+                                  border: Border.all(
+                                    color: isSelected
+                                        ? const Color(0xFFC6A667)
+                                        : const Color(0xFF878787),
+                                    width: isSelected ? 1.5 : 1,
+                                  ),
+                                ),
+                                child: Row(
+                                  children: [
+                                    Expanded(
+                                      child: Text(
+                                        pizzaName,
+                                        style: TextStyle(
+                                          color: isSelected
+                                              ? const Color(0xFF000000)
+                                              : const Color(0xFFF5E8C7),
+                                          fontSize: 13,
+                                          fontFamily: 'Lato',
+                                          fontWeight: isSelected
+                                              ? FontWeight.w700
+                                              : FontWeight.w400,
+                                        ),
+                                      ),
+                                    ),
+                                    if (isSelected)
+                                      const Icon(
+                                        Icons.check_circle,
+                                        color: Color(0xFF000000),
+                                        size: 20,
+                                      ),
+                                  ],
+                                ),
+                              ),
+                            ),
+                          );
+                        }),
+                        if (selectedPizzaSlices.length < requiredSlices && selectedPizzaSlices.isNotEmpty)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8),
+                            child: Text(
+                              'Select ${requiredSlices - selectedPizzaSlices.length} more ${requiredSlices - selectedPizzaSlices.length == 1 ? l10n.slice.toLowerCase() : '${l10n.slice.toLowerCase()}s'}',
+                              style: TextStyle(
+                                color: const Color(0xFFFF6B6B),
+                                fontSize: 11,
+                                fontFamily: 'Inter',
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  );
+                },
+              ),
+              const SizedBox(height: 16),
+
+              // Ingredients Section (skip for combos)
+              Builder(
+                builder: (context) {
+                  final isCombo = isComboWithSlices(item.$1, l10n);
+                  if (isCombo) {
+                    return const SizedBox.shrink();
+                  }
+                  return Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFF8E1),
@@ -628,11 +1263,18 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     ),
                   ],
                 ),
+                  );
+                },
               ),
               const SizedBox(height: 16),
 
-              // Special Toppings Section
-              Container(
+              // Special Toppings Section (only for pizzas, salads, fries, pasta - skip combos, dips, drinks, desserts)
+              Builder(
+                builder: (context) {
+                  if (!shouldShowSpecialToppings(item.$1, l10n, item.$8)) {
+                    return const SizedBox.shrink();
+                  }
+                  return Container(
                 padding: const EdgeInsets.all(18),
                 decoration: BoxDecoration(
                   color: const Color(0xFF0F0F0F).withValues(alpha: 0xCC),
@@ -646,20 +1288,66 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     ),
                   ],
                 ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      l10n.specialToppings,
-                      style: GoogleFonts.cinzel(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 14,
-                        color: const Color(0xFFD4AF7A),
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    ...item.$8.map<Widget>((topping) => Padding(
+                child: Builder(
+                  builder: (context) {
+                    // Calculate variables here so they're in scope
+                    final includedToppingsCalc = isPizza ? 2 : 0;
+                    final extraToppingsCount = selectedToppings.length > includedToppingsCalc 
+                        ? selectedToppings.length - includedToppingsCalc 
+                        : 0;
+                    
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              l10n.specialToppings,
+                              style: GoogleFonts.cinzel(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 14,
+                                color: const Color(0xFFD4AF7A),
+                                letterSpacing: 1.5,
+                              ),
+                            ),
+                            if (isPizza) ...[
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF00E676).withValues(alpha: 0x33),
+                                  borderRadius: BorderRadius.circular(8),
+                                  border: Border.all(color: const Color(0xFF00E676), width: 1),
+                                ),
+                                child: Text(
+                                  l10n.twoToppingsIncluded,
+                                  style: const TextStyle(
+                                    color: Color(0xFF00E676),
+                                    fontSize: 10,
+                                    fontWeight: FontWeight.w700,
+                                    fontFamily: 'Cinzel',
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ],
+                        ),
+                        if (isPizza && extraToppingsCount > 0)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 8, bottom: 4),
+                            child: Text(
+                              '${l10n.extraToppings}: ${extraToppingsCount}x \$${4.50 * extraToppingsCount}',
+                              style: TextStyle(
+                                color: const Color(0xFFC6A667),
+                                fontSize: 12,
+                                fontFamily: 'Inter',
+                                fontStyle: FontStyle.italic,
+                              ),
+                            ),
+                          ),
+                        const SizedBox(height: 12),
+                        ...item.$8.map<Widget>((topping) => Padding(
                       padding: const EdgeInsets.only(bottom: 8),
                       child: Container(
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
@@ -678,17 +1366,32 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         child: Row(
                           children: [
                             Expanded(
-                              child: Text(
-                                topping,
-                                style: TextStyle(
-                                  color: selectedToppings.contains(topping) ?
-                                    const Color(0xFF000000) :
-                                    const Color(0xFFF5E8C7),
-                                  fontSize: 13,
-                                  fontFamily: 'Lato',
-                                  fontWeight: selectedToppings.contains(topping) ?
-                                    FontWeight.w700 : FontWeight.w400,
-                                ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    topping.replaceAll(RegExp(r'\s*\(\+\$?[\d.]*\)'), ''), // Remove price from name for pizzas
+                                    style: TextStyle(
+                                      color: selectedToppings.contains(topping) ?
+                                        const Color(0xFF000000) :
+                                        const Color(0xFFF5E8C7),
+                                      fontSize: 13,
+                                      fontFamily: 'Lato',
+                                      fontWeight: selectedToppings.contains(topping) ?
+                                        FontWeight.w700 : FontWeight.w400,
+                                    ),
+                                  ),
+                                    if (isPizza && selectedToppings.length > 2 && selectedToppings.contains(topping))
+                                      Text(
+                                        '\$${(4.50).toStringAsFixed(2)} ${l10n.perTopping}',
+                                        style: TextStyle(
+                                          color: const Color(0xFF000000).withValues(alpha: 0x7F),
+                                          fontSize: 10,
+                                          fontFamily: 'Inter',
+                                          fontStyle: FontStyle.italic,
+                                        ),
+                                      ),
+                                ],
                               ),
                             ),
                             Checkbox(
@@ -709,48 +1412,64 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         ),
                       ),
                     )).toList(),
-                  ],
+                      ],
+                    );
+                  },
                 ),
+              );
+                },
               ),
               const SizedBox(height: 20),
 
-              // Size Options and Action Buttons
-              Container(
-                padding: const EdgeInsets.all(18),
-                decoration: BoxDecoration(
-                  color: const Color(0xFF7A1F1F).withValues(alpha: 0x66),
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: const Color(0xFFC6A667), width: 1.5),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withValues(alpha: 0x26),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
+              // Size Options and Action Buttons (ONLY for pizzas)
+              Builder(
+                builder: (context) {
+                  // Only show size options for pizzas
+                  if (!shouldShowSizeOptions(item.$1, l10n, item.$8)) {
+                    return const SizedBox.shrink();
+                  }
+                  
+                  return Container(
+                    padding: const EdgeInsets.all(18),
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF7A1F1F).withValues(alpha: 0x66),
+                      borderRadius: BorderRadius.circular(18),
+                      border: Border.all(color: const Color(0xFFC6A667), width: 1.5),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0x26),
+                          blurRadius: 4,
+                          offset: const Offset(0, 2),
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Text(
-                      l10n.sizeOptions,
-                      style: GoogleFonts.cinzel(
-                        fontWeight: FontWeight.w900,
-                        fontSize: 14,
-                        color: const Color(0xFFD4AF7A),
-                        letterSpacing: 1.5,
-                      ),
-                    ),
-                    const SizedBox(height: 12),
-                    Wrap(
-                      spacing: 10,
-                      runSpacing: 8,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        (l10n.solo, 'Solo'),
-                        (l10n.crew, 'Crew'),
-                        (l10n.family, 'Family'),
-                      ]
-                          .map<Widget>((size) => GestureDetector(
+                        Text(
+                          l10n.sizeOptions,
+                          style: GoogleFonts.cinzel(
+                            fontWeight: FontWeight.w900,
+                            fontSize: 14,
+                            color: const Color(0xFFD4AF7A),
+                            letterSpacing: 1.5,
+                          ),
+                        ),
+                        const SizedBox(height: 12),
+                        Builder(
+                          builder: (context) {
+                            final l10n = AppLocalizations.of(context)!;
+                            
+                            final sizeOptions = [
+                              (l10n.pizza10Inch, '10"'),
+                              (l10n.pizza18Inch, '18"'),
+                            ];
+                        
+                        return Wrap(
+                          spacing: 10,
+                          runSpacing: 8,
+                          children: sizeOptions
+                              .map<Widget>((size) => GestureDetector(
                                 onTap: () {
                                   setState(() {
                                     selectedSize = size.$2;
@@ -777,10 +1496,14 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                   ),
                                 ),
                               ))
-                          .toList(),
+                              .toList(),
+                          );
+                        },
+                      ),
+                      ],
                     ),
-                  ],
-                ),
+                  );
+                },
               ),
               const SizedBox(height: 20),
 
@@ -801,29 +1524,37 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                 ),
                 child: Column(
                   children: [
-                    SizedBox(
-                      width: double.infinity,
-                      child: ElevatedButton(
-                        onPressed: () => _addToCart(context),
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFFC6A667),
-                          foregroundColor: const Color(0xFF0F0F0F),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(12),
+                    Builder(
+                      builder: (context) {
+                        final isCombo = isComboWithSlices(item.$1, l10n);
+                        final requiredSlices = isCombo ? getRequiredSliceCount(item.$1, l10n) : 0;
+                        final canAddToCart = !isCombo || selectedPizzaSlices.length == requiredSlices;
+                        
+                        return SizedBox(
+                          width: double.infinity,
+                          child: ElevatedButton(
+                            onPressed: canAddToCart ? () => _addToCart(context) : null,
+                            style: ElevatedButton.styleFrom(
+                              backgroundColor: canAddToCart ? const Color(0xFFC6A667) : const Color(0xFF878787),
+                              foregroundColor: const Color(0xFF0F0F0F),
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(12),
+                              ),
+                              elevation: 2,
+                              shadowColor: Colors.black.withValues(alpha: 0x33),
+                              minimumSize: const Size(double.infinity, 50),
+                            ),
+                            child: Text(
+                              l10n.addToCartButton,
+                              style: const TextStyle(
+                                fontWeight: FontWeight.w900,
+                                fontSize: 12,
+                                letterSpacing: 0.8,
+                              ),
+                            ),
                           ),
-                          elevation: 2,
-                          shadowColor: Colors.black.withValues(alpha: 0x33),
-                          minimumSize: const Size(double.infinity, 50),
-                        ),
-                        child: Text(
-                          l10n.addToCartButton,
-                          style: const TextStyle(
-                            fontWeight: FontWeight.w900,
-                            fontSize: 12,
-                            letterSpacing: 0.8,
-                          ),
-                        ),
-                      ),
+                        );
+                      },
                     ),
                     const SizedBox(height: 12),
                     Container(

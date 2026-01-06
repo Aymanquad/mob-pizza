@@ -4,6 +4,7 @@ import 'package:mob_pizza_mobile/models/cart_item.dart';
 import 'package:mob_pizza_mobile/config/constants.dart';
 import 'package:mob_pizza_mobile/services/order_service.dart';
 import 'package:mob_pizza_mobile/services/auth_service.dart';
+import 'package:mob_pizza_mobile/services/user_service.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dart:convert';
 
@@ -62,14 +63,25 @@ class OrderProvider with ChangeNotifier {
         final ordersData = await _orderService.getOrders(identifier);
         debugPrint('[OrderProvider] Received ${ordersData.length} orders from API');
         
-        // Check if user is host/admin - if not, filter to only their orders
-        final isHost = await AuthService.isHost();
+        // ALWAYS filter orders for regular users - don't rely on isHost() check alone
+        // Get user role from backend to be sure
+        // Check user role from backend
+        bool isHostUser = false;
+        try {
+          final userService = UserService();
+          final userData = await userService.getProfile(identifier);
+          final role = userData['role'] as String? ?? 'customer';
+          isHostUser = role == 'admin' || role == 'delivery';
+          debugPrint('[OrderProvider] User role: $role, isHost: $isHostUser');
+        } catch (e) {
+          debugPrint('[OrderProvider] Error checking user role, assuming customer: $e');
+          isHostUser = false; // Default to customer for security
+        }
         
         List<Map<String, dynamic>> filteredOrders = ordersData;
         
-        // If not a host, filter orders to only show user's own orders
-        // Use the same identifier we used to fetch orders to match
-        if (!isHost) {
+        // ALWAYS filter orders if not a host - this is critical for security
+        if (!isHostUser) {
           filteredOrders = ordersData.where((json) {
             // Check if order belongs to current user by matching the identifier
             final customer = json['customer'] as Map<String, dynamic>?;
@@ -83,21 +95,26 @@ class OrderProvider with ChangeNotifier {
               final matchesPhone = customerPhone.isNotEmpty && customerPhone == identifier;
               final matchesEmail = customerEmail.isNotEmpty && customerEmail == identifierLower;
               
-              debugPrint('[OrderProvider] Checking order: customerPhone=$customerPhone, customerEmail=$customerEmail, identifier=$identifier, matches=${matchesPhone || matchesEmail}');
+              final matches = matchesPhone || matchesEmail;
+              if (!matches) {
+                debugPrint('[OrderProvider] Order filtered out: customerPhone=$customerPhone, customerEmail=$customerEmail, identifier=$identifier');
+              }
               
-              return matchesPhone || matchesEmail;
+              return matches;
             }
             
             // Fallback: check phoneNumber field directly if customer object is missing
             final orderPhone = (json['phoneNumber'] as String? ?? '').trim();
             final matches = orderPhone.isNotEmpty && orderPhone == identifier;
-            debugPrint('[OrderProvider] Fallback check: orderPhone=$orderPhone, identifier=$identifier, matches=$matches');
+            if (!matches) {
+              debugPrint('[OrderProvider] Order filtered out (fallback): orderPhone=$orderPhone, identifier=$identifier');
+            }
             return matches;
           }).toList();
           
-          debugPrint('[OrderProvider] Filtered ${ordersData.length} orders to ${filteredOrders.length} orders for user (identifier: $identifier)');
+          debugPrint('[OrderProvider] Filtered ${ordersData.length} orders to ${filteredOrders.length} orders for user (identifier: $identifier, role: customer)');
         } else {
-          debugPrint('[OrderProvider] Showing all ${filteredOrders.length} orders for host/admin');
+          debugPrint('[OrderProvider] Showing all ${filteredOrders.length} orders for host/admin (role: admin/delivery)');
         }
         
         _orders = filteredOrders.map((json) {
@@ -261,7 +278,15 @@ class OrderProvider with ChangeNotifier {
 
   // Add new order (create via API)
   Future<void> addOrder(Order order) async {
-    final identifier = await AuthService.getUserIdentifier();
+    // Get identifier - prefer email if available (for OAuth users)
+    // Phone might not be in DB yet if just entered at checkout
+    final prefs = await SharedPreferences.getInstance();
+    final email = prefs.getString(PrefKeys.email) ?? '';
+    final phone = prefs.getString(PrefKeys.phone) ?? '';
+    
+    // Use email if available (more reliable for OAuth users)
+    // Otherwise use phone
+    final identifier = email.isNotEmpty ? email : phone;
     
     if (identifier.isEmpty) {
       // No identifier = not onboarded, save locally only
@@ -273,7 +298,7 @@ class OrderProvider with ChangeNotifier {
 
     try {
       // Create order via API
-      debugPrint('[OrderProvider] Creating order via API with identifier: $identifier');
+      debugPrint('[OrderProvider] Creating order via API with identifier: $identifier (email: $email, phone: $phone)');
       final orderData = await _orderService.createOrder(
         identifier,
         items: order.items,

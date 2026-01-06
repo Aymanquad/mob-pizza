@@ -13,45 +13,36 @@ class AuthService {
   ];
 
   // Check if current user is a host/admin
-  // First checks user role from backend, falls back to phone number check
+  // Uses getUserIdentifier to support both phone and email
   static Future<bool> isHost() async {
     try {
-      final prefs = await SharedPreferences.getInstance();
-      final phone = prefs.getString(PrefKeys.phone) ?? '';
+      final identifier = await getUserIdentifier();
       
-      if (phone.isEmpty) return false;
+      if (identifier.isEmpty) {
+        debugPrint('[AuthService] No identifier found, not a host');
+        return false;
+      }
 
-      // Normalize phone number (remove +, spaces, etc.)
-      final normalizedPhone = phone.replaceAll(RegExp(r'[\s+\-()]'), '');
-
-      // Try to get user role from backend
+      // Try to get user role from backend using identifier
       try {
         final userService = UserService();
-        final userData = await userService.getProfile(phone);
+        final userData = await userService.getProfile(identifier);
         final role = userData['role'] as String? ?? 'customer';
         
-        debugPrint('[AuthService] User role from backend: $role');
+        debugPrint('[AuthService] User role from backend: $role (identifier: $identifier)');
         
         // Admin and delivery roles are considered hosts
         if (role == 'admin' || role == 'delivery') {
           return true;
         }
+        
+        // If role is customer, definitely not a host
+        return false;
       } catch (e) {
-        debugPrint('[AuthService] Error fetching user role, using phone fallback: $e');
+        debugPrint('[AuthService] Error fetching user role: $e');
+        // If we can't fetch role, assume not a host for security
+        return false;
       }
-
-      // Fallback to phone number check if API fails or role is customer
-      // Check both original and normalized phone numbers
-      final isHostPhone = hostPhoneNumbers.any((hostPhone) {
-        final normalizedHostPhone = hostPhone.replaceAll(RegExp(r'[\s+\-()]'), '');
-        return phone == hostPhone || 
-               normalizedPhone == normalizedHostPhone ||
-               phone.endsWith(hostPhone) ||
-               normalizedPhone.endsWith(normalizedHostPhone);
-      });
-
-      debugPrint('[AuthService] Phone check result: $isHostPhone (phone: $phone, normalized: $normalizedPhone)');
-      return isHostPhone;
     } catch (e) {
       debugPrint('[AuthService] Error checking host status: $e');
       return false;

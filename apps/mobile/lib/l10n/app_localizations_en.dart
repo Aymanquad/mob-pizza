@@ -55,6 +55,48 @@ class AppLocalizationsEn extends AppLocalizations {
   String get yourFileDesc => 'Profile & safehouses';
 
   @override
+  String get customizePizza => 'Customize Pizza';
+
+  @override
+  String get customizePizzaDesc => 'Build your own pizza';
+
+  @override
+  String get selectBaseItems => 'Select Base Items';
+
+  @override
+  String get selectBaseItemsDesc => 'Choose up to 8 items for your pizza';
+
+  @override
+  String get selectToppings => 'Select Toppings';
+
+  @override
+  String get selectDips => 'Select Dips';
+
+  @override
+  String get customPizza => 'Custom Pizza';
+
+  @override
+  String get customPizzaDesc => 'Your personalized creation';
+
+  @override
+  String get selectedItems => 'Selected Items';
+
+  @override
+  String get selectedToppings => 'Selected Toppings';
+
+  @override
+  String get selectedDips => 'Selected Dips';
+
+  @override
+  String get basePrice => 'Base Price';
+
+  @override
+  String get toppingsPrice => 'Toppings Price';
+
+  @override
+  String get dipsPrice => 'Dips Price';
+
+  @override
   String get languageToggle => 'Convert to Spanish?';
 
   @override
@@ -496,6 +538,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aboutThisPizza => 'ABOUT THIS PIZZA';
 
   @override
+  String get aboutThisItem => 'ABOUT THIS ITEM';
+
+  @override
+  String get aboutTheseWings => 'ABOUT THESE WINGS';
+
+  @override
   String get ingredients => 'INGREDIENTS';
 
   @override
@@ -826,4 +874,330 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get pizzaVelvetPepperoniFullDesc =>
       'Our take on the classic pepperoni pizza features premium pepperoni cups that curl perfectly during baking, creating crispy edges and juicy centers. Combined with our house tomato sauce and stretchy mozzarella, this is comfort food at its finest.';
+
+  @override
+  String get pizzaHawaiianBacon => 'Hawaiian Bacon';
+
+  @override
+  String get pizzaHawaiianBaconDesc =>
+      'Ham, bacon, pineapple, and green onions.';
+
+  @override
+  String get pizzaHawaiianBaconFullDesc =>
+      'A tropical paradise on a pizza! Sweet and savory collide with juicy pineapple, diced ham, crispy bacon, and fresh green onions. This island-inspired classic combines the best of both worlds - the sweetness of pineapple with the rich, smoky flavors of ham and bacon. Perfect for those who love bold, contrasting flavors.';
+
+  @override
+  String get pizzaSupreme => 'Supreme';
+
+  @override
+  String get pizzaSupremeDesc =>
+      'Loaded with pepperoni, sausage, peppers, onions, and mushrooms.';
+
+  @override
+  String get pizzaSupremeFullDesc =>
+      'The ultimate pizza loaded with all your favorites. Premium pepperoni, Italian sausage, bell peppers, onions, and mushrooms come together on our house tomato sauce and mozzarella. A hearty, satisfying classic that never disappoints.';
+
+  @override
+  String get combosDeals => 'Combos / Deals';
+
+  @override
+  String get combo2SlicesDrink => 'Buy 2 Slices + Drink';
+
+  @override
+  String get combo2SlicesDrinkDesc =>
+      'Two slices of pizza with your choice of drink.';
+
+  @override
+  String get combo2SlicesDrinkFullDesc =>
+      'Great value combo! Get two slices of pizza from our selection and a refreshing drink to complete your meal.';
+
+  @override
+  String get comboSliceDrink => 'Slice + Drink';
+
+  @override
+  String get comboSliceDrinkDesc => 'One slice of pizza with a drink.';
+
+  @override
+  String get comboSliceDrinkFullDesc =>
+      'Perfect for a quick meal! One delicious slice of pizza paired with your favorite drink.';
+
+  @override
+  String get comboSliceWingsSoda => 'Slice Pizza + Wings + Soda';
+
+  @override
+  String get comboSliceWingsSodaDesc =>
+      'One slice of pizza, wings, and a soda.';
+
+  @override
+  String get comboSliceWingsSodaFullDesc =>
+      'The perfect combo for the hungry! One slice of pizza, crispy wings with your choice of sauce, and a refreshing soda.';
+
+  @override
+  String get combo10WingsDrink => '10 Wings + Drink';
+
+  @override
+  String get combo10WingsDrinkDesc =>
+      'Ten wings with your choice of sauce and a drink.';
+
+  @override
+  String get combo10WingsDrinkFullDesc =>
+      'Wing lover\'s delight! Ten crispy wings tossed in your favorite sauce, paired with a refreshing drink.';
+
+  @override
+  String get wingsBoneless => 'Wings / Boneless';
+
+  @override
+  String get wingsBuffalo => 'Buffalo Wings';
+
+  @override
+  String get wingsBuffaloDesc => 'Classic spicy buffalo wings.';
+
+  @override
+  String get wingsBuffaloFullDesc =>
+      'Crispy chicken wings tossed in our signature spicy buffalo sauce. Tangy, hot, and perfectly balanced - the ultimate wing experience.';
+
+  @override
+  String get wingsGarlicParmesan => 'Garlic Parmesan Wings';
+
+  @override
+  String get wingsGarlicParmesanDesc =>
+      'Crispy wings with garlic parmesan sauce.';
+
+  @override
+  String get wingsGarlicParmesanFullDesc =>
+      'Perfectly crispy wings coated in a rich, savory garlic parmesan sauce. Buttery, garlicky, and cheesy - a flavor explosion in every bite.';
+
+  @override
+  String get wingsBBQ => 'BBQ Wings';
+
+  @override
+  String get wingsBBQDesc => 'Sweet and smoky BBQ wings.';
+
+  @override
+  String get wingsBBQFullDesc =>
+      'Tender wings glazed with our house-made BBQ sauce. Sweet, smoky, and slightly tangy - finger-licking good!';
+
+  @override
+  String get wingsMangoHabanero => 'Mango Habanero Wings';
+
+  @override
+  String get wingsMangoHabaneroDesc =>
+      'Spicy wings with sweet mango habanero sauce.';
+
+  @override
+  String get wingsMangoHabaneroFullDesc =>
+      'For those who love heat! Crispy wings tossed in a fiery mango habanero sauce that brings the perfect balance of sweet tropical fruit and intense spice.';
+
+  @override
+  String get wingsLemonPepper => 'Lemon Pepper Wings';
+
+  @override
+  String get wingsLemonPepperDesc => 'Zesty lemon pepper seasoned wings.';
+
+  @override
+  String get wingsLemonPepperFullDesc =>
+      'Bright and zesty wings seasoned with fresh lemon and cracked black pepper. Light, refreshing, and packed with flavor.';
+
+  @override
+  String get wingsHotHoney => 'Hot Honey Wings';
+
+  @override
+  String get wingsHotHoneyDesc => 'Sweet and spicy hot honey glazed wings.';
+
+  @override
+  String get wingsHotHoneyFullDesc =>
+      'The perfect sweet and heat combination! Crispy wings glazed with our hot honey sauce - sweet honey meets fiery heat for an unforgettable taste.';
+
+  @override
+  String get dips => 'Dips';
+
+  @override
+  String get dipHoneyMustard => 'Honey Mustard';
+
+  @override
+  String get dipHoneyMustardDesc => 'Sweet and tangy honey mustard dip.';
+
+  @override
+  String get dipHoneyMustardFullDesc =>
+      'A perfect blend of sweet honey and tangy mustard creating a delightful dipping sauce that complements any dish.';
+
+  @override
+  String get dipGarlic => 'Garlic Dip';
+
+  @override
+  String get dipGarlicDesc => 'Creamy garlic dip with herbs.';
+
+  @override
+  String get dipGarlicFullDesc =>
+      'Rich and creamy garlic dip infused with fresh herbs, perfect for fries, wings, and more.';
+
+  @override
+  String get dipParmesan => 'Parmesan Dip';
+
+  @override
+  String get dipParmesanDesc => 'Creamy parmesan cheese dip.';
+
+  @override
+  String get dipParmesanFullDesc =>
+      'Luxurious parmesan cheese dip with a smooth, creamy texture that elevates any side dish.';
+
+  @override
+  String get dipItalianDressing => 'Italian Dressing';
+
+  @override
+  String get dipItalianDressingDesc => 'Classic Italian dressing dip.';
+
+  @override
+  String get dipItalianDressingFullDesc =>
+      'Traditional Italian dressing with herbs and spices, perfect as a dip or dressing.';
+
+  @override
+  String get fries => 'Fries';
+
+  @override
+  String get friesGarlic => 'Garlic Fries';
+
+  @override
+  String get friesGarlicDesc => 'Crispy fries tossed with garlic and herbs.';
+
+  @override
+  String get friesGarlicFullDesc =>
+      'Golden crispy fries tossed with fresh minced garlic, parsley, and a hint of parmesan. A flavorful twist on the classic side.';
+
+  @override
+  String get friesPlain => 'Plain Fries';
+
+  @override
+  String get friesPlainDesc => 'Classic crispy golden fries.';
+
+  @override
+  String get friesPlainFullDesc =>
+      'Perfectly seasoned golden fries, crispy on the outside and fluffy on the inside. The classic side dish that never disappoints.';
+
+  @override
+  String get salads => 'Salads';
+
+  @override
+  String get saladCaesar => 'Caesar Salad';
+
+  @override
+  String get saladCaesarDesc => 'Classic Caesar salad with romaine lettuce.';
+
+  @override
+  String get saladCaesarFullDesc =>
+      'Crisp romaine lettuce tossed with our house-made Caesar dressing, parmesan cheese, and crunchy croutons. A timeless classic that never goes out of style.';
+
+  @override
+  String get saladGreen => 'Green Salad';
+
+  @override
+  String get saladGreenDesc =>
+      'Fresh mixed greens with your choice of dressing.';
+
+  @override
+  String get saladGreenFullDesc =>
+      'A refreshing mix of fresh greens, vegetables, and your choice of house dressing. Light, healthy, and delicious.';
+
+  @override
+  String get small => 'Small';
+
+  @override
+  String get large => 'Large';
+
+  @override
+  String get pasta => 'Pasta';
+
+  @override
+  String get pastaChickenAlfredo => 'Chicken Alfredo';
+
+  @override
+  String get pastaChickenAlfredoDesc =>
+      'Creamy alfredo pasta with tender chicken.';
+
+  @override
+  String get pastaChickenAlfredoFullDesc =>
+      'Tender grilled chicken breast served over fettuccine pasta in a rich, creamy alfredo sauce. Garnished with parmesan cheese and fresh parsley for a comforting, indulgent meal.';
+
+  @override
+  String get desserts => 'Desserts';
+
+  @override
+  String get dessertChocolateChipCookiePizza => 'Chocolate Chip Cookie Pizza';
+
+  @override
+  String get dessertChocolateChipCookiePizzaDesc =>
+      'Decadent chocolate chip cookie baked pizza-style.';
+
+  @override
+  String get dessertChocolateChipCookiePizzaFullDesc =>
+      'A giant warm chocolate chip cookie baked to perfection and served pizza-style. Gooey, chocolatey, and absolutely irresistible. Perfect for sharing or enjoying solo.';
+
+  @override
+  String get dessertChocolateChurros => 'Chocolate Churros';
+
+  @override
+  String get dessertChocolateChurrosDesc =>
+      'Crispy churros with chocolate dipping sauce.';
+
+  @override
+  String get dessertChocolateChurrosFullDesc =>
+      'Golden, crispy churros dusted with cinnamon sugar, served with a rich chocolate dipping sauce. A sweet treat that satisfies every craving.';
+
+  @override
+  String get dessertCheesecake => 'Cheesecake';
+
+  @override
+  String get dessertCheesecakeDesc =>
+      'Classic creamy New York-style cheesecake.';
+
+  @override
+  String get dessertCheesecakeFullDesc =>
+      'Rich and creamy New York-style cheesecake with a buttery graham cracker crust. Smooth, decadent, and the perfect ending to any meal.';
+
+  @override
+  String get drinks => 'Drinks';
+
+  @override
+  String get drink2Liter => '2 Liter';
+
+  @override
+  String get drink2LiterDesc => '2 liter bottle of soft drink.';
+
+  @override
+  String get drink2LiterFullDesc =>
+      'A large 2 liter bottle of your favorite soft drink, perfect for sharing with family and friends.';
+
+  @override
+  String get drink16oz => '16oz Drink';
+
+  @override
+  String get drink16ozDesc => '16 ounce soft drink.';
+
+  @override
+  String get drink16ozFullDesc =>
+      'A refreshing 16 ounce soft drink to quench your thirst and complement your meal perfectly.';
+
+  @override
+  String get selectPizzaSlice => 'Select Pizza Slice';
+
+  @override
+  String get chooseFromOptions => 'Choose from the options below';
+
+  @override
+  String get pizza10Inch => '10\" Pizza';
+
+  @override
+  String get pizza18Inch => '18\" Pizza';
+
+  @override
+  String get slice => 'Slice';
+
+  @override
+  String get extraToppings => 'Extra Toppings';
+
+  @override
+  String get perTopping => 'per topping';
+
+  @override
+  String get twoToppingsIncluded => '2 toppings included';
 }

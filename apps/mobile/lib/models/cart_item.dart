@@ -52,17 +52,34 @@ class CartItem {
   }
 
   double get totalPrice {
-    // Size multiplier
-    double sizeMultiplier = selectedSize == 'Solo' ? 1.0 :
-                           selectedSize == 'Crew' ? 1.5 : 2.0;
+    // Size multiplier - handle both old format (Solo/Crew) and new format (10"/18")
+    double sizeMultiplier = 1.0;
+    if (selectedSize == 'Solo') {
+      sizeMultiplier = 1.0;
+    } else if (selectedSize == 'Crew') {
+      sizeMultiplier = 1.5;
+    } else if (selectedSize == '18"') {
+      sizeMultiplier = 1.83; // 18" is ~1.83x the base price
+    } else {
+      // Default to 10" or any other size = 1.0
+      sizeMultiplier = 1.0;
+    }
 
-    // Toppings cost
+    // Toppings cost - handle both formats: (+$X.XX) and (+X.XX)
     double toppingsCost = 0.0;
     for (String topping in selectedToppings) {
-      RegExp priceRegex = RegExp(r'\(\+\$(\d+\.?\d*)\)');
-      Match? match = priceRegex.firstMatch(topping);
-      if (match != null) {
-        toppingsCost += double.parse(match.group(1)!);
+      // Try format with $ first: (+$X.XX)
+      RegExp priceRegex1 = RegExp(r'\(\+\$(\d+\.?\d*)\)');
+      Match? match1 = priceRegex1.firstMatch(topping);
+      if (match1 != null) {
+        toppingsCost += double.parse(match1.group(1)!);
+        continue;
+      }
+      // Try format without $: (+X.XX)
+      RegExp priceRegex2 = RegExp(r'\(\+(\d+\.?\d*)\)');
+      Match? match2 = priceRegex2.firstMatch(topping);
+      if (match2 != null) {
+        toppingsCost += double.parse(match2.group(1)!);
       }
     }
 

@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
       (l10n.theHitList, l10n.theHitListDesc, '/menu', Icons.restaurant_menu),
       (l10n.pastOrders, l10n.pastOrdersDesc, '/orders', Icons.history),
       (l10n.yourFile, l10n.yourFileDesc, '/profile', Icons.person),
+      (l10n.customizePizza, l10n.customizePizzaDesc, '/customize-pizza', Icons.build_circle),
     ];
     final featured = [
       (l10n.bossPick, l10n.margheritaBoss, '\$12', 'Solo • Extra cheese', 0), // Item ID 0

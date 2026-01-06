@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_pizza_mobile/providers/order_provider.dart';
 import 'package:mob_pizza_mobile/models/order.dart';
@@ -366,6 +367,9 @@ class _ManageOrdersScreenState extends State<ManageOrdersScreen> {
                       children: [
                         ListTile(
                           contentPadding: const EdgeInsets.all(16),
+                        onTap: () {
+                          context.go('/orders/${order.id}');
+                        },
                           title: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [

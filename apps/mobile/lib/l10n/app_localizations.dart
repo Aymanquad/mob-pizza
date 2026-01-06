@@ -188,6 +188,90 @@ abstract class AppLocalizations {
   /// **'Profile & safehouses'**
   String get yourFileDesc;
 
+  /// No description provided for @customizePizza.
+  ///
+  /// In en, this message translates to:
+  /// **'Customize Pizza'**
+  String get customizePizza;
+
+  /// No description provided for @customizePizzaDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Build your own pizza'**
+  String get customizePizzaDesc;
+
+  /// No description provided for @selectBaseItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Base Items'**
+  String get selectBaseItems;
+
+  /// No description provided for @selectBaseItemsDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose up to 8 items for your pizza'**
+  String get selectBaseItemsDesc;
+
+  /// No description provided for @selectToppings.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Toppings'**
+  String get selectToppings;
+
+  /// No description provided for @selectDips.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Dips'**
+  String get selectDips;
+
+  /// No description provided for @customPizza.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Pizza'**
+  String get customPizza;
+
+  /// No description provided for @customPizzaDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Your personalized creation'**
+  String get customPizzaDesc;
+
+  /// No description provided for @selectedItems.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Items'**
+  String get selectedItems;
+
+  /// No description provided for @selectedToppings.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Toppings'**
+  String get selectedToppings;
+
+  /// No description provided for @selectedDips.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected Dips'**
+  String get selectedDips;
+
+  /// No description provided for @basePrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Base Price'**
+  String get basePrice;
+
+  /// No description provided for @toppingsPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Toppings Price'**
+  String get toppingsPrice;
+
+  /// No description provided for @dipsPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'Dips Price'**
+  String get dipsPrice;
+
   /// No description provided for @languageToggle.
   ///
   /// In en, this message translates to:
@@ -1058,6 +1142,18 @@ abstract class AppLocalizations {
   /// **'ABOUT THIS PIZZA'**
   String get aboutThisPizza;
 
+  /// No description provided for @aboutThisItem.
+  ///
+  /// In en, this message translates to:
+  /// **'ABOUT THIS ITEM'**
+  String get aboutThisItem;
+
+  /// No description provided for @aboutTheseWings.
+  ///
+  /// In en, this message translates to:
+  /// **'ABOUT THESE WINGS'**
+  String get aboutTheseWings;
+
   /// No description provided for @ingredients.
   ///
   /// In en, this message translates to:
@@ -1639,6 +1735,582 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Our take on the classic pepperoni pizza features premium pepperoni cups that curl perfectly during baking, creating crispy edges and juicy centers. Combined with our house tomato sauce and stretchy mozzarella, this is comfort food at its finest.'**
   String get pizzaVelvetPepperoniFullDesc;
+
+  /// No description provided for @pizzaHawaiianBacon.
+  ///
+  /// In en, this message translates to:
+  /// **'Hawaiian Bacon'**
+  String get pizzaHawaiianBacon;
+
+  /// No description provided for @pizzaHawaiianBaconDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Ham, bacon, pineapple, and green onions.'**
+  String get pizzaHawaiianBaconDesc;
+
+  /// No description provided for @pizzaHawaiianBaconFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A tropical paradise on a pizza! Sweet and savory collide with juicy pineapple, diced ham, crispy bacon, and fresh green onions. This island-inspired classic combines the best of both worlds - the sweetness of pineapple with the rich, smoky flavors of ham and bacon. Perfect for those who love bold, contrasting flavors.'**
+  String get pizzaHawaiianBaconFullDesc;
+
+  /// No description provided for @pizzaSupreme.
+  ///
+  /// In en, this message translates to:
+  /// **'Supreme'**
+  String get pizzaSupreme;
+
+  /// No description provided for @pizzaSupremeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Loaded with pepperoni, sausage, peppers, onions, and mushrooms.'**
+  String get pizzaSupremeDesc;
+
+  /// No description provided for @pizzaSupremeFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The ultimate pizza loaded with all your favorites. Premium pepperoni, Italian sausage, bell peppers, onions, and mushrooms come together on our house tomato sauce and mozzarella. A hearty, satisfying classic that never disappoints.'**
+  String get pizzaSupremeFullDesc;
+
+  /// No description provided for @combosDeals.
+  ///
+  /// In en, this message translates to:
+  /// **'Combos / Deals'**
+  String get combosDeals;
+
+  /// No description provided for @combo2SlicesDrink.
+  ///
+  /// In en, this message translates to:
+  /// **'Buy 2 Slices + Drink'**
+  String get combo2SlicesDrink;
+
+  /// No description provided for @combo2SlicesDrinkDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Two slices of pizza with your choice of drink.'**
+  String get combo2SlicesDrinkDesc;
+
+  /// No description provided for @combo2SlicesDrinkFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Great value combo! Get two slices of pizza from our selection and a refreshing drink to complete your meal.'**
+  String get combo2SlicesDrinkFullDesc;
+
+  /// No description provided for @comboSliceDrink.
+  ///
+  /// In en, this message translates to:
+  /// **'Slice + Drink'**
+  String get comboSliceDrink;
+
+  /// No description provided for @comboSliceDrinkDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'One slice of pizza with a drink.'**
+  String get comboSliceDrinkDesc;
+
+  /// No description provided for @comboSliceDrinkFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect for a quick meal! One delicious slice of pizza paired with your favorite drink.'**
+  String get comboSliceDrinkFullDesc;
+
+  /// No description provided for @comboSliceWingsSoda.
+  ///
+  /// In en, this message translates to:
+  /// **'Slice Pizza + Wings + Soda'**
+  String get comboSliceWingsSoda;
+
+  /// No description provided for @comboSliceWingsSodaDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'One slice of pizza, wings, and a soda.'**
+  String get comboSliceWingsSodaDesc;
+
+  /// No description provided for @comboSliceWingsSodaFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The perfect combo for the hungry! One slice of pizza, crispy wings with your choice of sauce, and a refreshing soda.'**
+  String get comboSliceWingsSodaFullDesc;
+
+  /// No description provided for @combo10WingsDrink.
+  ///
+  /// In en, this message translates to:
+  /// **'10 Wings + Drink'**
+  String get combo10WingsDrink;
+
+  /// No description provided for @combo10WingsDrinkDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Ten wings with your choice of sauce and a drink.'**
+  String get combo10WingsDrinkDesc;
+
+  /// No description provided for @combo10WingsDrinkFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Wing lover\'s delight! Ten crispy wings tossed in your favorite sauce, paired with a refreshing drink.'**
+  String get combo10WingsDrinkFullDesc;
+
+  /// No description provided for @wingsBoneless.
+  ///
+  /// In en, this message translates to:
+  /// **'Wings / Boneless'**
+  String get wingsBoneless;
+
+  /// No description provided for @wingsBuffalo.
+  ///
+  /// In en, this message translates to:
+  /// **'Buffalo Wings'**
+  String get wingsBuffalo;
+
+  /// No description provided for @wingsBuffaloDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic spicy buffalo wings.'**
+  String get wingsBuffaloDesc;
+
+  /// No description provided for @wingsBuffaloFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Crispy chicken wings tossed in our signature spicy buffalo sauce. Tangy, hot, and perfectly balanced - the ultimate wing experience.'**
+  String get wingsBuffaloFullDesc;
+
+  /// No description provided for @wingsGarlicParmesan.
+  ///
+  /// In en, this message translates to:
+  /// **'Garlic Parmesan Wings'**
+  String get wingsGarlicParmesan;
+
+  /// No description provided for @wingsGarlicParmesanDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Crispy wings with garlic parmesan sauce.'**
+  String get wingsGarlicParmesanDesc;
+
+  /// No description provided for @wingsGarlicParmesanFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfectly crispy wings coated in a rich, savory garlic parmesan sauce. Buttery, garlicky, and cheesy - a flavor explosion in every bite.'**
+  String get wingsGarlicParmesanFullDesc;
+
+  /// No description provided for @wingsBBQ.
+  ///
+  /// In en, this message translates to:
+  /// **'BBQ Wings'**
+  String get wingsBBQ;
+
+  /// No description provided for @wingsBBQDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Sweet and smoky BBQ wings.'**
+  String get wingsBBQDesc;
+
+  /// No description provided for @wingsBBQFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tender wings glazed with our house-made BBQ sauce. Sweet, smoky, and slightly tangy - finger-licking good!'**
+  String get wingsBBQFullDesc;
+
+  /// No description provided for @wingsMangoHabanero.
+  ///
+  /// In en, this message translates to:
+  /// **'Mango Habanero Wings'**
+  String get wingsMangoHabanero;
+
+  /// No description provided for @wingsMangoHabaneroDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Spicy wings with sweet mango habanero sauce.'**
+  String get wingsMangoHabaneroDesc;
+
+  /// No description provided for @wingsMangoHabaneroFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'For those who love heat! Crispy wings tossed in a fiery mango habanero sauce that brings the perfect balance of sweet tropical fruit and intense spice.'**
+  String get wingsMangoHabaneroFullDesc;
+
+  /// No description provided for @wingsLemonPepper.
+  ///
+  /// In en, this message translates to:
+  /// **'Lemon Pepper Wings'**
+  String get wingsLemonPepper;
+
+  /// No description provided for @wingsLemonPepperDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Zesty lemon pepper seasoned wings.'**
+  String get wingsLemonPepperDesc;
+
+  /// No description provided for @wingsLemonPepperFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Bright and zesty wings seasoned with fresh lemon and cracked black pepper. Light, refreshing, and packed with flavor.'**
+  String get wingsLemonPepperFullDesc;
+
+  /// No description provided for @wingsHotHoney.
+  ///
+  /// In en, this message translates to:
+  /// **'Hot Honey Wings'**
+  String get wingsHotHoney;
+
+  /// No description provided for @wingsHotHoneyDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Sweet and spicy hot honey glazed wings.'**
+  String get wingsHotHoneyDesc;
+
+  /// No description provided for @wingsHotHoneyFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'The perfect sweet and heat combination! Crispy wings glazed with our hot honey sauce - sweet honey meets fiery heat for an unforgettable taste.'**
+  String get wingsHotHoneyFullDesc;
+
+  /// No description provided for @dips.
+  ///
+  /// In en, this message translates to:
+  /// **'Dips'**
+  String get dips;
+
+  /// No description provided for @dipHoneyMustard.
+  ///
+  /// In en, this message translates to:
+  /// **'Honey Mustard'**
+  String get dipHoneyMustard;
+
+  /// No description provided for @dipHoneyMustardDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Sweet and tangy honey mustard dip.'**
+  String get dipHoneyMustardDesc;
+
+  /// No description provided for @dipHoneyMustardFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A perfect blend of sweet honey and tangy mustard creating a delightful dipping sauce that complements any dish.'**
+  String get dipHoneyMustardFullDesc;
+
+  /// No description provided for @dipGarlic.
+  ///
+  /// In en, this message translates to:
+  /// **'Garlic Dip'**
+  String get dipGarlic;
+
+  /// No description provided for @dipGarlicDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Creamy garlic dip with herbs.'**
+  String get dipGarlicDesc;
+
+  /// No description provided for @dipGarlicFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Rich and creamy garlic dip infused with fresh herbs, perfect for fries, wings, and more.'**
+  String get dipGarlicFullDesc;
+
+  /// No description provided for @dipParmesan.
+  ///
+  /// In en, this message translates to:
+  /// **'Parmesan Dip'**
+  String get dipParmesan;
+
+  /// No description provided for @dipParmesanDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Creamy parmesan cheese dip.'**
+  String get dipParmesanDesc;
+
+  /// No description provided for @dipParmesanFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Luxurious parmesan cheese dip with a smooth, creamy texture that elevates any side dish.'**
+  String get dipParmesanFullDesc;
+
+  /// No description provided for @dipItalianDressing.
+  ///
+  /// In en, this message translates to:
+  /// **'Italian Dressing'**
+  String get dipItalianDressing;
+
+  /// No description provided for @dipItalianDressingDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic Italian dressing dip.'**
+  String get dipItalianDressingDesc;
+
+  /// No description provided for @dipItalianDressingFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Traditional Italian dressing with herbs and spices, perfect as a dip or dressing.'**
+  String get dipItalianDressingFullDesc;
+
+  /// No description provided for @fries.
+  ///
+  /// In en, this message translates to:
+  /// **'Fries'**
+  String get fries;
+
+  /// No description provided for @friesGarlic.
+  ///
+  /// In en, this message translates to:
+  /// **'Garlic Fries'**
+  String get friesGarlic;
+
+  /// No description provided for @friesGarlicDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Crispy fries tossed with garlic and herbs.'**
+  String get friesGarlicDesc;
+
+  /// No description provided for @friesGarlicFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Golden crispy fries tossed with fresh minced garlic, parsley, and a hint of parmesan. A flavorful twist on the classic side.'**
+  String get friesGarlicFullDesc;
+
+  /// No description provided for @friesPlain.
+  ///
+  /// In en, this message translates to:
+  /// **'Plain Fries'**
+  String get friesPlain;
+
+  /// No description provided for @friesPlainDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic crispy golden fries.'**
+  String get friesPlainDesc;
+
+  /// No description provided for @friesPlainFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfectly seasoned golden fries, crispy on the outside and fluffy on the inside. The classic side dish that never disappoints.'**
+  String get friesPlainFullDesc;
+
+  /// No description provided for @salads.
+  ///
+  /// In en, this message translates to:
+  /// **'Salads'**
+  String get salads;
+
+  /// No description provided for @saladCaesar.
+  ///
+  /// In en, this message translates to:
+  /// **'Caesar Salad'**
+  String get saladCaesar;
+
+  /// No description provided for @saladCaesarDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic Caesar salad with romaine lettuce.'**
+  String get saladCaesarDesc;
+
+  /// No description provided for @saladCaesarFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Crisp romaine lettuce tossed with our house-made Caesar dressing, parmesan cheese, and crunchy croutons. A timeless classic that never goes out of style.'**
+  String get saladCaesarFullDesc;
+
+  /// No description provided for @saladGreen.
+  ///
+  /// In en, this message translates to:
+  /// **'Green Salad'**
+  String get saladGreen;
+
+  /// No description provided for @saladGreenDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Fresh mixed greens with your choice of dressing.'**
+  String get saladGreenDesc;
+
+  /// No description provided for @saladGreenFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A refreshing mix of fresh greens, vegetables, and your choice of house dressing. Light, healthy, and delicious.'**
+  String get saladGreenFullDesc;
+
+  /// No description provided for @small.
+  ///
+  /// In en, this message translates to:
+  /// **'Small'**
+  String get small;
+
+  /// No description provided for @large.
+  ///
+  /// In en, this message translates to:
+  /// **'Large'**
+  String get large;
+
+  /// No description provided for @pasta.
+  ///
+  /// In en, this message translates to:
+  /// **'Pasta'**
+  String get pasta;
+
+  /// No description provided for @pastaChickenAlfredo.
+  ///
+  /// In en, this message translates to:
+  /// **'Chicken Alfredo'**
+  String get pastaChickenAlfredo;
+
+  /// No description provided for @pastaChickenAlfredoDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Creamy alfredo pasta with tender chicken.'**
+  String get pastaChickenAlfredoDesc;
+
+  /// No description provided for @pastaChickenAlfredoFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Tender grilled chicken breast served over fettuccine pasta in a rich, creamy alfredo sauce. Garnished with parmesan cheese and fresh parsley for a comforting, indulgent meal.'**
+  String get pastaChickenAlfredoFullDesc;
+
+  /// No description provided for @desserts.
+  ///
+  /// In en, this message translates to:
+  /// **'Desserts'**
+  String get desserts;
+
+  /// No description provided for @dessertChocolateChipCookiePizza.
+  ///
+  /// In en, this message translates to:
+  /// **'Chocolate Chip Cookie Pizza'**
+  String get dessertChocolateChipCookiePizza;
+
+  /// No description provided for @dessertChocolateChipCookiePizzaDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Decadent chocolate chip cookie baked pizza-style.'**
+  String get dessertChocolateChipCookiePizzaDesc;
+
+  /// No description provided for @dessertChocolateChipCookiePizzaFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A giant warm chocolate chip cookie baked to perfection and served pizza-style. Gooey, chocolatey, and absolutely irresistible. Perfect for sharing or enjoying solo.'**
+  String get dessertChocolateChipCookiePizzaFullDesc;
+
+  /// No description provided for @dessertChocolateChurros.
+  ///
+  /// In en, this message translates to:
+  /// **'Chocolate Churros'**
+  String get dessertChocolateChurros;
+
+  /// No description provided for @dessertChocolateChurrosDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Crispy churros with chocolate dipping sauce.'**
+  String get dessertChocolateChurrosDesc;
+
+  /// No description provided for @dessertChocolateChurrosFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Golden, crispy churros dusted with cinnamon sugar, served with a rich chocolate dipping sauce. A sweet treat that satisfies every craving.'**
+  String get dessertChocolateChurrosFullDesc;
+
+  /// No description provided for @dessertCheesecake.
+  ///
+  /// In en, this message translates to:
+  /// **'Cheesecake'**
+  String get dessertCheesecake;
+
+  /// No description provided for @dessertCheesecakeDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic creamy New York-style cheesecake.'**
+  String get dessertCheesecakeDesc;
+
+  /// No description provided for @dessertCheesecakeFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Rich and creamy New York-style cheesecake with a buttery graham cracker crust. Smooth, decadent, and the perfect ending to any meal.'**
+  String get dessertCheesecakeFullDesc;
+
+  /// No description provided for @drinks.
+  ///
+  /// In en, this message translates to:
+  /// **'Drinks'**
+  String get drinks;
+
+  /// No description provided for @drink2Liter.
+  ///
+  /// In en, this message translates to:
+  /// **'2 Liter'**
+  String get drink2Liter;
+
+  /// No description provided for @drink2LiterDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'2 liter bottle of soft drink.'**
+  String get drink2LiterDesc;
+
+  /// No description provided for @drink2LiterFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A large 2 liter bottle of your favorite soft drink, perfect for sharing with family and friends.'**
+  String get drink2LiterFullDesc;
+
+  /// No description provided for @drink16oz.
+  ///
+  /// In en, this message translates to:
+  /// **'16oz Drink'**
+  String get drink16oz;
+
+  /// No description provided for @drink16ozDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'16 ounce soft drink.'**
+  String get drink16ozDesc;
+
+  /// No description provided for @drink16ozFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A refreshing 16 ounce soft drink to quench your thirst and complement your meal perfectly.'**
+  String get drink16ozFullDesc;
+
+  /// No description provided for @selectPizzaSlice.
+  ///
+  /// In en, this message translates to:
+  /// **'Select Pizza Slice'**
+  String get selectPizzaSlice;
+
+  /// No description provided for @chooseFromOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose from the options below'**
+  String get chooseFromOptions;
+
+  /// No description provided for @pizza10Inch.
+  ///
+  /// In en, this message translates to:
+  /// **'10\" Pizza'**
+  String get pizza10Inch;
+
+  /// No description provided for @pizza18Inch.
+  ///
+  /// In en, this message translates to:
+  /// **'18\" Pizza'**
+  String get pizza18Inch;
+
+  /// No description provided for @slice.
+  ///
+  /// In en, this message translates to:
+  /// **'Slice'**
+  String get slice;
+
+  /// No description provided for @extraToppings.
+  ///
+  /// In en, this message translates to:
+  /// **'Extra Toppings'**
+  String get extraToppings;
+
+  /// No description provided for @perTopping.
+  ///
+  /// In en, this message translates to:
+  /// **'per topping'**
+  String get perTopping;
+
+  /// No description provided for @twoToppingsIncluded.
+  ///
+  /// In en, this message translates to:
+  /// **'2 toppings included'**
+  String get twoToppingsIncluded;
 }
 
 class _AppLocalizationsDelegate

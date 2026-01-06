@@ -10,6 +10,7 @@ import 'package:mob_pizza_mobile/screens/orders/orders_screen.dart';
 import 'package:mob_pizza_mobile/screens/orders/order_detail_screen.dart';
 import 'package:mob_pizza_mobile/screens/manage_orders/manage_orders_screen.dart';
 import 'package:mob_pizza_mobile/screens/profile/profile_screen.dart';
+import 'package:mob_pizza_mobile/screens/customize/customize_pizza_screen.dart';
 import 'package:mob_pizza_mobile/services/auth_service.dart';
 import 'package:mob_pizza_mobile/widgets/bottom_nav_bar.dart';
 import 'package:mob_pizza_mobile/screens/onboarding/onboarding_screen.dart';
@@ -27,6 +28,10 @@ class AppRouter {
         GoRoute(
           path: '/checkout',
           builder: (context, state) => const CheckoutScreen(),
+        ),
+        GoRoute(
+          path: '/customize-pizza',
+          builder: (context, state) => const CustomizePizzaScreen(),
         ),
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {

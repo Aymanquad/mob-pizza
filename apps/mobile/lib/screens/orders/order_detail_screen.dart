@@ -172,36 +172,80 @@ class OrderDetailScreen extends StatelessWidget {
                   ),
                   const SizedBox(width: 12),
                   Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          '${item.quantity}x ${item.name}',
-                          style: const TextStyle(
-                            color: Color(0xFFFFF8E1),
-                            fontSize: 16,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '${l10n.size} ${item.selectedSize}',
-                          style: const TextStyle(
-                            color: Color(0xFFD4AF7A),
-                            fontSize: 12,
-                          ),
-                        ),
-                        if (item.selectedToppings.isNotEmpty) ...[
-                          const SizedBox(height: 4),
-                          Text(
-                            '${l10n.toppings} ${item.selectedToppings.length}',
-                            style: const TextStyle(
-                              color: Color(0xFF878787),
-                              fontSize: 11,
+                    child: Builder(
+                      builder: (context) {
+                        // Check if it's a combo (combos don't show size, they show selected slices instead)
+                        final isCombo = item.name.toLowerCase().contains('combo') || 
+                                       (item.name.toLowerCase().contains('slice') && item.name.toLowerCase().contains('drink'));
+                        
+                        return Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              '${item.quantity}x ${item.name}',
+                              style: const TextStyle(
+                                color: Color(0xFFFFF8E1),
+                                fontSize: 16,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
-                          ),
-                        ],
-                      ],
+                            const SizedBox(height: 6),
+                            // Show size if not empty (only for pizzas, not combos)
+                            if (item.selectedSize.isNotEmpty && 
+                                item.selectedSize != 'N/A' && 
+                                !isCombo) ...[
+                              Text(
+                                '${l10n.size}: ${item.selectedSize}',
+                                style: const TextStyle(
+                                  color: Color(0xFFD4AF7A),
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                            ],
+                            // Parse and display description details (for custom pizzas, combos, etc.)
+                            // Always show if it contains "Selected slices" (for combos) or if description differs from name
+                            if (item.description.isNotEmpty && 
+                                (item.description != item.name || item.description.contains('Selected slices'))) ...[
+                              _buildDetailText(item.description, l10n),
+                              const SizedBox(height: 4),
+                            ],
+                            // Show all toppings with names (not just count)
+                            if (item.selectedToppings.isNotEmpty) ...[
+                              const SizedBox(height: 4),
+                              Wrap(
+                                spacing: 4,
+                                runSpacing: 4,
+                                children: [
+                                  Text(
+                                    '${l10n.toppings}: ',
+                                    style: const TextStyle(
+                                      color: Color(0xFF878787),
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  ...item.selectedToppings.map((topping) {
+                                    // Remove price info from display (e.g., "Extra Cheese (+2.00)" -> "Extra Cheese")
+                                    final cleanTopping = topping.replaceAll(RegExp(r'\s*\(\+[\$]?[\d.]+\)'), '');
+                                    return Padding(
+                                      padding: const EdgeInsets.only(right: 4),
+                                      child: Text(
+                                        cleanTopping,
+                                        style: const TextStyle(
+                                          color: Color(0xFF878787),
+                                          fontSize: 11,
+                                        ),
+                                      ),
+                                    );
+                                  }),
+                                ],
+                              ),
+                            ],
+                          ],
+                        );
+                      },
                     ),
                   ),
                   Text(
@@ -325,6 +369,130 @@ class OrderDetailScreen extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildDetailText(String description, AppLocalizations l10n) {
+    // Handle multi-line descriptions (e.g., combos with "Selected slices: ..." on new line)
+    final lines = description.split('\n');
+    List<Widget> detailWidgets = [];
+
+    for (final line in lines) {
+      if (line.trim().isEmpty) continue;
+
+      // Check if it's structured format with " | " separator (custom pizzas)
+      if (line.contains(' | ')) {
+        final parts = line.split(' | ');
+        for (final part in parts) {
+          if (part.trim().isEmpty) continue;
+          
+          final colonIndex = part.indexOf(':');
+          if (colonIndex == -1) continue;
+          
+          final label = part.substring(0, colonIndex).trim();
+          final value = part.substring(colonIndex + 1).trim();
+          
+          if (value.isEmpty) continue;
+
+          // Skip Size since we already show it separately
+          if (label.toLowerCase() == 'size') continue;
+
+          detailWidgets.add(
+            Padding(
+              padding: const EdgeInsets.only(bottom: 3),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${label[0].toUpperCase()}${label.substring(1)}: ',
+                    style: const TextStyle(
+                      color: Color(0xFFD4AF7A),
+                      fontSize: 11,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      value,
+                      style: const TextStyle(
+                        color: Color(0xFF878787),
+                        fontSize: 11,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          );
+        }
+      } else {
+        // Single line format (e.g., "Selected slices: Pizza1, Pizza2" or plain description)
+        final colonIndex = line.indexOf(':');
+        if (colonIndex != -1 && colonIndex < line.length - 1) {
+          final label = line.substring(0, colonIndex).trim();
+          final value = line.substring(colonIndex + 1).trim();
+          
+          if (value.isNotEmpty) {
+            detailWidgets.add(
+              Padding(
+                padding: const EdgeInsets.only(bottom: 3),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      '${label[0].toUpperCase()}${label.substring(1)}: ',
+                      style: const TextStyle(
+                        color: Color(0xFFD4AF7A),
+                        fontSize: 11,
+                        fontWeight: FontWeight.w600,
+                      ),
+                    ),
+                    Expanded(
+                      child: Text(
+                        value,
+                        style: const TextStyle(
+                          color: Color(0xFF878787),
+                          fontSize: 11,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+        } else if (!line.contains(' | ')) {
+          // Plain text description (not structured)
+          detailWidgets.add(
+            Padding(
+              padding: const EdgeInsets.only(bottom: 3),
+              child: Text(
+                line,
+                style: const TextStyle(
+                  color: Color(0xFF878787),
+                  fontSize: 11,
+                ),
+              ),
+            ),
+          );
+        }
+      }
+    }
+
+    if (detailWidgets.isEmpty) {
+      // If no structured format, just show the description
+      return Text(
+        description,
+        style: const TextStyle(
+          color: Color(0xFF878787),
+          fontSize: 11,
+        ),
+      );
+    }
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: detailWidgets,
     );
   }
 }

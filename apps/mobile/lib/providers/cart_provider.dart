@@ -160,16 +160,55 @@ class CartProvider with ChangeNotifier {
   Future<void> updateQuantity(String id, int quantity) async {
     final identifier = await AuthService.getUserIdentifier();
     
+    // Check if item exists before update
+    final itemExists = _items.any((item) => item.id == id);
+    if (!itemExists) {
+      debugPrint('[CartProvider] Item $id not found in cart');
+      return;
+    }
+    
     try {
       if (identifier.isNotEmpty) {
         try {
+          List<CartItem> updatedCart;
           if (quantity <= 0) {
-            _items = await _cartService.removeItem(identifier, id);
+            updatedCart = await _cartService.removeItem(identifier, id);
           } else {
-            _items = await _cartService.updateQuantity(identifier, id, quantity);
+            updatedCart = await _cartService.updateQuantity(identifier, id, quantity);
           }
-          await _saveToLocalStorage();
-          debugPrint('[CartProvider] Quantity updated via API');
+          
+          // Validate that the API response contains all expected items
+          // Get all current item IDs (except the one being updated/removed)
+          final expectedItemIds = _items
+              .where((item) => item.id != id)
+              .map((item) => item.id)
+              .toSet();
+          
+          // Get IDs from API response
+          final responseItemIds = updatedCart.map((item) => item.id).toSet();
+          
+          // Check if all other items are still present (unless we're removing the item)
+          final allOtherItemsPresent = quantity <= 0 
+              ? true  // If removing, other items should still be there
+              : expectedItemIds.every((itemId) => responseItemIds.contains(itemId));
+          
+          // Check if the updated/removed item is handled correctly
+          final updatedItemCorrect = quantity <= 0
+              ? !responseItemIds.contains(id)  // Should be removed
+              : responseItemIds.contains(id) &&  // Should still be there
+                updatedCart.firstWhere((item) => item.id == id).quantity == quantity;  // With correct quantity
+          
+          if (allOtherItemsPresent && updatedItemCorrect) {
+            // Response looks valid, use it
+            _items = updatedCart;
+            await _saveToLocalStorage();
+            debugPrint('[CartProvider] Quantity updated via API (${_items.length} items)');
+          } else {
+            // Response looks suspicious - items missing or incorrect
+            debugPrint('[CartProvider] API response suspicious: allOtherItemsPresent=$allOtherItemsPresent, updatedItemCorrect=$updatedItemCorrect. Using local update instead.');
+            _updateQuantityLocally(id, quantity);
+            await _saveToLocalStorage();
+          }
         } catch (e) {
           debugPrint('[CartProvider] API error, updating locally: $e');
           _updateQuantityLocally(id, quantity);
@@ -181,6 +220,7 @@ class CartProvider with ChangeNotifier {
       }
     } catch (e) {
       debugPrint('[CartProvider] Error updating quantity: $e');
+      // If we had an error, revert to local update
       _updateQuantityLocally(id, quantity);
       await _saveToLocalStorage();
     }
