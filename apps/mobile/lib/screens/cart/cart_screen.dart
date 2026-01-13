@@ -186,14 +186,30 @@ class CartScreen extends StatelessWidget {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          TextButton.icon(
-                            onPressed: () async => await cartProvider.removeItem(item.id),
-                            icon: const Icon(Icons.delete_outline, size: 18),
-                            label: Text(l10n.remove),
-                            style: TextButton.styleFrom(
-                              foregroundColor: const Color(0xFFFF5252),
-                              padding: const EdgeInsets.symmetric(horizontal: 8),
-                            ),
+                          Row(
+                            children: [
+                              TextButton.icon(
+                                onPressed: () {
+                                  // Navigate to edit screen with cart item data
+                                  context.push('/menu/edit/${Uri.encodeComponent(item.id)}', extra: item);
+                                },
+                                icon: const Icon(Icons.edit_outlined, size: 18),
+                                label: const Text('Edit'),
+                                style: TextButton.styleFrom(
+                                  foregroundColor: const Color(0xFFC6A667),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                ),
+                              ),
+                              TextButton.icon(
+                                onPressed: () async => await cartProvider.removeItem(item.id),
+                                icon: const Icon(Icons.delete_outline, size: 18),
+                                label: Text(l10n.remove),
+                                style: TextButton.styleFrom(
+                                  foregroundColor: const Color(0xFFFF5252),
+                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                ),
+                              ),
+                            ],
                           ),
                           Container(
                             decoration: BoxDecoration(

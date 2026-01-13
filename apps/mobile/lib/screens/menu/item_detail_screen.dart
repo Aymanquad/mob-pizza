@@ -8,7 +8,12 @@ import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 
 class ItemDetailScreen extends StatefulWidget {
   final int itemIndex;
-  const ItemDetailScreen({super.key, required this.itemIndex});
+  final CartItem? cartItemForEdit;
+  const ItemDetailScreen({
+    super.key, 
+    required this.itemIndex,
+    this.cartItemForEdit,
+  });
 
   @override
   State<ItemDetailScreen> createState() => _ItemDetailScreenState();
@@ -18,6 +23,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   String selectedSize = '10"'; // Default to 10" for pizzas
   Set<String> selectedToppings = {};
   List<String> selectedPizzaSlices = []; // For combos with slices
+  int? _actualItemIndex; // Will be set based on cart item name if editing
 
   // 5 pizzas available for slice selection in combos
   List<String> getAvailableSlicePizzas(AppLocalizations l10n) {
@@ -147,6 +153,26 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   @override
   void initState() {
     super.initState();
+    // If editing a cart item, pre-populate the fields
+    if (widget.cartItemForEdit != null) {
+      final cartItem = widget.cartItemForEdit!;
+      selectedSize = cartItem.selectedSize.isNotEmpty ? cartItem.selectedSize : '10"';
+      selectedToppings = Set<String>.from(cartItem.selectedToppings);
+      
+      // Find the item index by matching the name
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (mounted) {
+          final l10n = AppLocalizations.of(context)!;
+          final items = _getItems(l10n);
+          final index = items.indexWhere((item) => item.$1 == cartItem.name);
+          if (index >= 0) {
+            setState(() {
+              _actualItemIndex = index;
+            });
+          }
+        }
+      });
+    }
     // Size will be initialized based on item type in build method
   }
 
@@ -713,7 +739,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   double getTotalPrice() {
     final l10n = AppLocalizations.of(context)!;
     final items = _getItems(l10n);
-    final item = widget.itemIndex < items.length ? items[widget.itemIndex] : items.first;
+    final effectiveIndex = _actualItemIndex ?? widget.itemIndex;
+    final item = effectiveIndex < items.length ? items[effectiveIndex] : items.first;
     
     // Check if it's a pizza (pizzas have 10"/18" sizing)
     final isPizza = !item.$1.toLowerCase().contains('salad') && 
@@ -765,7 +792,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   Future<void> _addToCart(BuildContext context) async {
     final l10n = AppLocalizations.of(context)!;
     final items = _getItems(l10n);
-    final item = widget.itemIndex < items.length ? items[widget.itemIndex] : items.first;
+    final effectiveIndex = _actualItemIndex ?? widget.itemIndex;
+    final item = effectiveIndex < items.length ? items[effectiveIndex] : items.first;
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
 
     // Check if it's a pizza (only pizzas have size options)
@@ -787,7 +815,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     final sizeForCart = isPizza ? selectedSize : '';
 
     final cartItem = CartItem(
-      id: '${item.$1}_${DateTime.now().millisecondsSinceEpoch}',
+      id: widget.cartItemForEdit?.id ?? '${item.$1}_${DateTime.now().millisecondsSinceEpoch}',
       name: item.$1,
       description: description,
       basePrice: item.$3,
@@ -795,9 +823,15 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       imagePath: item.$5,
       selectedSize: sizeForCart,
       selectedToppings: selectedToppings.toList(),
+      quantity: widget.cartItemForEdit?.quantity ?? 1, // Preserve quantity when editing
     );
 
-    await cartProvider.addItem(cartItem);
+    // If editing, update the cart item; otherwise add new item
+    if (widget.cartItemForEdit != null) {
+      await cartProvider.updateCartItem(widget.cartItemForEdit!.id, cartItem);
+    } else {
+      await cartProvider.addItem(cartItem);
+    }
 
     // Show snackbar with cart info
     ScaffoldMessenger.of(context).showSnackBar(
@@ -821,7 +855,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     Text(
-                      l10n.addedToCart,
+                      widget.cartItemForEdit != null 
+                          ? 'Item Updated'
+                          : l10n.addedToCart,
                       style: GoogleFonts.cinzel(
                         fontWeight: FontWeight.w700,
                         fontSize: 14,
@@ -879,7 +915,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final items = _getItems(l10n);
-    final item = widget.itemIndex < items.length ? items[widget.itemIndex] : items.first;
+    final effectiveIndex = _actualItemIndex ?? widget.itemIndex;
+    final item = effectiveIndex < items.length ? items[effectiveIndex] : items.first;
     
     // Initialize size ONLY for pizzas (10" default)
     final isPizza = !item.$1.toLowerCase().contains('salad') && 
@@ -1545,7 +1582,9 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               minimumSize: const Size(double.infinity, 50),
                             ),
                             child: Text(
-                              l10n.addToCartButton,
+                              widget.cartItemForEdit != null 
+                                  ? 'Save Changes'
+                                  : l10n.addToCartButton,
                               style: const TextStyle(
                                 fontWeight: FontWeight.w900,
                                 fontSize: 12,

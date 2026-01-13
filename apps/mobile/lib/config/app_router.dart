@@ -4,6 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mob_pizza_mobile/screens/home/home_screen.dart';
 import 'package:mob_pizza_mobile/screens/menu/menu_list_screen.dart';
 import 'package:mob_pizza_mobile/screens/menu/item_detail_screen.dart';
+import 'package:mob_pizza_mobile/models/cart_item.dart';
 import 'package:mob_pizza_mobile/screens/cart/cart_screen.dart';
 import 'package:mob_pizza_mobile/screens/checkout/checkout_screen.dart';
 import 'package:mob_pizza_mobile/screens/orders/orders_screen.dart';
@@ -59,6 +60,20 @@ class AppRouter {
                       builder: (context, state) {
                         final id = state.pathParameters['id'] ?? '0';
                         return ItemDetailScreen(itemIndex: int.tryParse(id) ?? 0);
+                      },
+                    ),
+                    GoRoute(
+                      path: 'edit/:cartItemId',
+                      builder: (context, state) {
+                        final cartItem = state.extra as CartItem?;
+                        if (cartItem != null) {
+                          return ItemDetailScreen(
+                            itemIndex: 0, // Will be determined from cart item name
+                            cartItemForEdit: cartItem,
+                          );
+                        }
+                        // Fallback if no cart item provided
+                        return ItemDetailScreen(itemIndex: 0);
                       },
                     ),
                   ],

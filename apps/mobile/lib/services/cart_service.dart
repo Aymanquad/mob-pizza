@@ -98,6 +98,36 @@ class CartService {
     }
   }
 
+  /// Update entire cart item (toppings, size, etc.)
+  Future<List<CartItem>> updateItem(String phone, String itemId, CartItem updatedItem) async {
+    final url = '$baseUrl/cart/$phone/$itemId';
+    debugPrint('[cart_service] PUT $url with updated item: ${updatedItem.toJson()}');
+
+    try {
+      final response = await http.put(
+        Uri.parse(url),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(updatedItem.toJson()),
+      ).timeout(const Duration(seconds: 10));
+
+      debugPrint('[cart_service] status=${response.statusCode} body=${response.body}');
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['success'] == true) {
+          final List<dynamic> cartData = data['data'] as List<dynamic>;
+          return cartData
+              .map((json) => CartItem.fromJson(json as Map<String, dynamic>))
+              .toList();
+        }
+      }
+      throw Exception('Failed to update cart item: ${response.statusCode}');
+    } catch (e) {
+      debugPrint('[cart_service] error updating item: $e');
+      rethrow;
+    }
+  }
+
   /// Remove item from cart
   Future<List<CartItem>> removeItem(String phone, String itemId) async {
     final url = '$baseUrl/cart/$phone/$itemId';

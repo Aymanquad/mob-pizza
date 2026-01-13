@@ -239,6 +239,53 @@ class CartProvider with ChangeNotifier {
     }
   }
 
+  Future<void> updateCartItem(String id, CartItem updatedItem) async {
+    final identifier = await AuthService.getUserIdentifier();
+    
+    // Check if item exists before update
+    final itemExists = _items.any((item) => item.id == id);
+    if (!itemExists) {
+      debugPrint('[CartProvider] Item $id not found in cart');
+      return;
+    }
+    
+    try {
+      if (identifier.isNotEmpty) {
+        try {
+          // Try to update via API
+          _items = await _cartService.updateItem(identifier, id, updatedItem);
+          await _saveToLocalStorage();
+          debugPrint('[CartProvider] Cart item updated via API');
+        } catch (e) {
+          debugPrint('[CartProvider] API error, updating locally: $e');
+          // Fallback to local update
+          _updateItemLocally(id, updatedItem);
+          await _saveToLocalStorage();
+        }
+      } else {
+        _updateItemLocally(id, updatedItem);
+        await _saveToLocalStorage();
+      }
+    } catch (e) {
+      debugPrint('[CartProvider] Error updating cart item: $e');
+      _updateItemLocally(id, updatedItem);
+      await _saveToLocalStorage();
+    }
+    
+    notifyListeners();
+  }
+
+  void _updateItemLocally(String id, CartItem updatedItem) {
+    final index = _items.indexWhere((item) => item.id == id);
+    if (index >= 0) {
+      // Preserve the original ID and quantity, but update other properties
+      _items[index] = updatedItem.copyWith(
+        id: id,
+        quantity: _items[index].quantity, // Preserve quantity when editing toppings/size
+      );
+    }
+  }
+
   Future<void> clearCart() async {
     final phone = await AuthService.getCurrentUserPhone();
     
