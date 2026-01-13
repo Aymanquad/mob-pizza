@@ -944,8 +944,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
           item.$1.toUpperCase(),
           style: GoogleFonts.playfairDisplay(
             fontWeight: FontWeight.w900,
-            fontSize: 18,
-            letterSpacing: 1.2,
+            fontSize: 16,
+            letterSpacing: 1.0,
             color: const Color(0xFFFFF8E1),
           ),
         ),
@@ -968,26 +968,29 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
         ),
         child: SingleChildScrollView(
           child: Padding(
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
               Container(
                 decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(24),
-                  border: Border.all(color: const Color(0xFFC6A667).withValues(alpha: 0x4D), width: 2),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: const Color(0xFFC6A667).withValues(alpha: 0.4),
+                    width: 1.5,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0x33),
-                      blurRadius: 6,
-                      offset: const Offset(0, 3),
+                      color: Colors.black.withValues(alpha: 0.25),
+                      blurRadius: 4,
+                      offset: const Offset(0, 2),
                     ),
                   ],
                 ),
                 child: ClipRRect(
-                  borderRadius: BorderRadius.circular(22),
+                  borderRadius: BorderRadius.circular(14.5),
                   child: SizedBox(
-                    height: 240,
+                    height: 200,
                     child: ColorFiltered(
                       colorFilter: const ColorFilter.mode(Color(0x330B0C10), BlendMode.darken),
                       child: Image.asset(
@@ -999,7 +1002,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 14),
 
               // Spice Level Indicator
               Builder(
@@ -1007,16 +1010,19 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   final spiceLevel = getSpiceLevel(item.$1, item.$2);
                   if (spiceLevel.isEmpty) return const SizedBox.shrink();
                   return Container(
-                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF7A1F1F).withValues(alpha: 0xCC),
-                      borderRadius: BorderRadius.circular(20),
-                      border: Border.all(color: const Color(0xFFC6A667), width: 1.5),
+                      color: const Color(0xFF7A1F1F).withValues(alpha: 0.7),
+                      borderRadius: BorderRadius.circular(16),
+                      border: Border.all(
+                        color: const Color(0xFFC6A667).withValues(alpha: 0.7),
+                        width: 1,
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0x26),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
+                          color: Colors.black.withValues(alpha: 0.2),
+                          blurRadius: 3,
+                          offset: const Offset(0, 1),
                         ),
                       ],
                     ),
@@ -1027,15 +1033,15 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           l10n.heatLevel,
                           style: GoogleFonts.cinzel(
                             fontWeight: FontWeight.w700,
-                            fontSize: 12,
+                            fontSize: 11,
                             color: const Color(0xFFC6A667),
-                            letterSpacing: 1.0,
+                            letterSpacing: 0.8,
                           ),
                         ),
                         Text(
                           spiceLevel,
                           style: const TextStyle(
-                            fontSize: 16,
+                            fontSize: 14,
                             color: Color(0xFFF5E8C7),
                           ),
                         ),
@@ -1044,20 +1050,23 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   );
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
 
               // Detailed Description Section
               Container(
-                padding: const EdgeInsets.all(20),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0F0F0F).withValues(alpha: 0xCC),
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: const Color(0xFF878787), width: 1.5),
+                  color: const Color(0xFF0F0F0F).withValues(alpha: 0.8),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: const Color(0xFF878787).withValues(alpha: 0.5),
+                    width: 1,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0x33),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 3,
+                      offset: const Offset(0, 1),
                     ),
                   ],
                 ),
@@ -1087,20 +1096,20 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           sectionTitle,
                           style: GoogleFonts.cinzel(
                             fontWeight: FontWeight.w900,
-                            fontSize: 14,
+                            fontSize: 13,
                             color: const Color(0xFFD4AF7A),
-                            letterSpacing: 1.5,
+                            letterSpacing: 1.2,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 8),
                         Text(
                           item.$6,
                           textAlign: TextAlign.center,
                           style: const TextStyle(
                             color: Color(0xFFFFF8E1),
-                            fontSize: 14,
+                            fontSize: 13,
                             fontFamily: 'Lato',
-                            height: 1.6,
+                            height: 1.5,
                           ),
                         ),
                       ],
@@ -1108,7 +1117,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   },
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
 
               // Pizza Slice Selection for Combos
               Builder(
@@ -1122,16 +1131,19 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   final availablePizzas = getAvailableSlicePizzas(l10n);
                   
                   return Container(
-                    padding: const EdgeInsets.all(18),
+                    padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF0F0F0F).withValues(alpha: 0xCC),
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: const Color(0xFFC6A667), width: 1.5),
+                      color: const Color(0xFF0F0F0F).withValues(alpha: 0.8),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: const Color(0xFFC6A667).withValues(alpha: 0.7),
+                        width: 1,
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0x33),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
+                          color: Colors.black.withValues(alpha: 0.2),
+                          blurRadius: 3,
+                          offset: const Offset(0, 1),
                         ),
                       ],
                     ),
@@ -1142,28 +1154,28 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           l10n.selectPizzaSlice,
                           style: GoogleFonts.cinzel(
                             fontWeight: FontWeight.w900,
-                            fontSize: 14,
+                            fontSize: 13,
                             color: const Color(0xFFD4AF7A),
-                            letterSpacing: 1.5,
+                            letterSpacing: 1.2,
                           ),
                         ),
-                        const SizedBox(height: 8),
+                        const SizedBox(height: 6),
                         Text(
                           '${l10n.chooseFromOptions} (${l10n.slice} $requiredSlices)',
-                          style: const TextStyle(
-                            color: Color(0xFFC6A667),
-                            fontSize: 12,
+                          style: TextStyle(
+                            color: const Color(0xFFC6A667).withValues(alpha: 0.9),
+                            fontSize: 11,
                             fontFamily: 'Inter',
                             fontStyle: FontStyle.italic,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 10),
                         ...availablePizzas.asMap().entries.map((entry) {
                           final pizzaName = entry.value;
                           final isSelected = selectedPizzaSlices.contains(pizzaName);
                           
                           return Padding(
-                            padding: const EdgeInsets.only(bottom: 8),
+                            padding: const EdgeInsets.only(bottom: 6),
                             child: GestureDetector(
                               onTap: () {
                                 setState(() {
@@ -1181,16 +1193,16 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                 });
                               },
                               child: Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+                                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                                 decoration: BoxDecoration(
                                   color: isSelected
                                       ? const Color(0xFFC6A667)
-                                      : const Color(0xFF1C1512).withValues(alpha: 0x80),
-                                  borderRadius: BorderRadius.circular(12),
+                                      : const Color(0xFF1C1512).withValues(alpha: 0.6),
+                                  borderRadius: BorderRadius.circular(10),
                                   border: Border.all(
                                     color: isSelected
                                         ? const Color(0xFFC6A667)
-                                        : const Color(0xFF878787),
+                                        : const Color(0xFF878787).withValues(alpha: 0.5),
                                     width: isSelected ? 1.5 : 1,
                                   ),
                                 ),
@@ -1203,7 +1215,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                           color: isSelected
                                               ? const Color(0xFF000000)
                                               : const Color(0xFFF5E8C7),
-                                          fontSize: 13,
+                                          fontSize: 12,
                                           fontFamily: 'Lato',
                                           fontWeight: isSelected
                                               ? FontWeight.w700
@@ -1215,7 +1227,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                       const Icon(
                                         Icons.check_circle,
                                         color: Color(0xFF000000),
-                                        size: 20,
+                                        size: 18,
                                       ),
                                   ],
                                 ),
@@ -1241,7 +1253,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   );
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
 
               // Ingredients Section (skip for combos)
               Builder(
@@ -1251,16 +1263,19 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     return const SizedBox.shrink();
                   }
                   return Container(
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
                   color: const Color(0xFFFFF8E1),
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: const Color(0xFF878787), width: 1.5),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: const Color(0xFF878787).withValues(alpha: 0.5),
+                    width: 1,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0x33),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 3,
+                      offset: const Offset(0, 1),
                     ),
                   ],
                 ),
@@ -1271,27 +1286,30 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                       l10n.ingredients,
                       style: GoogleFonts.cinzel(
                         fontWeight: FontWeight.w900,
-                        fontSize: 14,
+                        fontSize: 13,
                         color: const Color(0xFF000000),
-                        letterSpacing: 1.5,
+                        letterSpacing: 1.2,
                       ),
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     Wrap(
-                      spacing: 8,
-                      runSpacing: 8,
+                      spacing: 6,
+                      runSpacing: 6,
                       children: item.$7.map<Widget>((ingredient) => Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 5),
                         decoration: BoxDecoration(
-                          color: const Color(0xFFC6A667).withValues(alpha: 0x19),
-                          borderRadius: BorderRadius.circular(12),
-                          border: Border.all(color: const Color(0xFFC6A667).withValues(alpha: 0x4D), width: 1),
+                          color: const Color(0xFFC6A667).withValues(alpha: 0.15),
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: const Color(0xFFC6A667).withValues(alpha: 0.4),
+                            width: 1,
+                          ),
                         ),
                         child: Text(
                           ingredient,
                           style: const TextStyle(
                             color: Color(0xFF1C1512),
-                            fontSize: 12,
+                            fontSize: 11,
                             fontFamily: 'Lato',
                             fontWeight: FontWeight.w500,
                           ),
@@ -1303,7 +1321,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   );
                 },
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 12),
 
               // Special Toppings Section (only for pizzas, salads, fries, pasta - skip combos, dips, drinks, desserts)
               Builder(
@@ -1312,16 +1330,19 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                     return const SizedBox.shrink();
                   }
                   return Container(
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0F0F0F).withValues(alpha: 0xCC),
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: const Color(0xFF878787), width: 1.5),
+                  color: const Color(0xFF0F0F0F).withValues(alpha: 0.8),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: const Color(0xFF878787).withValues(alpha: 0.5),
+                    width: 1,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0x33),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 3,
+                      offset: const Offset(0, 1),
                     ),
                   ],
                 ),
@@ -1343,25 +1364,28 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               l10n.specialToppings,
                               style: GoogleFonts.cinzel(
                                 fontWeight: FontWeight.w900,
-                                fontSize: 14,
+                                fontSize: 13,
                                 color: const Color(0xFFD4AF7A),
-                                letterSpacing: 1.5,
+                                letterSpacing: 1.2,
                               ),
                             ),
                             if (isPizza) ...[
-                              const SizedBox(width: 8),
+                              const SizedBox(width: 6),
                               Container(
-                                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 3),
                                 decoration: BoxDecoration(
-                                  color: const Color(0xFF00E676).withValues(alpha: 0x33),
-                                  borderRadius: BorderRadius.circular(8),
-                                  border: Border.all(color: const Color(0xFF00E676), width: 1),
+                                  color: const Color(0xFF00E676).withValues(alpha: 0.25),
+                                  borderRadius: BorderRadius.circular(6),
+                                  border: Border.all(
+                                    color: const Color(0xFF00E676).withValues(alpha: 0.8),
+                                    width: 1,
+                                  ),
                                 ),
                                 child: Text(
                                   l10n.twoToppingsIncluded,
                                   style: const TextStyle(
                                     color: Color(0xFF00E676),
-                                    fontSize: 10,
+                                    fontSize: 9,
                                     fontWeight: FontWeight.w700,
                                     fontFamily: 'Cinzel',
                                   ),
@@ -1372,31 +1396,31 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         ),
                         if (isPizza && extraToppingsCount > 0)
                           Padding(
-                            padding: const EdgeInsets.only(top: 8, bottom: 4),
+                            padding: const EdgeInsets.only(top: 6, bottom: 3),
                             child: Text(
                               '${l10n.extraToppings}: ${extraToppingsCount}x \$${4.50 * extraToppingsCount}',
                               style: TextStyle(
-                                color: const Color(0xFFC6A667),
-                                fontSize: 12,
+                                color: const Color(0xFFC6A667).withValues(alpha: 0.9),
+                                fontSize: 11,
                                 fontFamily: 'Inter',
                                 fontStyle: FontStyle.italic,
                               ),
                             ),
                           ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 10),
                         ...item.$8.map<Widget>((topping) => Padding(
-                      padding: const EdgeInsets.only(bottom: 8),
+                      padding: const EdgeInsets.only(bottom: 6),
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 7),
                         decoration: BoxDecoration(
                           color: selectedToppings.contains(topping) ?
                             const Color(0xFFC6A667) :
-                            const Color(0xFF1C1512).withValues(alpha: 0x80),
-                          borderRadius: BorderRadius.circular(12),
+                            const Color(0xFF1C1512).withValues(alpha: 0.6),
+                          borderRadius: BorderRadius.circular(10),
                           border: Border.all(
                             color: selectedToppings.contains(topping) ?
                               const Color(0xFFC6A667) :
-                              const Color(0xFF878787),
+                              const Color(0xFF878787).withValues(alpha: 0.5),
                             width: selectedToppings.contains(topping) ? 1.5 : 1,
                           ),
                         ),
@@ -1412,7 +1436,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                       color: selectedToppings.contains(topping) ?
                                         const Color(0xFF000000) :
                                         const Color(0xFFF5E8C7),
-                                      fontSize: 13,
+                                      fontSize: 12,
                                       fontFamily: 'Lato',
                                       fontWeight: selectedToppings.contains(topping) ?
                                         FontWeight.w700 : FontWeight.w400,
@@ -1422,8 +1446,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                       Text(
                                         '\$${(4.50).toStringAsFixed(2)} ${l10n.perTopping}',
                                         style: TextStyle(
-                                          color: const Color(0xFF000000).withValues(alpha: 0x7F),
-                                          fontSize: 10,
+                                          color: const Color(0xFF000000).withValues(alpha: 0.6),
+                                          fontSize: 9,
                                           fontFamily: 'Inter',
                                           fontStyle: FontStyle.italic,
                                         ),
@@ -1456,7 +1480,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
               );
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
 
               // Size Options and Action Buttons (ONLY for pizzas)
               Builder(
@@ -1467,16 +1491,19 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   }
                   
                   return Container(
-                    padding: const EdgeInsets.all(18),
+                    padding: const EdgeInsets.all(14),
                     decoration: BoxDecoration(
-                      color: const Color(0xFF7A1F1F).withValues(alpha: 0x66),
-                      borderRadius: BorderRadius.circular(18),
-                      border: Border.all(color: const Color(0xFFC6A667), width: 1.5),
+                      color: const Color(0xFF7A1F1F).withValues(alpha: 0.4),
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: const Color(0xFFC6A667).withValues(alpha: 0.7),
+                        width: 1,
+                      ),
                       boxShadow: [
                         BoxShadow(
-                          color: Colors.black.withValues(alpha: 0x26),
-                          blurRadius: 4,
-                          offset: const Offset(0, 2),
+                          color: Colors.black.withValues(alpha: 0.2),
+                          blurRadius: 3,
+                          offset: const Offset(0, 1),
                         ),
                       ],
                     ),
@@ -1487,12 +1514,12 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                           l10n.sizeOptions,
                           style: GoogleFonts.cinzel(
                             fontWeight: FontWeight.w900,
-                            fontSize: 14,
+                            fontSize: 13,
                             color: const Color(0xFFD4AF7A),
-                            letterSpacing: 1.5,
+                            letterSpacing: 1.2,
                           ),
                         ),
-                        const SizedBox(height: 12),
+                        const SizedBox(height: 10),
                         Builder(
                           builder: (context) {
                             final l10n = AppLocalizations.of(context)!;
@@ -1503,8 +1530,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                             ];
                         
                         return Wrap(
-                          spacing: 10,
-                          runSpacing: 8,
+                          spacing: 8,
+                          runSpacing: 6,
                           children: sizeOptions
                               .map<Widget>((size) => GestureDetector(
                                 onTap: () {
@@ -1513,12 +1540,12 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                   });
                                 },
                                 child: Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 7),
                                   decoration: BoxDecoration(
                                     color: size.$2 == selectedSize ? const Color(0xFFC6A667) : Colors.transparent,
-                                    borderRadius: BorderRadius.circular(20),
+                                    borderRadius: BorderRadius.circular(16),
                                     border: Border.all(
-                                      color: const Color(0xFFC6A667),
+                                      color: const Color(0xFFC6A667).withValues(alpha: 0.8),
                                       width: 1.5,
                                     ),
                                   ),
@@ -1527,8 +1554,8 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                                     style: TextStyle(
                                       color: size.$2 == selectedSize ? const Color(0xFF0F0F0F) : const Color(0xFFF5E8C7),
                                       fontWeight: FontWeight.w900,
-                                      fontSize: 12,
-                                      letterSpacing: 0.5,
+                                      fontSize: 11,
+                                      letterSpacing: 0.4,
                                     ),
                                   ),
                                 ),
@@ -1542,20 +1569,23 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   );
                 },
               ),
-              const SizedBox(height: 20),
+              const SizedBox(height: 12),
 
               // Action Buttons and Info
               Container(
-                padding: const EdgeInsets.all(18),
+                padding: const EdgeInsets.all(14),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF0F0F0F).withValues(alpha: 0xE6),
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: const Color(0xFF878787), width: 2),
+                  color: const Color(0xFF0F0F0F).withValues(alpha: 0.9),
+                  borderRadius: BorderRadius.circular(14),
+                  border: Border.all(
+                    color: const Color(0xFF878787).withValues(alpha: 0.5),
+                    width: 1,
+                  ),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0x33),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 3,
+                      offset: const Offset(0, 1),
                     ),
                   ],
                 ),
@@ -1575,11 +1605,11 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                               backgroundColor: canAddToCart ? const Color(0xFFC6A667) : const Color(0xFF878787),
                               foregroundColor: const Color(0xFF0F0F0F),
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(12),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                              elevation: 2,
-                              shadowColor: Colors.black.withValues(alpha: 0x33),
-                              minimumSize: const Size(double.infinity, 50),
+                              elevation: 1,
+                              shadowColor: Colors.black.withValues(alpha: 0.25),
+                              minimumSize: const Size(double.infinity, 46),
                             ),
                             child: Text(
                               widget.cartItemForEdit != null 
@@ -1595,35 +1625,38 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                         );
                       },
                     ),
-                    const SizedBox(height: 12),
+                    const SizedBox(height: 10),
                     Container(
-                      padding: const EdgeInsets.all(14),
+                      padding: const EdgeInsets.all(12),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF1C1512).withValues(alpha: 0xE6),
-                        borderRadius: BorderRadius.circular(16),
-                        border: Border.all(color: const Color(0xFF878787), width: 1.5),
+                        color: const Color(0xFF1C1512).withValues(alpha: 0.9),
+                        borderRadius: BorderRadius.circular(12),
+                        border: Border.all(
+                          color: const Color(0xFF878787).withValues(alpha: 0.4),
+                          width: 1,
+                        ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0x26),
-                            blurRadius: 3,
+                            color: Colors.black.withValues(alpha: 0.2),
+                            blurRadius: 2,
                             offset: const Offset(0, 1),
                           ),
                         ],
                       ),
                       child: Row(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.info_outline,
-                            color: Color(0xFFC6A667),
-                            size: 16,
+                            color: const Color(0xFFC6A667).withValues(alpha: 0.9),
+                            size: 14,
                           ),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
                               '${l10n.houseNotes} ${item.$2.split('.').first}. ${l10n.addTruffleDrizzle}',
                               style: TextStyle(
-                                color: const Color(0xFFC6A667).withValues(alpha: 0xCC),
-                                fontSize: 12,
+                                color: const Color(0xFFC6A667).withValues(alpha: 0.85),
+                                fontSize: 11,
                                 fontFamily: 'Lato',
                                 height: 1.3,
                               ),

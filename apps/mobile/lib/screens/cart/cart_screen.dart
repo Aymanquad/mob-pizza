@@ -93,94 +93,126 @@ class CartScreen extends StatelessWidget {
         // Cart Items List
         Expanded(
           child: ListView.builder(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
             itemCount: cartProvider.items.length,
             itemBuilder: (context, index) {
               final item = cartProvider.items[index];
               return Container(
-                margin: const EdgeInsets.only(bottom: 16),
+                margin: const EdgeInsets.only(bottom: 12),
                 decoration: BoxDecoration(
                   color: const Color(0xFF0F0F0F),
-                  borderRadius: BorderRadius.circular(16),
-                  border: Border.all(color: const Color(0xFF878787), width: 1.5),
+                  borderRadius: BorderRadius.circular(12),
+                  border: Border.all(color: const Color(0xFF878787).withValues(alpha: 0.5), width: 1),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0x26),
-                      blurRadius: 4,
-                      offset: const Offset(0, 2),
+                      color: Colors.black.withValues(alpha: 0.2),
+                      blurRadius: 3,
+                      offset: const Offset(0, 1),
                     ),
                   ],
                 ),
                 child: Column(
                   children: [
-                    ListTile(
-                      contentPadding: const EdgeInsets.all(12),
-                      leading: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.asset(
-                          item.imagePath,
-                          width: 60,
-                          height: 60,
-                          fit: BoxFit.cover,
-                          errorBuilder: (_, __, ___) => Container(
-                            width: 60,
-                            height: 60,
-                            color: const Color(0xFF1C1512),
-                          ),
-                        ),
-                      ),
-                      title: Text(
-                        item.name,
-                        style: GoogleFonts.playfairDisplay(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xFFFFF8E1),
-                        ),
-                      ),
-                      subtitle: Column(
+                    Padding(
+                      padding: const EdgeInsets.all(10),
+                      child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const SizedBox(height: 4),
-                          Text(
-                            '${l10n.size} ${item.selectedSize}',
-                            style: const TextStyle(
-                              color: Color(0xFFD4AF7A),
-                              fontSize: 12,
-                            ),
-                          ),
-                          if (item.selectedToppings.isNotEmpty) ...[
-                            const SizedBox(height: 4),
-                            Text(
-                              '${l10n.toppings} ${item.selectedToppings.length}',
-                              style: const TextStyle(
-                                color: Color(0xFF878787),
-                                fontSize: 11,
+                          ClipRRect(
+                            borderRadius: BorderRadius.circular(8),
+                            child: Image.asset(
+                              item.imagePath,
+                              width: 70,
+                              height: 70,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) => Container(
+                                width: 70,
+                                height: 70,
+                                color: const Color(0xFF1C1512),
                               ),
                             ),
-                          ],
-                        ],
-                      ),
-                      trailing: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.end,
-                        children: [
-                          Text(
-                            '\$${item.totalPrice.toStringAsFixed(2)}',
-                            style: GoogleFonts.cinzel(
-                              fontSize: 16,
-                              fontWeight: FontWeight.w900,
-                              color: const Color(0xFFC6A667),
+                          ),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  item.name,
+                                  style: GoogleFonts.playfairDisplay(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    color: const Color(0xFFFFF8E1),
+                                    height: 1.2,
+                                  ),
+                                  maxLines: 2,
+                                  overflow: TextOverflow.ellipsis,
+                                ),
+                                const SizedBox(height: 4),
+                                if (item.selectedSize.isNotEmpty)
+                                  Text(
+                                    '${l10n.size} ${item.selectedSize}',
+                                    style: const TextStyle(
+                                      color: Color(0xFFD4AF7A),
+                                      fontSize: 11,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                if (item.selectedToppings.isNotEmpty) ...[
+                                  const SizedBox(height: 3),
+                                  Text(
+                                    item.selectedToppings
+                                        .map((t) => t.replaceAll(RegExp(r'\s*\(\+\$?[\d.]*\)'), ''))
+                                        .join(', '),
+                                    style: TextStyle(
+                                      color: const Color(0xFF878787).withValues(alpha: 0.9),
+                                      fontSize: 10,
+                                      height: 1.3,
+                                    ),
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                  ),
+                                ],
+                              ],
                             ),
+                          ),
+                          const SizedBox(width: 8),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.end,
+                            children: [
+                              Text(
+                                '\$${item.totalPrice.toStringAsFixed(2)}',
+                                style: GoogleFonts.cinzel(
+                                  fontSize: 15,
+                                  fontWeight: FontWeight.w900,
+                                  color: const Color(0xFFC6A667),
+                                ),
+                              ),
+                              if (item.quantity > 1)
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 2),
+                                  child: Text(
+                                    '×${item.quantity}',
+                                    style: TextStyle(
+                                      fontSize: 10,
+                                      color: const Color(0xFF878787).withValues(alpha: 0.7),
+                                    ),
+                                  ),
+                                ),
+                            ],
                           ),
                         ],
                       ),
                     ),
                     // Quantity controls
                     Container(
-                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
-                      decoration: const BoxDecoration(
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
+                      decoration: BoxDecoration(
                         border: Border(
-                          top: BorderSide(color: Color(0xFF878787), width: 1),
+                          top: BorderSide(
+                            color: const Color(0xFF878787).withValues(alpha: 0.3),
+                            width: 1,
+                          ),
                         ),
                       ),
                       child: Row(
@@ -188,66 +220,120 @@ class CartScreen extends StatelessWidget {
                         children: [
                           Row(
                             children: [
-                              TextButton.icon(
-                                onPressed: () {
-                                  // Navigate to edit screen with cart item data
+                              InkWell(
+                                onTap: () {
                                   context.push('/menu/edit/${Uri.encodeComponent(item.id)}', extra: item);
                                 },
-                                icon: const Icon(Icons.edit_outlined, size: 18),
-                                label: const Text('Edit'),
-                                style: TextButton.styleFrom(
-                                  foregroundColor: const Color(0xFFC6A667),
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                                borderRadius: BorderRadius.circular(6),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.edit_outlined,
+                                        size: 16,
+                                        color: const Color(0xFFC6A667).withValues(alpha: 0.9),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        'Edit',
+                                        style: TextStyle(
+                                          color: const Color(0xFFC6A667).withValues(alpha: 0.9),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
-                              TextButton.icon(
-                                onPressed: () async => await cartProvider.removeItem(item.id),
-                                icon: const Icon(Icons.delete_outline, size: 18),
-                                label: Text(l10n.remove),
-                                style: TextButton.styleFrom(
-                                  foregroundColor: const Color(0xFFFF5252),
-                                  padding: const EdgeInsets.symmetric(horizontal: 8),
+                              const SizedBox(width: 8),
+                              InkWell(
+                                onTap: () async => await cartProvider.removeItem(item.id),
+                                borderRadius: BorderRadius.circular(6),
+                                child: Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Icon(
+                                        Icons.delete_outline,
+                                        size: 16,
+                                        color: const Color(0xFFFF5252).withValues(alpha: 0.9),
+                                      ),
+                                      const SizedBox(width: 4),
+                                      Text(
+                                        l10n.remove,
+                                        style: TextStyle(
+                                          color: const Color(0xFFFF5252).withValues(alpha: 0.9),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
                           ),
                           Container(
                             decoration: BoxDecoration(
-                              border: Border.all(color: const Color(0xFFC6A667)),
-                              borderRadius: BorderRadius.circular(8),
+                              border: Border.all(
+                                color: const Color(0xFFC6A667).withValues(alpha: 0.6),
+                                width: 1,
+                              ),
+                              borderRadius: BorderRadius.circular(6),
                             ),
                             child: Row(
+                              mainAxisSize: MainAxisSize.min,
                               children: [
-                                IconButton(
-                                  icon: const Icon(Icons.remove, size: 18),
-                                  onPressed: () async {
-                                    if (item.quantity > 1) {
-                                      await cartProvider.updateQuantity(item.id, item.quantity - 1);
-                                    }
-                                  },
-                                  color: const Color(0xFFC6A667),
-                                  padding: const EdgeInsets.all(4),
-                                  constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                                Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () async {
+                                      if (item.quantity > 1) {
+                                        await cartProvider.updateQuantity(item.id, item.quantity - 1);
+                                      }
+                                    },
+                                    borderRadius: const BorderRadius.horizontal(left: Radius.circular(6)),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(6),
+                                      child: Icon(
+                                        Icons.remove,
+                                        size: 16,
+                                        color: const Color(0xFFC6A667),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                                 Container(
-                                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                                  padding: const EdgeInsets.symmetric(horizontal: 10),
                                   child: Text(
                                     '${item.quantity}',
                                     style: GoogleFonts.cinzel(
-                                      fontSize: 14,
+                                      fontSize: 13,
                                       fontWeight: FontWeight.w700,
                                       color: const Color(0xFFF5E8C7),
                                     ),
                                   ),
                                 ),
-                                IconButton(
-                                  icon: const Icon(Icons.add, size: 18),
-                                  onPressed: () async {
-                                    await cartProvider.updateQuantity(item.id, item.quantity + 1);
-                                  },
-                                  color: const Color(0xFFC6A667),
-                                  padding: const EdgeInsets.all(4),
-                                  constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                                Material(
+                                  color: Colors.transparent,
+                                  child: InkWell(
+                                    onTap: () async {
+                                      await cartProvider.updateQuantity(item.id, item.quantity + 1);
+                                    },
+                                    borderRadius: const BorderRadius.horizontal(right: Radius.circular(6)),
+                                    child: Container(
+                                      padding: const EdgeInsets.all(6),
+                                      child: Icon(
+                                        Icons.add,
+                                        size: 16,
+                                        color: const Color(0xFFC6A667),
+                                      ),
+                                    ),
+                                  ),
                                 ),
                               ],
                             ),
@@ -263,16 +349,19 @@ class CartScreen extends StatelessWidget {
         ),
         // Bottom section with total and buttons
         Container(
-          padding: const EdgeInsets.all(16),
+          padding: const EdgeInsets.all(12),
           decoration: BoxDecoration(
             color: const Color(0xFF0F0F0F),
-            border: const Border(
-              top: BorderSide(color: Color(0xFF878787), width: 1.5),
+            border: Border(
+              top: BorderSide(
+                color: const Color(0xFF878787).withValues(alpha: 0.5),
+                width: 1,
+              ),
             ),
             boxShadow: [
               BoxShadow(
-                color: Colors.black.withValues(alpha: 0x33),
-                blurRadius: 8,
+                color: Colors.black.withValues(alpha: 0.25),
+                blurRadius: 6,
                 offset: const Offset(0, -2),
               ),
             ],
@@ -281,11 +370,14 @@ class CartScreen extends StatelessWidget {
             children: [
               // Total section
               Container(
-                padding: const EdgeInsets.all(16),
+                padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
                 decoration: BoxDecoration(
-                  color: const Color(0xFF7A1F1F).withValues(alpha: 0x66),
-                  borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: const Color(0xFFC6A667), width: 1.5),
+                  color: const Color(0xFF7A1F1F).withValues(alpha: 0.5),
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: const Color(0xFFC6A667).withValues(alpha: 0.7),
+                    width: 1,
+                  ),
                 ),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -296,17 +388,17 @@ class CartScreen extends StatelessWidget {
                         Text(
                           'TOTAL',
                           style: GoogleFonts.cinzel(
-                            fontSize: 12,
+                            fontSize: 11,
                             fontWeight: FontWeight.w700,
                             color: const Color(0xFFD4AF7A),
-                            letterSpacing: 1.2,
+                            letterSpacing: 1.0,
                           ),
                         ),
                         Text(
                           '${cartProvider.totalQuantity} ${cartProvider.totalQuantity > 1 ? l10n.items : l10n.item}',
-                          style: const TextStyle(
-                            fontSize: 11,
-                            color: Color(0xFF878787),
+                          style: TextStyle(
+                            fontSize: 10,
+                            color: const Color(0xFF878787).withValues(alpha: 0.8),
                           ),
                         ),
                       ],
@@ -314,7 +406,7 @@ class CartScreen extends StatelessWidget {
                     Text(
                       '\$${cartProvider.totalPrice.toStringAsFixed(2)}',
                       style: GoogleFonts.cinzel(
-                        fontSize: 24,
+                        fontSize: 22,
                         fontWeight: FontWeight.w900,
                         color: const Color(0xFFC6A667),
                       ),
@@ -322,7 +414,7 @@ class CartScreen extends StatelessWidget {
                   ],
                 ),
               ),
-              const SizedBox(height: 16),
+              const SizedBox(height: 10),
               // Action buttons
               Row(
                 children: [
@@ -330,10 +422,13 @@ class CartScreen extends StatelessWidget {
                     child: OutlinedButton(
                       style: OutlinedButton.styleFrom(
                         foregroundColor: const Color(0xFFC6A667),
-                        side: const BorderSide(color: Color(0xFFC6A667), width: 1.5),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
+                        side: BorderSide(
+                          color: const Color(0xFFC6A667).withValues(alpha: 0.7),
+                          width: 1,
+                        ),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       onPressed: () => context.go('/menu'),
@@ -341,24 +436,24 @@ class CartScreen extends StatelessWidget {
                         l10n.addMore,
                         style: GoogleFonts.cinzel(
                           fontWeight: FontWeight.w900,
-                          fontSize: 12,
-                          letterSpacing: 0.8,
+                          fontSize: 11,
+                          letterSpacing: 0.6,
                         ),
                       ),
                     ),
                   ),
-                  const SizedBox(width: 12),
+                  const SizedBox(width: 10),
                   Expanded(
                     flex: 2,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: const Color(0xFFC6A667),
                         foregroundColor: const Color(0xFF0F0F0F),
-                        padding: const EdgeInsets.symmetric(vertical: 16),
-                        elevation: 2,
-                        shadowColor: Colors.black.withValues(alpha: 0x33),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        elevation: 1,
+                        shadowColor: Colors.black.withValues(alpha: 0.25),
                         shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
                       onPressed: () => context.go('/checkout'),
@@ -366,8 +461,8 @@ class CartScreen extends StatelessWidget {
                         l10n.proceedToDeal,
                         style: GoogleFonts.cinzel(
                           fontWeight: FontWeight.w900,
-                          fontSize: 12,
-                          letterSpacing: 0.8,
+                          fontSize: 11,
+                          letterSpacing: 0.6,
                         ),
                       ),
                     ),
