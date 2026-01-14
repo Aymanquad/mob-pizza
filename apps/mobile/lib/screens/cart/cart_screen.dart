@@ -222,7 +222,14 @@ class CartScreen extends StatelessWidget {
                             children: [
                               InkWell(
                                 onTap: () {
-                                  context.push('/menu/edit/${Uri.encodeComponent(item.id)}', extra: item);
+                                  final l10n = AppLocalizations.of(context)!;
+                                  // Check if it's a custom pizza - route to customize screen
+                                  if (item.name == l10n.customPizza) {
+                                    context.push('/customize-pizza', extra: item);
+                                  } else {
+                                    // Regular menu item - route to item detail screen
+                                    context.push('/menu/edit/${Uri.encodeComponent(item.id)}', extra: item);
+                                  }
                                 },
                                 borderRadius: BorderRadius.circular(6),
                                 child: Padding(

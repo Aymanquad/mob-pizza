@@ -109,9 +109,6 @@ class AppLocalizationsEn extends AppLocalizations {
   String get ordersClosed => 'Orders Closed';
 
   @override
-  String get familyPoints => 'Family Points';
-
-  @override
   String get safehouses => 'Safehouses';
 
   @override
@@ -479,6 +476,9 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get toppings => 'Toppings:';
+
+  @override
+  String get selectedSlices => 'Selected slices:';
 
   @override
   String get remove => 'Remove';
@@ -898,6 +898,49 @@ class AppLocalizationsEn extends AppLocalizations {
       'The ultimate pizza loaded with all your favorites. Premium pepperoni, Italian sausage, bell peppers, onions, and mushrooms come together on our house tomato sauce and mozzarella. A hearty, satisfying classic that never disappoints.';
 
   @override
+  String get pizzaMeatLover => 'Meat Lover';
+
+  @override
+  String get pizzaMeatLoverDesc => 'Pepperoni, sausage, bacon, and ham.';
+
+  @override
+  String get pizzaMeatLoverFullDesc =>
+      'A carnivore\'s dream come true! This hearty pizza is loaded with premium pepperoni, Italian sausage, crispy bacon, and savory ham. Every bite delivers a protein-packed punch of flavor. Perfect for those who believe more meat is always better.';
+
+  @override
+  String get pizzaMexicali => 'Mexicali';
+
+  @override
+  String get pizzaMexicaliDesc =>
+      'Spicy Mexican-inspired toppings with jalapeños.';
+
+  @override
+  String get pizzaMexicaliFullDesc =>
+      'A fiesta of flavors on a pizza! Our Mexicali pizza brings together the bold spices of Mexico with classic Italian pizza. Featuring spicy ground beef, jalapeños, bell peppers, onions, and our signature Mexican cheese blend. A fusion that\'s as exciting as it is delicious.';
+
+  @override
+  String get pizzaChickenTikkaMasala => 'Chicken Tikka Masala';
+
+  @override
+  String get pizzaChickenTikkaMasalaDesc =>
+      'Indian-inspired with tikka masala chicken.';
+
+  @override
+  String get pizzaChickenTikkaMasalaFullDesc =>
+      'Experience the rich, aromatic flavors of India on a perfectly baked pizza crust. Tender marinated chicken tikka, creamy masala sauce, red onions, and fresh cilantro create an unforgettable fusion. This bold creation brings the warmth of Indian spices to Italian tradition.';
+
+  @override
+  String get pizzaAlfredoChicken => 'Alfredo Chicken';
+
+  @override
+  String get pizzaAlfredoChickenDesc =>
+      'Creamy alfredo sauce with grilled chicken.';
+
+  @override
+  String get pizzaAlfredoChickenFullDesc =>
+      'Indulge in creamy perfection with our Alfredo Chicken pizza. Tender grilled chicken breast, rich alfredo sauce, and mozzarella cheese come together on a golden crust. A white pizza that\'s as comforting as it is elegant. Pure creamy satisfaction in every bite.';
+
+  @override
   String get combosDeals => 'Combos / Deals';
 
   @override
@@ -1052,6 +1095,26 @@ class AppLocalizationsEn extends AppLocalizations {
       'Traditional Italian dressing with herbs and spices, perfect as a dip or dressing.';
 
   @override
+  String get dipRanch => 'Ranch';
+
+  @override
+  String get dipRanchDesc => 'Creamy ranch dip with herbs.';
+
+  @override
+  String get dipRanchFullDesc =>
+      'Classic creamy ranch dip with a perfect blend of herbs and spices. Cool, tangy, and refreshing - the ultimate dipping sauce for wings, fries, and more.';
+
+  @override
+  String get dipBlueCheese => 'Blue Cheese';
+
+  @override
+  String get dipBlueCheeseDesc => 'Rich and tangy blue cheese dip.';
+
+  @override
+  String get dipBlueCheeseFullDesc =>
+      'Bold and tangy blue cheese dip with chunks of real blue cheese. Rich, creamy, and full of flavor - a sophisticated choice for wings and vegetables.';
+
+  @override
   String get fries => 'Fries';
 
   @override
@@ -1153,6 +1216,17 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dessertCheesecakeFullDesc =>
       'Rich and creamy New York-style cheesecake with a buttery graham cracker crust. Smooth, decadent, and the perfect ending to any meal.';
+
+  @override
+  String get dessertFreshCannoli => 'Fresh Cannoli';
+
+  @override
+  String get dessertFreshCannoliDesc =>
+      'Crispy shell filled with sweet ricotta cream.';
+
+  @override
+  String get dessertFreshCannoliFullDesc =>
+      'Authentic Italian cannoli with a crispy, golden shell filled with sweet, creamy ricotta cheese. Topped with chocolate chips and dusted with powdered sugar. A traditional Sicilian treat that\'s both elegant and indulgent.';
 
   @override
   String get drinks => 'Drinks';

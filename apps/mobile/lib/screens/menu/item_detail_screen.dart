@@ -52,9 +52,13 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   itemName == l10n.dipItalianDressing ||
                   itemName == l10n.dipGarlic ||
                   itemName == l10n.dipParmesan ||
+                  itemName == l10n.dipRanch ||
+                  itemName == l10n.dipBlueCheese ||
                   lowerName.contains('dip') ||
                   lowerName.contains('honey mustard') ||
                   lowerName.contains('italian dressing') ||
+                  lowerName.contains('ranch') ||
+                  lowerName.contains('blue cheese') ||
                   (toppings.isEmpty && (lowerName.contains('mustard') || lowerName.contains('dressing') || lowerName.contains('parmesan')));
     
     final isDrink = itemName == l10n.drink2Liter ||
@@ -66,15 +70,17 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     final isDessert = itemName == l10n.dessertChocolateChipCookiePizza ||
                       itemName == l10n.dessertChocolateChurros ||
                       itemName == l10n.dessertCheesecake ||
+                      itemName == l10n.dessertFreshCannoli ||
                       lowerName.contains('dessert') ||
                       lowerName.contains('churros') ||
                       lowerName.contains('cheesecake') ||
                       lowerName.contains('cookie pizza') ||
-                      lowerName.contains('chocolate chip cookie');
+                      lowerName.contains('chocolate chip cookie') ||
+                      lowerName.contains('cannoli');
     
     final isPasta = itemName == l10n.pastaChickenAlfredo ||
-                    lowerName.contains('pasta') ||
-                    lowerName.contains('alfredo');
+                    (lowerName.contains('pasta') && lowerName.contains('alfredo')) ||
+                    (lowerName.contains('pasta') && !lowerName.contains('pizza'));
     
     final isCombo = isComboWithSlices(itemName, l10n) ||
                     lowerName.contains('combo') ||
@@ -109,9 +115,13 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
                   itemName == l10n.dipItalianDressing ||
                   itemName == l10n.dipGarlic ||
                   itemName == l10n.dipParmesan ||
+                  itemName == l10n.dipRanch ||
+                  itemName == l10n.dipBlueCheese ||
                   lowerName.contains('dip') ||
                   lowerName.contains('honey mustard') ||
                   lowerName.contains('italian dressing') ||
+                  lowerName.contains('ranch') ||
+                  lowerName.contains('blue cheese') ||
                   (toppings.isEmpty && (lowerName.contains('mustard') || lowerName.contains('dressing') || lowerName.contains('parmesan')));
     
     final isDrink = itemName == l10n.drink2Liter ||
@@ -123,11 +133,13 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     final isDessert = itemName == l10n.dessertChocolateChipCookiePizza ||
                       itemName == l10n.dessertChocolateChurros ||
                       itemName == l10n.dessertCheesecake ||
+                      itemName == l10n.dessertFreshCannoli ||
                       lowerName.contains('dessert') ||
                       lowerName.contains('churros') ||
                       lowerName.contains('cheesecake') ||
                       lowerName.contains('cookie pizza') ||
-                      lowerName.contains('chocolate chip cookie');
+                      lowerName.contains('chocolate chip cookie') ||
+                      lowerName.contains('cannoli');
     
     final isCombo = isComboWithSlices(itemName, l10n) ||
                     lowerName.contains('combo') ||
@@ -159,6 +171,19 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       selectedSize = cartItem.selectedSize.isNotEmpty ? cartItem.selectedSize : '10"';
       selectedToppings = Set<String>.from(cartItem.selectedToppings);
       
+      // Restore combo pizza slice selections from description
+      if (cartItem.description.contains('Selected slices:')) {
+        final slicesMatch = RegExp(r'Selected slices:\s*(.+?)(?:\n|$)').firstMatch(cartItem.description);
+        if (slicesMatch != null) {
+          final slicesText = slicesMatch.group(1) ?? '';
+          selectedPizzaSlices = slicesText.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+        }
+      } else {
+        // Also check if slices are stored in a different format
+        // Some combos might store slices differently
+        selectedPizzaSlices = [];
+      }
+      
       // Find the item index by matching the name
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) {
@@ -169,6 +194,10 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
             setState(() {
               _actualItemIndex = index;
             });
+          } else {
+            // Item not found in menu (could be custom pizza or other custom item)
+            // Keep _actualItemIndex as null, will use widget.itemIndex (0) as fallback
+            debugPrint('[ItemDetailScreen] Cart item "${cartItem.name}" not found in menu items');
           }
         }
       });
@@ -208,175 +237,177 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
 
   List _getItems(AppLocalizations l10n) {
     return [
-    // International Variations
-    (
-      l10n.pizzaJapaneseInspired,
-      l10n.pizzaJapaneseInspiredDesc,
-      16.5,
-      false,
-      'assets/images/japanese-inspired-pizza.jpg',
-      l10n.pizzaJapaneseInspiredFullDesc,
-      ['Sushi Tuna', 'Japanese Mayo', 'Teriyaki Glaze', 'Nori', 'Sesame Seeds', 'Cucumber'],
-      ['Extra Tuna (+4.00)', 'Spicy Mayo (+1.50)', 'Wasabi (+1.00)']
-    ),
-    (
-      l10n.pizzaIndianInspired,
-      l10n.pizzaIndianInspiredDesc,
-      15.0,
-      true,
-      'assets/images/indian-inspired-pizza.jpg',
-      l10n.pizzaIndianInspiredFullDesc,
-      ['Tandoori Paneer', 'Pickled Onions', 'Cilantro Chutney', 'Mozzarella', 'Garam Masala'],
-      ['Extra Paneer (+3.00)', 'Mango Chutney (+1.50)', 'Chili Flakes (+1.00)']
-    ),
-    (
-      l10n.pizzaTurkishPide,
-      l10n.pizzaTurkishPideDesc,
-      17.5,
-      false,
-      'assets/images/turkish-pide-pizza.webp',
-      l10n.pizzaTurkishPideFullDesc,
-      ['Ground Lamb', 'Onions', 'Bell Peppers', 'Tomatoes', 'Yogurt Sauce', 'Sumac'],
-      ['Extra Lamb (+3.50)', 'Feta Cheese (+2.00)', 'Hot Sauce (+1.00)']
-    ),
-    (
-      l10n.pizzaBrazilian,
-      l10n.pizzaBrazilianDesc,
-      14.5,
-      false,
-      'assets/images/Brazilian-inspired-Pizza.jpg',
-      l10n.pizzaBrazilianFullDesc,
-      ['Hearts of Palm', 'Corn', 'Coconut Flakes', 'Catupiry Cheese', 'Tomato Sauce'],
-      ['Extra Catupiry (+2.50)', 'Pineapple (+2.00)', 'Cilantro (+1.50)']
-    ),
+    // COMMENTED OUT - Not in menu images
+    // // International Variations
+    // (
+    //   l10n.pizzaJapaneseInspired,
+    //   l10n.pizzaJapaneseInspiredDesc,
+    //   16.5,
+    //   false,
+    //   'assets/images/japanese-inspired-pizza.jpg',
+    //   l10n.pizzaJapaneseInspiredFullDesc,
+    //   ['Sushi Tuna', 'Japanese Mayo', 'Teriyaki Glaze', 'Nori', 'Sesame Seeds', 'Cucumber'],
+    //   ['Extra Tuna (+4.00)', 'Spicy Mayo (+1.50)', 'Wasabi (+1.00)']
+    // ),
+    // (
+    //   l10n.pizzaIndianInspired,
+    //   l10n.pizzaIndianInspiredDesc,
+    //   15.0,
+    //   true,
+    //   'assets/images/indian-inspired-pizza.jpg',
+    //   l10n.pizzaIndianInspiredFullDesc,
+    //   ['Tandoori Paneer', 'Pickled Onions', 'Cilantro Chutney', 'Mozzarella', 'Garam Masala'],
+    //   ['Extra Paneer (+3.00)', 'Mango Chutney (+1.50)', 'Chili Flakes (+1.00)']
+    // ),
+    // (
+    //   l10n.pizzaTurkishPide,
+    //   l10n.pizzaTurkishPideDesc,
+    //   17.5,
+    //   false,
+    //   'assets/images/turkish-pide-pizza.webp',
+    //   l10n.pizzaTurkishPideFullDesc,
+    //   ['Ground Lamb', 'Onions', 'Bell Peppers', 'Tomatoes', 'Yogurt Sauce', 'Sumac'],
+    //   ['Extra Lamb (+3.50)', 'Feta Cheese (+2.00)', 'Hot Sauce (+1.00)']
+    // ),
+    // (
+    //   l10n.pizzaBrazilian,
+    //   l10n.pizzaBrazilianDesc,
+    //   14.5,
+    //   false,
+    //   'assets/images/Brazilian-inspired-Pizza.jpg',
+    //   l10n.pizzaBrazilianFullDesc,
+    //   ['Hearts of Palm', 'Corn', 'Coconut Flakes', 'Catupiry Cheese', 'Tomato Sauce'],
+    //   ['Extra Catupiry (+2.50)', 'Pineapple (+2.00)', 'Cilantro (+1.50)']
+    // ),
 
-    // Speciality and Alternative Bases
-    (
-      l10n.pizzaGlutenFree,
-      l10n.pizzaGlutenFreeDesc,
-      16.0,
-      true,
-      'assets/images/gluten-free-pizza.jpg',
-      l10n.pizzaGlutenFreeFullDesc,
-      ['Gluten-Free Crust', 'Tomato Sauce', 'Mozzarella', 'Bell Peppers', 'Onions', 'Mushrooms'],
-      ['Dairy-Free Cheese (+2.00)', 'Extra Veggies (+2.00)', 'Olives (+1.50)']
-    ),
-    (
-      l10n.pizzaVegan,
-      l10n.pizzaVeganDesc,
-      15.5,
-      true,
-      'assets/images/vegan-pizza.jpg',
-      l10n.pizzaVeganFullDesc,
-      ['Vegan Cheese', 'Vegan Tomato Sauce', 'Bell Peppers', 'Onions', 'Mushrooms', 'Fresh Basil'],
-      ['Vegan Pepperoni (+3.00)', 'Pineapple (+2.00)', 'Jalapeños (+1.00)']
-    ),
-    (
-      l10n.pizzaStuffedCrust,
-      l10n.pizzaStuffedCrustDesc,
-      17.0,
-      false,
-      'assets/images/stuffed-crust-pizza.jpg',
-      l10n.pizzaStuffedCrustFullDesc,
-      ['Stuffed Cheese Crust', 'Pepperoni', 'Mozzarella', 'Tomato Sauce', 'Garlic Butter'],
-      ['Extra Stuffed Crust (+2.50)', 'Sausage (+3.00)', 'Mushrooms (+1.50)']
-    ),
-    (
-      l10n.pizzaWhite,
-      l10n.pizzaWhiteDesc,
-      15.0,
-      true,
-      'assets/images/white-pizza.jpg',
-      l10n.pizzaWhiteFullDesc,
-      ['Ricotta Cheese', 'Mozzarella', 'Roasted Garlic', 'Fresh Herbs', 'Extra Virgin Olive Oil'],
-      ['Truffle Oil (+3.00)', 'Prosciutto (+4.00)', 'Arugula (+2.50)']
-    ),
+    // // Speciality and Alternative Bases
+    // (
+    //   l10n.pizzaGlutenFree,
+    //   l10n.pizzaGlutenFreeDesc,
+    //   16.0,
+    //   true,
+    //   'assets/images/gluten-free-pizza.jpg',
+    //   l10n.pizzaGlutenFreeFullDesc,
+    //   ['Gluten-Free Crust', 'Tomato Sauce', 'Mozzarella', 'Bell Peppers', 'Onions', 'Mushrooms'],
+    //   ['Dairy-Free Cheese (+2.00)', 'Extra Veggies (+2.00)', 'Olives (+1.50)']
+    // ),
+    // (
+    //   l10n.pizzaVegan,
+    //   l10n.pizzaVeganDesc,
+    //   15.5,
+    //   true,
+    //   'assets/images/vegan-pizza.jpg',
+    //   l10n.pizzaVeganFullDesc,
+    //   ['Vegan Cheese', 'Vegan Tomato Sauce', 'Bell Peppers', 'Onions', 'Mushrooms', 'Fresh Basil'],
+    //   ['Vegan Pepperoni (+3.00)', 'Pineapple (+2.00)', 'Jalapeños (+1.00)']
+    // ),
+    // (
+    //   l10n.pizzaStuffedCrust,
+    //   l10n.pizzaStuffedCrustDesc,
+    //   17.0,
+    //   false,
+    //   'assets/images/stuffed-crust-pizza.jpg',
+    //   l10n.pizzaStuffedCrustFullDesc,
+    //   ['Stuffed Cheese Crust', 'Pepperoni', 'Mozzarella', 'Tomato Sauce', 'Garlic Butter'],
+    //   ['Extra Stuffed Crust (+2.50)', 'Sausage (+3.00)', 'Mushrooms (+1.50)']
+    // ),
+    // (
+    //   l10n.pizzaWhite,
+    //   l10n.pizzaWhiteDesc,
+    //   15.0,
+    //   true,
+    //   'assets/images/white-pizza.jpg',
+    //   l10n.pizzaWhiteFullDesc,
+    //   ['Ricotta Cheese', 'Mozzarella', 'Roasted Garlic', 'Fresh Herbs', 'Extra Virgin Olive Oil'],
+    //   ['Truffle Oil (+3.00)', 'Prosciutto (+4.00)', 'Arugula (+2.50)']
+    // ),
 
-    // American Regional Style
-    (
-      l10n.pizzaNewYorkStyle,
-      l10n.pizzaNewYorkStyleDesc,
-      14.0,
-      false,
-      'assets/images/new-york-style-pizza.jpg',
-      l10n.pizzaNewYorkStyleFullDesc,
-      ['Thin Crust', 'House Tomato Sauce', 'Premium Pepperoni', 'Mozzarella', 'Oregano'],
-      ['Extra Pepperoni (+2.50)', 'Mushrooms (+1.50)', 'Sausage (+3.00)']
-    ),
-    (
-      l10n.pizzaChicagoDeepDish,
-      l10n.pizzaChicagoDeepDishDesc,
-      18.0,
-      false,
-      'assets/images/chicago-style-pizza.jpg',
-      l10n.pizzaChicagoDeepDishFullDesc,
-      ['Buttery Deep Crust', 'Italian Sausage', 'Mozzarella', 'Parmesan', 'Chunky Tomato Sauce'],
-      ['Extra Sausage (+3.00)', 'Mushrooms (+1.50)', 'Green Peppers (+1.50)']
-    ),
-    (
-      l10n.pizzaDetroitStyle,
-      l10n.pizzaDetroitStyleDesc,
-      17.5,
-      false,
-      'assets/images/detroit-style-pizza.jpg',
-      l10n.pizzaDetroitStyleFullDesc,
-      ['Brick Cheese', 'Premium Pepperoni', 'Detroit Tomato Sauce', 'Oregano', 'Garlic'],
-      ['Extra Cheese (+2.00)', 'Hot Honey (+1.50)', 'Jalapeños (+1.00)']
-    ),
-    (
-      l10n.pizzaCaliforniaStyle,
-      l10n.pizzaCaliforniaStyleDesc,
-      15.0,
-      false,
-      'assets/images/california-style-pizza.jpg',
-      l10n.pizzaCaliforniaStyleFullDesc,
-      ['Goat Cheese', 'Walnuts', 'Fresh Figs', 'Arugula', 'Balsamic Glaze'],
-      ['Prosciutto (+4.00)', 'Extra Figs (+2.50)', 'Honey Drizzle (+1.50)']
-    ),
+    // // American Regional Style
+    // (
+    //   l10n.pizzaNewYorkStyle,
+    //   l10n.pizzaNewYorkStyleDesc,
+    //   14.0,
+    //   false,
+    //   'assets/images/new-york-style-pizza.jpg',
+    //   l10n.pizzaNewYorkStyleFullDesc,
+    //   ['Thin Crust', 'House Tomato Sauce', 'Premium Pepperoni', 'Mozzarella', 'Oregano'],
+    //   ['Extra Pepperoni (+2.50)', 'Mushrooms (+1.50)', 'Sausage (+3.00)']
+    // ),
+    // (
+    //   l10n.pizzaChicagoDeepDish,
+    //   l10n.pizzaChicagoDeepDishDesc,
+    //   18.0,
+    //   false,
+    //   'assets/images/chicago-style-pizza.jpg',
+    //   l10n.pizzaChicagoDeepDishFullDesc,
+    //   ['Buttery Deep Crust', 'Italian Sausage', 'Mozzarella', 'Parmesan', 'Chunky Tomato Sauce'],
+    //   ['Extra Sausage (+3.00)', 'Mushrooms (+1.50)', 'Green Peppers (+1.50)']
+    // ),
+    // (
+    //   l10n.pizzaDetroitStyle,
+    //   l10n.pizzaDetroitStyleDesc,
+    //   17.5,
+    //   false,
+    //   'assets/images/detroit-style-pizza.jpg',
+    //   l10n.pizzaDetroitStyleFullDesc,
+    //   ['Brick Cheese', 'Premium Pepperoni', 'Detroit Tomato Sauce', 'Oregano', 'Garlic'],
+    //   ['Extra Cheese (+2.00)', 'Hot Honey (+1.50)', 'Jalapeños (+1.00)']
+    // ),
+    // (
+    //   l10n.pizzaCaliforniaStyle,
+    //   l10n.pizzaCaliforniaStyleDesc,
+    //   15.0,
+    //   false,
+    //   'assets/images/california-style-pizza.jpg',
+    //   l10n.pizzaCaliforniaStyleFullDesc,
+    //   ['Goat Cheese', 'Walnuts', 'Fresh Figs', 'Arugula', 'Balsamic Glaze'],
+    //   ['Prosciutto (+4.00)', 'Extra Figs (+2.50)', 'Honey Drizzle (+1.50)']
+    // ),
 
-    // Italian Style
-    (
-      l10n.pizzaNeapolitan,
-      l10n.pizzaNeapolitanDesc,
-      15.5,
-      true,
-      'assets/images/neapolitan-style-pizza.webp',
-      l10n.pizzaNeapolitanFullDesc,
-      ['High-Hydration Dough', 'San Marzano Tomatoes', 'Fresh Mozzarella', 'Basil', 'Sea Salt'],
-      ['Extra Mozzarella (+2.00)', 'Anchovies (+3.00)', 'Hot Peppers (+1.00)']
-    ),
-    (
-      l10n.pizzaRomanAlTaglio,
-      l10n.pizzaRomanAlTaglioDesc,
-      16.0,
-      false,
-      'assets/images/Romanaltaglio-Style-Pizza.webp',
-      l10n.pizzaRomanAlTaglioFullDesc,
-      ['Roman Thin Crust', 'Seasonal Toppings', 'Mozzarella', 'Tomato Sauce', 'Fresh Herbs'],
-      ['Prosciutto (+4.00)', 'Artichokes (+2.50)', 'Buffalo Mozzarella (+3.00)']
-    ),
-    (
-      l10n.pizzaSicilian,
-      l10n.pizzaSicilianDesc,
-      16.5,
-      false,
-      'assets/images/Sicilian-Pizza.webp',
-      l10n.pizzaSicilianFullDesc,
-      ['Thick Focaccia Crust', 'Sweet Onions', 'Anchovies', 'Tomato Sauce', 'Oregano', 'Caciocavallo Cheese'],
-      ['Extra Onions (+1.50)', 'Capers (+1.50)', 'Hot Peppers (+1.00)']
-    ),
+    // // Italian Style
+    // (
+    //   l10n.pizzaNeapolitan,
+    //   l10n.pizzaNeapolitanDesc,
+    //   15.5,
+    //   true,
+    //   'assets/images/neapolitan-style-pizza.webp',
+    //   l10n.pizzaNeapolitanFullDesc,
+    //   ['High-Hydration Dough', 'San Marzano Tomatoes', 'Fresh Mozzarella', 'Basil', 'Sea Salt'],
+    //   ['Extra Mozzarella (+2.00)', 'Anchovies (+3.00)', 'Hot Peppers (+1.00)']
+    // ),
+    // (
+    //   l10n.pizzaRomanAlTaglio,
+    //   l10n.pizzaRomanAlTaglioDesc,
+    //   16.0,
+    //   false,
+    //   'assets/images/Romanaltaglio-Style-Pizza.webp',
+    //   l10n.pizzaRomanAlTaglioFullDesc,
+    //   ['Roman Thin Crust', 'Seasonal Toppings', 'Mozzarella', 'Tomato Sauce', 'Fresh Herbs'],
+    //   ['Prosciutto (+4.00)', 'Artichokes (+2.50)', 'Buffalo Mozzarella (+3.00)']
+    // ),
+    // (
+    //   l10n.pizzaSicilian,
+    //   l10n.pizzaSicilianDesc,
+    //   16.5,
+    //   false,
+    //   'assets/images/Sicilian-Pizza.webp',
+    //   l10n.pizzaSicilianFullDesc,
+    //   ['Thick Focaccia Crust', 'Sweet Onions', 'Anchovies', 'Tomato Sauce', 'Oregano', 'Caciocavallo Cheese'],
+    //   ['Extra Onions (+1.50)', 'Capers (+1.50)', 'Hot Peppers (+1.00)']
+    // ),
 
     // Classic and Widely Sold Pizzas
-    (
-      l10n.pizzaMargherita,
-      l10n.pizzaMargheritaDesc,
-      12.0,
-      true,
-      'assets/images/margherita-pizza.jpg',
-      l10n.pizzaMargheritaFullDesc,
-      ['San Marzano Tomatoes', 'Fresh Mozzarella', 'Basil Leaves', 'Extra Virgin Olive Oil', 'Sea Salt'],
-      ['Truffle Oil Drizzle (+3.00)', 'Arugula (+2.50)', 'Prosciutto (+4.00)']
-    ),
+    // COMMENTED OUT - Not in menu images
+    // (
+    //   l10n.pizzaMargherita,
+    //   l10n.pizzaMargheritaDesc,
+    //   12.0,
+    //   true,
+    //   'assets/images/margherita-pizza.jpg',
+    //   l10n.pizzaMargheritaFullDesc,
+    //   ['San Marzano Tomatoes', 'Fresh Mozzarella', 'Basil Leaves', 'Extra Virgin Olive Oil', 'Sea Salt'],
+    //   ['Truffle Oil Drizzle (+3.00)', 'Arugula (+2.50)', 'Prosciutto (+4.00)']
+    // ),
     (
       l10n.pizzaPepperoniClassic,
       l10n.pizzaPepperoniClassicDesc,
@@ -397,16 +428,17 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       ['Pepperoni', 'Italian Sausage', 'Bell Peppers', 'Onions', 'Mushrooms', 'Tomato Sauce', 'Mozzarella'],
       ['Extra Pepperoni (+2.50)', 'Extra Sausage (+2.50)', 'Hot Peppers (+1.00)']
     ),
-    (
-      l10n.pizzaCheeseClassic,
-      l10n.pizzaCheeseClassicDesc,
-      11.0,
-      true,
-      'assets/images/Cheese_Classic_Pizza.jpg',
-      l10n.pizzaCheeseClassicFullDesc,
-      ['House Tomato Sauce', 'Premium Mozzarella', 'Extra Virgin Olive Oil', 'Fresh Basil'],
-      ['Extra Cheese (+2.00)', 'Basil (+1.50)', 'Hot Oil (+1.00)']
-    ),
+    // COMMENTED OUT - Not in menu images
+    // (
+    //   l10n.pizzaCheeseClassic,
+    //   l10n.pizzaCheeseClassicDesc,
+    //   11.0,
+    //   true,
+    //   'assets/images/Cheese_Classic_Pizza.jpg',
+    //   l10n.pizzaCheeseClassicFullDesc,
+    //   ['House Tomato Sauce', 'Premium Mozzarella', 'Extra Virgin Olive Oil', 'Fresh Basil'],
+    //   ['Extra Cheese (+2.00)', 'Basil (+1.50)', 'Hot Oil (+1.00)']
+    // ),
     (
       l10n.pizzaVeggieClassic,
       l10n.pizzaVeggieClassicDesc,
@@ -417,36 +449,37 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       ['Bell Peppers', 'Red Onions', 'Black Olives', 'Mushrooms', 'Tomato Sauce', 'Mozzarella'],
       ['Extra Veggies (+2.00)', 'Feta Cheese (+2.50)', 'Artichokes (+2.50)']
     ),
-    (
-      l10n.pizzaCapreseHitman,
-      l10n.pizzaCapreseHitmanDesc,
-      14.0,
-      true,
-      'assets/images/caprese-pizza.jpeg',
-      l10n.pizzaCapreseHitmanFullDesc,
-      ['Heirloom Tomatoes', 'Fresh Mozzarella', 'Basil', 'Balsamic Reduction', 'Extra Virgin Olive Oil'],
-      ['Extra Tomatoes (+2.00)', 'Burrata (+3.50)', 'Pine Nuts (+2.50)']
-    ),
-    (
-      l10n.pizzaTruffleWhiteHit,
-      l10n.pizzaTruffleWhiteHitDesc,
-      16.0,
-      true,
-      'assets/images/Truffle-White-Pizza.jpg',
-      l10n.pizzaTruffleWhiteHitFullDesc,
-      ['Ricotta Cheese', 'Parmesan', 'Black Truffle', 'Garlic', 'Fresh Herbs', 'Mozzarella'],
-      ['Extra Truffle (+5.00)', 'Prosciutto (+4.00)', 'Arugula (+2.50)']
-    ),
-    (
-      l10n.pizzaBrickOvenDon,
-      l10n.pizzaBrickOvenDonDesc,
-      17.0,
-      false,
-      'assets/images/brick-oven-pizza.webp',
-      l10n.pizzaBrickOvenDonFullDesc,
-      ['Type 00 Flour Crust', 'San Marzano Tomatoes', 'Fresh Mozzarella', 'Basil Oil', 'Sea Salt'],
-      ['Extra Basil Oil (+1.50)', 'Anchovies (+3.00)', 'Olives (+1.50)']
-    ),
+    // COMMENTED OUT - Not in menu images
+    // (
+    //   l10n.pizzaCapreseHitman,
+    //   l10n.pizzaCapreseHitmanDesc,
+    //   14.0,
+    //   true,
+    //   'assets/images/caprese-pizza.jpeg',
+    //   l10n.pizzaCapreseHitmanFullDesc,
+    //   ['Heirloom Tomatoes', 'Fresh Mozzarella', 'Basil', 'Balsamic Reduction', 'Extra Virgin Olive Oil'],
+    //   ['Extra Tomatoes (+2.00)', 'Burrata (+3.50)', 'Pine Nuts (+2.50)']
+    // ),
+    // (
+    //   l10n.pizzaTruffleWhiteHit,
+    //   l10n.pizzaTruffleWhiteHitDesc,
+    //   16.0,
+    //   true,
+    //   'assets/images/Truffle-White-Pizza.jpg',
+    //   l10n.pizzaTruffleWhiteHitFullDesc,
+    //   ['Ricotta Cheese', 'Parmesan', 'Black Truffle', 'Garlic', 'Fresh Herbs', 'Mozzarella'],
+    //   ['Extra Truffle (+5.00)', 'Prosciutto (+4.00)', 'Arugula (+2.50)']
+    // ),
+    // (
+    //   l10n.pizzaBrickOvenDon,
+    //   l10n.pizzaBrickOvenDonDesc,
+    //   17.0,
+    //   false,
+    //   'assets/images/brick-oven-pizza.webp',
+    //   l10n.pizzaBrickOvenDonFullDesc,
+    //   ['Type 00 Flour Crust', 'San Marzano Tomatoes', 'Fresh Mozzarella', 'Basil Oil', 'Sea Salt'],
+    //   ['Extra Basil Oil (+1.50)', 'Anchovies (+3.00)', 'Olives (+1.50)']
+    // ),
     (
       l10n.pizzaSmokyCapoBBQ,
       l10n.pizzaSmokyCapoBBQDesc,
@@ -457,16 +490,17 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       ['House BBQ Sauce', 'Smoked Brisket', 'Red Onions', 'Cheddar Cheese', 'Cilantro'],
       ['Extra BBQ Sauce (+1.50)', 'Jalapeños (+1.00)', 'Corn (+2.00)']
     ),
-    (
-      l10n.pizzaVelvetPepperoni,
-      l10n.pizzaVelvetPepperoniDesc,
-      15.5,
-      false,
-      'assets/images/velvet-pepperoni-pizza.jpg',
-      l10n.pizzaVelvetPepperoniFullDesc,
-      ['House Tomato Sauce', 'Premium Pepperoni', 'Mozzarella', 'Oregano', 'Garlic'],
-      ['Extra Pepperoni (+2.50)', 'Hot Honey (+1.50)', 'Red Pepper Flakes (+1.00)']
-    ),
+    // COMMENTED OUT - Not in menu images
+    // (
+    //   l10n.pizzaVelvetPepperoni,
+    //   l10n.pizzaVelvetPepperoniDesc,
+    //   15.5,
+    //   false,
+    //   'assets/images/velvet-pepperoni-pizza.jpg',
+    //   l10n.pizzaVelvetPepperoniFullDesc,
+    //   ['House Tomato Sauce', 'Premium Pepperoni', 'Mozzarella', 'Oregano', 'Garlic'],
+    //   ['Extra Pepperoni (+2.50)', 'Hot Honey (+1.50)', 'Red Pepper Flakes (+1.00)']
+    // ),
     (
       l10n.pizzaHawaiianBacon,
       l10n.pizzaHawaiianBaconDesc,
@@ -476,6 +510,46 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       l10n.pizzaHawaiianBaconFullDesc,
       ['Diced Ham', 'Crispy Bacon', 'Pineapple', 'Green Onions', 'Mozzarella', 'Tomato Sauce'],
       ['Extra Bacon (+2.50)', 'Extra Pineapple (+2.00)', 'Jalapeños (+1.00)']
+    ),
+    (
+      l10n.pizzaMeatLover,
+      l10n.pizzaMeatLoverDesc,
+      16.0,
+      false,
+      'assets/images/meat-lovers-pizza.jpg',
+      l10n.pizzaMeatLoverFullDesc,
+      ['Premium Pepperoni', 'Italian Sausage', 'Crispy Bacon', 'Diced Ham', 'Mozzarella', 'Tomato Sauce'],
+      ['Extra Pepperoni (+2.50)', 'Extra Sausage (+2.50)', 'Extra Bacon (+2.50)']
+    ),
+    (
+      l10n.pizzaMexicali,
+      l10n.pizzaMexicaliDesc,
+      15.5,
+      false,
+      'assets/images/mexicalli-pizza.jpg',
+      l10n.pizzaMexicaliFullDesc,
+      ['Spicy Ground Beef', 'Jalapeños', 'Bell Peppers', 'Red Onions', 'Mexican Cheese Blend', 'Tomato Sauce'],
+      ['Extra Jalapeños (+1.00)', 'Sour Cream (+1.50)', 'Cilantro (+1.00)']
+    ),
+    (
+      l10n.pizzaChickenTikkaMasala,
+      l10n.pizzaChickenTikkaMasalaDesc,
+      16.5,
+      false,
+      'assets/images/Chicken-Tikka-Masala-Pizza.jpg',
+      l10n.pizzaChickenTikkaMasalaFullDesc,
+      ['Marinated Chicken Tikka', 'Creamy Masala Sauce', 'Red Onions', 'Fresh Cilantro', 'Mozzarella', 'Garam Masala'],
+      ['Extra Chicken (+3.00)', 'Mango Chutney (+1.50)', 'Yogurt Sauce (+1.00)']
+    ),
+    (
+      l10n.pizzaAlfredoChicken,
+      l10n.pizzaAlfredoChickenDesc,
+      16.0,
+      false,
+      'assets/images/Chicken-Alfredo-Pizza.jpg',
+      l10n.pizzaAlfredoChickenFullDesc,
+      ['Grilled Chicken Breast', 'Creamy Alfredo Sauce', 'Mozzarella', 'Parmesan Cheese', 'Fresh Parsley', 'Garlic'],
+      ['Extra Chicken (+4.00)', 'Mushrooms (+2.00)', 'Broccoli (+2.00)']
     ),
 
     // Combos / Deals
@@ -492,7 +566,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     (
       l10n.comboSliceDrink,
       l10n.comboSliceDrinkDesc,
-      10.99,
+      11.99, // Updated from 10.99 to match menu
       false,
       'assets/images/combo-1-img.jpg',
       l10n.comboSliceDrinkFullDesc,
@@ -502,7 +576,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     (
       l10n.comboSliceWingsSoda,
       l10n.comboSliceWingsSodaDesc,
-      16.99,
+      18.99, // Updated from 16.99 to match menu
       false,
       'assets/images/combo-3.jpg',
       l10n.comboSliceWingsSodaFullDesc,
@@ -623,6 +697,26 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
       ['Olive Oil', 'Vinegar', 'Italian Herbs', 'Garlic', 'Spices'],
       []
     ),
+    (
+      l10n.dipRanch,
+      l10n.dipRanchDesc,
+      2.99,
+      true,
+      'assets/images/ranch-dip.jpg',
+      l10n.dipRanchFullDesc,
+      ['Mayonnaise', 'Sour Cream', 'Buttermilk', 'Fresh Herbs', 'Garlic', 'Onion Powder'],
+      []
+    ),
+    (
+      l10n.dipBlueCheese,
+      l10n.dipBlueCheeseDesc,
+      2.99,
+      true,
+      'assets/images/spinach-blue-cheese-dip.jpg',
+      l10n.dipBlueCheeseFullDesc,
+      ['Blue Cheese', 'Cream Cheese', 'Sour Cream', 'Spinach', 'Garlic', 'Herbs'],
+      []
+    ),
 
     // Fries
     (
@@ -650,29 +744,30 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     (
       l10n.saladCaesar,
       l10n.saladCaesarDesc,
-      7.99,
+      13.0, // Updated from 7.99 to match menu
       true,
       'assets/images/Caesar-Salad.jpg',
       l10n.saladCaesarFullDesc,
       ['Romaine Lettuce', 'Caesar Dressing', 'Parmesan Cheese', 'Croutons', 'Black Pepper'],
       ['Extra Dressing (+0.50)', 'Grilled Chicken (+4.00)', 'Anchovies (+2.00)']
     ),
-    (
-      l10n.saladGreen,
-      l10n.saladGreenDesc,
-      7.99,
-      true,
-      'assets/images/green-salad.jpg',
-      l10n.saladGreenFullDesc,
-      ['Mixed Greens', 'Cherry Tomatoes', 'Cucumbers', 'Carrots', 'House Dressing'],
-      ['Extra Dressing (+0.50)', 'Grilled Chicken (+4.00)', 'Avocado (+2.50)']
-    ),
+    // COMMENTED OUT - Not in menu images
+    // (
+    //   l10n.saladGreen,
+    //   l10n.saladGreenDesc,
+    //   7.99,
+    //   true,
+    //   'assets/images/green-salad.jpg',
+    //   l10n.saladGreenFullDesc,
+    //   ['Mixed Greens', 'Cherry Tomatoes', 'Cucumbers', 'Carrots', 'House Dressing'],
+    //   ['Extra Dressing (+0.50)', 'Grilled Chicken (+4.00)', 'Avocado (+2.50)']
+    // ),
 
     // Pasta
     (
       l10n.pastaChickenAlfredo,
       l10n.pastaChickenAlfredoDesc,
-      15.99,
+      18.0, // Updated from 15.99 to match menu
       false,
       'assets/images/Chicken-Alfredo-pasta.webp',
       l10n.pastaChickenAlfredoFullDesc,
@@ -694,7 +789,7 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     (
       l10n.dessertChocolateChurros,
       l10n.dessertChocolateChurrosDesc,
-      7.99,
+      7.0, // Updated from 7.99 to match menu
       true,
       'assets/images/choc-churros.jpg',
       l10n.dessertChocolateChurrosFullDesc,
@@ -704,19 +799,29 @@ class _ItemDetailScreenState extends State<ItemDetailScreen> {
     (
       l10n.dessertCheesecake,
       l10n.dessertCheesecakeDesc,
-      7.99,
+      8.0, // Updated from 7.99 to match menu
       true,
       'assets/images/Cherry-Cheesecake.jpg',
       l10n.dessertCheesecakeFullDesc,
       ['Cream Cheese', 'Graham Cracker Crust', 'Sugar', 'Vanilla', 'Eggs'],
       ['Strawberry Topping (+2.00)', 'Caramel Sauce (+1.50)', 'Cherry Topping (+1.50)']
     ),
+    (
+      l10n.dessertFreshCannoli,
+      l10n.dessertFreshCannoliDesc,
+      7.0,
+      true,
+      'assets/images/fresh-canoli.jpg',
+      l10n.dessertFreshCannoliFullDesc,
+      ['Crispy Shell', 'Sweet Ricotta Cheese', 'Chocolate Chips', 'Powdered Sugar', 'Vanilla'],
+      ['Extra Chocolate Chips (+1.00)', 'Caramel Drizzle (+1.50)', 'Pistachios (+1.50)']
+    ),
 
     // Drinks
     (
       l10n.drink2Liter,
       l10n.drink2LiterDesc,
-      4.99,
+      5.0, // Updated from 4.99 to match menu
       true,
       'assets/images/2litrre-softdrink.jpg',
       l10n.drink2LiterFullDesc,

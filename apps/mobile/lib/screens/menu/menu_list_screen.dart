@@ -46,141 +46,143 @@ class _MenuListScreenState extends State<MenuListScreen> {
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
     final sections = [
-      (
-        l10n.internationalVariations,
-        [
-      (
-        l10n.pizzaJapaneseInspired,
-        l10n.pizzaJapaneseInspiredDesc,
-        16.5,
-        false,
-        'assets/images/japanese-inspired-pizza.jpg'
-      ),
-      (
-        l10n.pizzaIndianInspired,
-        l10n.pizzaIndianInspiredDesc,
-        15.0,
-        true,
-        'assets/images/indian-inspired-pizza.jpg'
-      ),
-      (
-        l10n.pizzaTurkishPide,
-        l10n.pizzaTurkishPideDesc,
-        17.5,
-        false,
-        'assets/images/turkish-pide-pizza.webp'
-      ),
-      (
-        l10n.pizzaBrazilian,
-        l10n.pizzaBrazilianDesc,
-        14.5,
-        false,
-        'assets/images/Brazilian-inspired-Pizza.jpg'
-      ),
-        ]
-      ),
-      (
-        l10n.specialityAndAlternativeBases,
-        [
-          (
-            l10n.pizzaGlutenFree,
-            l10n.pizzaGlutenFreeDesc,
-            16.0,
-            true,
-            'assets/images/gluten-free-pizza.jpg'
-          ),
-          (
-            l10n.pizzaVegan,
-            l10n.pizzaVeganDesc,
-            15.5,
-            true,
-            'assets/images/vegan-pizza.jpg'
-          ),
-          (
-            l10n.pizzaStuffedCrust,
-            l10n.pizzaStuffedCrustDesc,
-            17.0,
-            false,
-            'assets/images/stuffed-crust-pizza.jpg'
-          ),
-          (
-            l10n.pizzaWhite,
-            l10n.pizzaWhiteDesc,
-            15.0,
-            true,
-            'assets/images/white-pizza.jpg'
-          ),
-        ]
-      ),
-      (
-        l10n.americanRegionalStyle,
-        [
-          (
-            l10n.pizzaNewYorkStyle,
-            l10n.pizzaNewYorkStyleDesc,
-            14.0,
-            false,
-            'assets/images/new-york-style-pizza.jpg'
-          ),
-          (
-            l10n.pizzaChicagoDeepDish,
-            l10n.pizzaChicagoDeepDishDesc,
-            18.0,
-            false,
-            'assets/images/chicago-style-pizza.jpg'
-          ),
-          (
-            l10n.pizzaDetroitStyle,
-            l10n.pizzaDetroitStyleDesc,
-            17.5,
-            false,
-            'assets/images/detroit-style-pizza.jpg'
-          ),
-          (
-            l10n.pizzaCaliforniaStyle,
-            l10n.pizzaCaliforniaStyleDesc,
-            15.0,
-            false,
-            'assets/images/california-style-pizza.jpg'
-          ),
-        ]
-      ),
-      (
-        l10n.italianStyle,
-        [
-          (
-            l10n.pizzaNeapolitan,
-            l10n.pizzaNeapolitanDesc,
-            15.5,
-            true,
-            'assets/images/neapolitan-style-pizza.webp'
-          ),
-          (
-            l10n.pizzaRomanAlTaglio,
-            l10n.pizzaRomanAlTaglioDesc,
-            16.0,
-            false,
-            'assets/images/Romanaltaglio-Style-Pizza.webp'
-          ),
-          (
-            l10n.pizzaSicilian,
-            l10n.pizzaSicilianDesc,
-            16.5,
-            false,
-            'assets/images/Sicilian-Pizza.webp'
-          ),
-        ]
-      ),
+      // COMMENTED OUT - Not in menu images
+      // (
+      //   l10n.internationalVariations,
+      //   [
+      // (
+      //   l10n.pizzaJapaneseInspired,
+      //   l10n.pizzaJapaneseInspiredDesc,
+      //   16.5,
+      //   false,
+      //   'assets/images/japanese-inspired-pizza.jpg'
+      // ),
+      // (
+      //   l10n.pizzaIndianInspired,
+      //   l10n.pizzaIndianInspiredDesc,
+      //   15.0,
+      //   true,
+      //   'assets/images/indian-inspired-pizza.jpg'
+      // ),
+      // (
+      //   l10n.pizzaTurkishPide,
+      //   l10n.pizzaTurkishPideDesc,
+      //   17.5,
+      //   false,
+      //   'assets/images/turkish-pide-pizza.webp'
+      // ),
+      // (
+      //   l10n.pizzaBrazilian,
+      //   l10n.pizzaBrazilianDesc,
+      //   14.5,
+      //   false,
+      //   'assets/images/Brazilian-inspired-Pizza.jpg'
+      // ),
+      //   ]
+      // ),
+      // (
+      //   l10n.specialityAndAlternativeBases,
+      //   [
+      //     (
+      //       l10n.pizzaGlutenFree,
+      //       l10n.pizzaGlutenFreeDesc,
+      //       16.0,
+      //       true,
+      //       'assets/images/gluten-free-pizza.jpg'
+      //     ),
+      //     (
+      //       l10n.pizzaVegan,
+      //       l10n.pizzaVeganDesc,
+      //       15.5,
+      //       true,
+      //       'assets/images/vegan-pizza.jpg'
+      //     ),
+      //     (
+      //       l10n.pizzaStuffedCrust,
+      //       l10n.pizzaStuffedCrustDesc,
+      //       17.0,
+      //       false,
+      //       'assets/images/stuffed-crust-pizza.jpg'
+      //     ),
+      //     (
+      //       l10n.pizzaWhite,
+      //       l10n.pizzaWhiteDesc,
+      //       15.0,
+      //       true,
+      //       'assets/images/white-pizza.jpg'
+      //     ),
+      //   ]
+      // ),
+      // (
+      //   l10n.americanRegionalStyle,
+      //   [
+      //     (
+      //       l10n.pizzaNewYorkStyle,
+      //       l10n.pizzaNewYorkStyleDesc,
+      //       14.0,
+      //       false,
+      //       'assets/images/new-york-style-pizza.jpg'
+      //     ),
+      //     (
+      //       l10n.pizzaChicagoDeepDish,
+      //       l10n.pizzaChicagoDeepDishDesc,
+      //       18.0,
+      //       false,
+      //       'assets/images/chicago-style-pizza.jpg'
+      //     ),
+      //     (
+      //       l10n.pizzaDetroitStyle,
+      //       l10n.pizzaDetroitStyleDesc,
+      //       17.5,
+      //       false,
+      //       'assets/images/detroit-style-pizza.jpg'
+      //     ),
+      //     (
+      //       l10n.pizzaCaliforniaStyle,
+      //       l10n.pizzaCaliforniaStyleDesc,
+      //       15.0,
+      //       false,
+      //       'assets/images/california-style-pizza.jpg'
+      //     ),
+      //   ]
+      // ),
+      // (
+      //   l10n.italianStyle,
+      //   [
+      //     (
+      //       l10n.pizzaNeapolitan,
+      //       l10n.pizzaNeapolitanDesc,
+      //       15.5,
+      //       true,
+      //       'assets/images/neapolitan-style-pizza.webp'
+      //     ),
+      //     (
+      //       l10n.pizzaRomanAlTaglio,
+      //       l10n.pizzaRomanAlTaglioDesc,
+      //       16.0,
+      //       false,
+      //       'assets/images/Romanaltaglio-Style-Pizza.webp'
+      //     ),
+      //     (
+      //       l10n.pizzaSicilian,
+      //       l10n.pizzaSicilianDesc,
+      //       16.5,
+      //       false,
+      //       'assets/images/Sicilian-Pizza.webp'
+      //     ),
+      //   ]
+      // ),
       (
         l10n.classicAndWidelySoldPizzas,
         [
-          (
-            l10n.pizzaMargherita,
-            l10n.pizzaMargheritaDesc,
-            12.0,
-            true,
-            'assets/images/margherita-pizza.jpg'
-          ),
+          // COMMENTED OUT - Not in menu images
+          // (
+          //   l10n.pizzaMargherita,
+          //   l10n.pizzaMargheritaDesc,
+          //   12.0,
+          //   true,
+          //   'assets/images/margherita-pizza.jpg'
+          // ),
           (
             l10n.pizzaPepperoniClassic,
             l10n.pizzaPepperoniClassicDesc,
@@ -195,13 +197,14 @@ class _MenuListScreenState extends State<MenuListScreen> {
             false,
             'assets/images/Supreme-Pizza.jpg'
           ),
-          (
-            l10n.pizzaCheeseClassic,
-            l10n.pizzaCheeseClassicDesc,
-            11.0,
-            true,
-            'assets/images/Cheese_Classic_Pizza.jpg'
-          ),
+          // COMMENTED OUT - Not in menu images
+          // (
+          //   l10n.pizzaCheeseClassic,
+          //   l10n.pizzaCheeseClassicDesc,
+          //   11.0,
+          //   true,
+          //   'assets/images/Cheese_Classic_Pizza.jpg'
+          // ),
           (
             l10n.pizzaVeggieClassic,
             l10n.pizzaVeggieClassicDesc,
@@ -209,27 +212,28 @@ class _MenuListScreenState extends State<MenuListScreen> {
             true,
             'assets/images/veggie-pizza.png'
           ),
-          (
-            l10n.pizzaCapreseHitman,
-            l10n.pizzaCapreseHitmanDesc,
-            14.0,
-            true,
-            'assets/images/caprese-pizza.jpeg'
-          ),
-          (
-            l10n.pizzaTruffleWhiteHit,
-            l10n.pizzaTruffleWhiteHitDesc,
-            16.0,
-            true,
-            'assets/images/Truffle-White-Pizza.jpg'
-          ),
-          (
-            l10n.pizzaBrickOvenDon,
-            l10n.pizzaBrickOvenDonDesc,
-            17.0,
-            false,
-            'assets/images/brick-oven-pizza.webp'
-          ),
+          // COMMENTED OUT - Not in menu images
+          // (
+          //   l10n.pizzaCapreseHitman,
+          //   l10n.pizzaCapreseHitmanDesc,
+          //   14.0,
+          //   true,
+          //   'assets/images/caprese-pizza.jpeg'
+          // ),
+          // (
+          //   l10n.pizzaTruffleWhiteHit,
+          //   l10n.pizzaTruffleWhiteHitDesc,
+          //   16.0,
+          //   true,
+          //   'assets/images/Truffle-White-Pizza.jpg'
+          // ),
+          // (
+          //   l10n.pizzaBrickOvenDon,
+          //   l10n.pizzaBrickOvenDonDesc,
+          //   17.0,
+          //   false,
+          //   'assets/images/brick-oven-pizza.webp'
+          // ),
           (
             l10n.pizzaSmokyCapoBBQ,
             l10n.pizzaSmokyCapoBBQDesc,
@@ -237,19 +241,48 @@ class _MenuListScreenState extends State<MenuListScreen> {
             false,
             'assets/images/smoke-bbq-pizza.jpg'
           ),
-          (
-            l10n.pizzaVelvetPepperoni,
-            l10n.pizzaVelvetPepperoniDesc,
-            15.5,
-            false,
-            'assets/images/velvet-pepperoni-pizza.jpg'
-          ),
+          // COMMENTED OUT - Not in menu images
+          // (
+          //   l10n.pizzaVelvetPepperoni,
+          //   l10n.pizzaVelvetPepperoniDesc,
+          //   15.5,
+          //   false,
+          //   'assets/images/velvet-pepperoni-pizza.jpg'
+          // ),
           (
             l10n.pizzaHawaiianBacon,
             l10n.pizzaHawaiianBaconDesc,
             14.5,
             false,
             'assets/images/hawaiin-bacon-pizza.jpg'
+          ),
+          (
+            l10n.pizzaMeatLover,
+            l10n.pizzaMeatLoverDesc,
+            16.0,
+            false,
+            'assets/images/meat-lovers-pizza.jpg'
+          ),
+          (
+            l10n.pizzaMexicali,
+            l10n.pizzaMexicaliDesc,
+            15.5,
+            false,
+            'assets/images/mexicalli-pizza.jpg'
+          ),
+          (
+            l10n.pizzaChickenTikkaMasala,
+            l10n.pizzaChickenTikkaMasalaDesc,
+            16.5,
+            false,
+            'assets/images/Chicken-Tikka-Masala-Pizza.jpg'
+          ),
+          (
+            l10n.pizzaAlfredoChicken,
+            l10n.pizzaAlfredoChickenDesc,
+            16.0,
+            false,
+            'assets/images/Chicken-Alfredo-Pizza.jpg'
           ),
         ]
       ),
@@ -266,14 +299,14 @@ class _MenuListScreenState extends State<MenuListScreen> {
           (
             l10n.comboSliceDrink,
             l10n.comboSliceDrinkDesc,
-            10.99,
+            11.99, // Updated from 10.99 to match menu
             false,
             'assets/images/combo-1-img.jpg'
           ),
           (
             l10n.comboSliceWingsSoda,
             l10n.comboSliceWingsSodaDesc,
-            16.99,
+            18.99, // Updated from 16.99 to match menu
             false,
             'assets/images/combo-3.jpg'
           ),
@@ -364,6 +397,20 @@ class _MenuListScreenState extends State<MenuListScreen> {
             true,
             'assets/images/Italian-dressing.jpg'
           ),
+          (
+            l10n.dipRanch,
+            l10n.dipRanchDesc,
+            2.99,
+            true,
+            'assets/images/ranch-dip.jpg'
+          ),
+          (
+            l10n.dipBlueCheese,
+            l10n.dipBlueCheeseDesc,
+            2.99,
+            true,
+            'assets/images/spinach-blue-cheese-dip.jpg'
+          ),
         ]
       ),
       (
@@ -391,17 +438,18 @@ class _MenuListScreenState extends State<MenuListScreen> {
           (
             l10n.saladCaesar,
             l10n.saladCaesarDesc,
-            7.99,
+            13.0, // Updated from 7.99 to match menu
             true,
             'assets/images/Caesar-Salad.jpg'
           ),
-          (
-            l10n.saladGreen,
-            l10n.saladGreenDesc,
-            7.99,
-            true,
-            'assets/images/green-salad.jpg'
-          ),
+          // COMMENTED OUT - Not in menu images
+          // (
+          //   l10n.saladGreen,
+          //   l10n.saladGreenDesc,
+          //   7.99,
+          //   true,
+          //   'assets/images/green-salad.jpg'
+          // ),
         ]
       ),
       (
@@ -410,7 +458,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
           (
             l10n.pastaChickenAlfredo,
             l10n.pastaChickenAlfredoDesc,
-            15.99,
+            18.0, // Updated from 15.99 to match menu
             false,
             'assets/images/Chicken-Alfredo-pasta.webp'
           ),
@@ -429,16 +477,23 @@ class _MenuListScreenState extends State<MenuListScreen> {
           (
             l10n.dessertChocolateChurros,
             l10n.dessertChocolateChurrosDesc,
-            7.99,
+            7.0, // Updated from 7.99 to match menu
             true,
             'assets/images/choc-churros.jpg'
           ),
           (
             l10n.dessertCheesecake,
             l10n.dessertCheesecakeDesc,
-            7.99,
+            8.0, // Updated from 7.99 to match menu
             true,
             'assets/images/Cherry-Cheesecake.jpg'
+          ),
+          (
+            l10n.dessertFreshCannoli,
+            l10n.dessertFreshCannoliDesc,
+            7.0,
+            true,
+            'assets/images/fresh-canoli.jpg'
           ),
         ]
       ),
@@ -448,7 +503,7 @@ class _MenuListScreenState extends State<MenuListScreen> {
           (
             l10n.drink2Liter,
             l10n.drink2LiterDesc,
-            4.99,
+            5.0, // Updated from 4.99 to match menu
             true,
             'assets/images/2litrre-softdrink.jpg'
           ),

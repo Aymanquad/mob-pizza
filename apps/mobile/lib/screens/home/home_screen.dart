@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:go_router/go_router.dart';
+import 'package:provider/provider.dart';
 import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
+import 'package:mob_pizza_mobile/providers/order_provider.dart';
+import 'package:mob_pizza_mobile/services/user_service.dart';
+import 'package:mob_pizza_mobile/services/auth_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,6 +16,38 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final GlobalKey _familyBulletinKey = GlobalKey();
+  final UserService _userService = UserService();
+  int _addressCount = 0;
+  bool _isLoadingStats = true;
+
+  @override
+  void initState() {
+    super.initState();
+    _loadUserStats();
+  }
+
+  Future<void> _loadUserStats() async {
+    try {
+      final identifier = await AuthService.getUserIdentifier();
+      if (identifier.isNotEmpty) {
+        final userData = await _userService.getProfile(identifier);
+        final addresses = userData['addresses'] as List?;
+        setState(() {
+          _addressCount = addresses?.length ?? 0;
+          _isLoadingStats = false;
+        });
+      } else {
+        setState(() {
+          _isLoadingStats = false;
+        });
+      }
+    } catch (e) {
+      debugPrint('[home] Error loading user stats: $e');
+      setState(() {
+        _isLoadingStats = false;
+      });
+    }
+  }
 
   void _scrollToFamilyBulletin() {
     final context = _familyBulletinKey.currentContext;
@@ -27,6 +63,8 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final l10n = AppLocalizations.of(context)!;
+    final orderProvider = Provider.of<OrderProvider>(context);
+    final orderCount = orderProvider.orderCount;
 
     final cards = [
       (l10n.theHitList, l10n.theHitListDesc, '/menu', Icons.restaurant_menu),
@@ -34,16 +72,21 @@ class _HomeScreenState extends State<HomeScreen> {
       (l10n.yourFile, l10n.yourFileDesc, '/profile', Icons.person),
       (l10n.customizePizza, l10n.customizePizzaDesc, '/customize-pizza', Icons.build_circle),
     ];
+    
+    // Updated Family Bulletin with 3 current menu items (1 combo + 2 pizzas)
+    // Indices based on item_detail_screen.dart _getItems() method:
+    // - Pepperoni Classic: index 0
+    // - Supreme: index 1  
+    // - 2 Slices + Drink combo: index 9
     final featured = [
-      (l10n.bossPick, l10n.margheritaBoss, '\$12', 'Solo • Extra cheese', 0), // Item ID 0
-      (l10n.houseSecret, l10n.smokyCapo, '\$15', 'Brick oven • Sweet heat', 1), // Item ID 1
-      (l10n.familyCombo, l10n.crewFeast, '\$29', '2 pies • Sides • Liquid alibi', 2), // Item ID 2
+      (l10n.bossPick, l10n.pizzaPepperoniClassic, '\$13.00', l10n.pizzaPepperoniClassicDesc, 0),
+      (l10n.houseSecret, l10n.pizzaSupreme, '\$14.50', l10n.pizzaSupremeDesc, 1),
+      (l10n.familyCombo, l10n.combo2SlicesDrink, '\$15.99', l10n.combo2SlicesDrinkDesc, 9),
     ];
 
     final stats = [
-      (l10n.ordersClosed, '124'),
-      (l10n.familyPoints, '1,240'),
-      (l10n.safehouses, '3'),
+      (l10n.ordersClosed, orderCount.toString()),
+      (l10n.safehouses, _isLoadingStats ? '...' : _addressCount.toString()),
     ];
 
     return SafeArea(

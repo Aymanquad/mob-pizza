@@ -20,7 +20,7 @@ const ProfilePage = () => {
         </div>
         <div className="card">
           <div style={{ fontWeight: 800, marginBottom: 6 }}>Family Loyalty</div>
-          <div style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Rank: Capo · 1,240 Family Points</div>
+          <div style={{ color: 'var(--text-secondary)', fontSize: 14 }}>Rank: Capo</div>
           <Button style={{ marginTop: 12 }} variant="ghost">
             View Rewards
           </Button>

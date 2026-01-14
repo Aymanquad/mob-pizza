@@ -204,10 +204,57 @@ class OrderDetailScreen extends StatelessWidget {
                               ),
                               const SizedBox(height: 4),
                             ],
-                            // Parse and display description details (for custom pizzas, combos, etc.)
-                            // Always show if it contains "Selected slices" (for combos) or if description differs from name
+                            // Show selected slices for combos (extract from description)
+                            if (isCombo && item.description.contains('Selected slices:')) ...[
+                              Builder(
+                                builder: (context) {
+                                  final slicesMatch = RegExp(r'Selected slices:\s*(.+?)(?:\n|$)').firstMatch(item.description);
+                                  if (slicesMatch != null) {
+                                    final slicesText = slicesMatch.group(1)?.trim() ?? '';
+                                    if (slicesText.isNotEmpty) {
+                                      final slices = slicesText.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+                                      return Column(
+                                        crossAxisAlignment: CrossAxisAlignment.start,
+                                        children: [
+                                          Text(
+                                            l10n.selectedSlices,
+                                            style: const TextStyle(
+                                              color: Color(0xFFD4AF7A),
+                                              fontSize: 12,
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                          ),
+                                          const SizedBox(height: 2),
+                                          Wrap(
+                                            spacing: 4,
+                                            runSpacing: 4,
+                                            children: slices.map((slice) {
+                                              return Padding(
+                                                padding: const EdgeInsets.only(right: 4),
+                                                child: Text(
+                                                  slice,
+                                                  style: const TextStyle(
+                                                    color: Color(0xFF878787),
+                                                    fontSize: 11,
+                                                  ),
+                                                ),
+                                              );
+                                            }).toList(),
+                                          ),
+                                          const SizedBox(height: 4),
+                                        ],
+                                      );
+                                    }
+                                  }
+                                  return const SizedBox.shrink();
+                                },
+                              ),
+                            ],
+                            // Parse and display description details (for custom pizzas, etc.)
+                            // Show description if it's not empty and doesn't contain "Selected slices" (already shown above)
                             if (item.description.isNotEmpty && 
-                                (item.description != item.name || item.description.contains('Selected slices'))) ...[
+                                !item.description.contains('Selected slices') &&
+                                item.description != item.name) ...[
                               _buildDetailText(item.description, l10n),
                               const SizedBox(height: 4),
                             ],

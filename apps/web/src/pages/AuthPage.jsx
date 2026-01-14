@@ -43,7 +43,7 @@ const AuthPage = () => {
           <ul style={{ color: 'var(--text-secondary)', paddingLeft: 18, lineHeight: 1.6 }}>
             <li>Save safehouses & payment methods</li>
             <li>Track jobs in real-time</li>
-            <li>Earn Family Points</li>
+            <li>Exclusive family deals</li>
           </ul>
         </div>
       </div>

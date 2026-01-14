@@ -32,7 +32,10 @@ class AppRouter {
         ),
         GoRoute(
           path: '/customize-pizza',
-          builder: (context, state) => const CustomizePizzaScreen(),
+          builder: (context, state) {
+            final cartItem = state.extra as CartItem?;
+            return CustomizePizzaScreen(cartItemForEdit: cartItem);
+          },
         ),
         StatefulShellRoute.indexedStack(
           builder: (context, state, navigationShell) {

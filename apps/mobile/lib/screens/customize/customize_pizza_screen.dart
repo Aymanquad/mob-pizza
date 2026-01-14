@@ -7,7 +7,8 @@ import 'package:mob_pizza_mobile/models/cart_item.dart';
 import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 
 class CustomizePizzaScreen extends StatefulWidget {
-  const CustomizePizzaScreen({super.key});
+  final CartItem? cartItemForEdit;
+  const CustomizePizzaScreen({super.key, this.cartItemForEdit});
 
   @override
   State<CustomizePizzaScreen> createState() => _CustomizePizzaScreenState();
@@ -18,6 +19,57 @@ class _CustomizePizzaScreenState extends State<CustomizePizzaScreen> {
   Set<String> selectedToppings = {};
   Set<String> selectedDips = {};
   String selectedSize = '10"';
+  
+  @override
+  void initState() {
+    super.initState();
+    // If editing a cart item, restore the selections
+    if (widget.cartItemForEdit != null) {
+      _restoreFromCartItem(widget.cartItemForEdit!);
+    }
+  }
+  
+  void _restoreFromCartItem(CartItem cartItem) {
+    // Restore size
+    selectedSize = cartItem.selectedSize.isNotEmpty ? cartItem.selectedSize : '10"';
+    
+    // Parse description to restore base items, toppings, and dips
+    final description = cartItem.description;
+    
+    // Extract base items from description
+    final baseMatch = RegExp(r'Base:\s*(.+?)(?:\s*\||$)').firstMatch(description);
+    if (baseMatch != null) {
+      final baseText = baseMatch.group(1) ?? '';
+      selectedBaseItems = baseText.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toSet();
+    }
+    
+    // Extract toppings from description
+    final toppingsMatch = RegExp(r'Toppings:\s*(.+?)(?:\s*\||$)').firstMatch(description);
+    if (toppingsMatch != null) {
+      final toppingsText = toppingsMatch.group(1) ?? '';
+      selectedToppings = toppingsText.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toSet();
+    }
+    
+    // Extract dips from description
+    final dipsMatch = RegExp(r'Dips:\s*(.+?)(?:\s*\||$)').firstMatch(description);
+    if (dipsMatch != null) {
+      final dipsText = dipsMatch.group(1) ?? '';
+      // Remove price tags from dip names
+      selectedDips = dipsText.split(',').map((s) => s.trim().replaceAll(RegExp(r'\s*\(\+\$?[\d.]*\)'), '')).where((s) => s.isNotEmpty).toSet();
+    }
+    
+    // Also check selectedToppings from cart item for dips (they might be stored there)
+    for (String topping in cartItem.selectedToppings) {
+      // Check if it's a dip (has (+1.50) price tag)
+      if (topping.contains('(+1.50)')) {
+        final dipName = topping.replaceAll(RegExp(r'\s*\(\+1\.50\)'), '');
+        selectedDips.add(dipName);
+      } else if (!selectedToppings.contains(topping)) {
+        // It's a regular topping
+        selectedToppings.add(topping);
+      }
+    }
+  }
   
   // Base items (8 common pizza ingredients)
   List<String> getBaseItems(AppLocalizations l10n) {
@@ -135,7 +187,7 @@ class _CustomizePizzaScreenState extends State<CustomizePizzaScreen> {
     final cartProvider = Provider.of<CartProvider>(context, listen: false);
     
     final customPizza = CartItem(
-      id: 'custom-pizza-${DateTime.now().millisecondsSinceEpoch}',
+      id: widget.cartItemForEdit?.id ?? 'custom-pizza-${DateTime.now().millisecondsSinceEpoch}',
       name: l10n.customPizza,
       description: buildDescription(),
       basePrice: getBasePrice(),
@@ -149,10 +201,15 @@ class _CustomizePizzaScreenState extends State<CustomizePizzaScreen> {
         ...selectedToppings.toList(),
         ...selectedDips.map((dip) => '$dip (+1.50)').toList(),
       ],
-      quantity: 1,
+      quantity: widget.cartItemForEdit?.quantity ?? 1, // Preserve quantity when editing
     );
     
-    await cartProvider.addItem(customPizza);
+    // If editing, update the cart item; otherwise add new item
+    if (widget.cartItemForEdit != null) {
+      await cartProvider.updateCartItem(widget.cartItemForEdit!.id, customPizza);
+    } else {
+      await cartProvider.addItem(customPizza);
+    }
     
     // Show snackbar with cart info (same style as menu items)
     if (mounted) {
@@ -177,7 +234,9 @@ class _CustomizePizzaScreenState extends State<CustomizePizzaScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        l10n.addedToCart,
+                        widget.cartItemForEdit != null 
+                            ? 'Item Updated'
+                            : l10n.addedToCart,
                         style: GoogleFonts.cinzel(
                           fontWeight: FontWeight.w700,
                           fontSize: 14,
@@ -688,7 +747,7 @@ class _CustomizePizzaScreenState extends State<CustomizePizzaScreen> {
                 ),
               ),
               child: Text(
-                'Add to Cart',
+                widget.cartItemForEdit != null ? 'Save Changes' : 'Add to Cart',
                 style: GoogleFonts.cinzel(
                   fontWeight: FontWeight.w900,
                   fontSize: 18,

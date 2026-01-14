@@ -296,12 +296,6 @@ abstract class AppLocalizations {
   /// **'Orders Closed'**
   String get ordersClosed;
 
-  /// No description provided for @familyPoints.
-  ///
-  /// In en, this message translates to:
-  /// **'Family Points'**
-  String get familyPoints;
-
   /// No description provided for @safehouses.
   ///
   /// In en, this message translates to:
@@ -1027,6 +1021,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Toppings:'**
   String get toppings;
+
+  /// No description provided for @selectedSlices.
+  ///
+  /// In en, this message translates to:
+  /// **'Selected slices:'**
+  String get selectedSlices;
 
   /// No description provided for @remove.
   ///
@@ -1772,6 +1772,78 @@ abstract class AppLocalizations {
   /// **'The ultimate pizza loaded with all your favorites. Premium pepperoni, Italian sausage, bell peppers, onions, and mushrooms come together on our house tomato sauce and mozzarella. A hearty, satisfying classic that never disappoints.'**
   String get pizzaSupremeFullDesc;
 
+  /// No description provided for @pizzaMeatLover.
+  ///
+  /// In en, this message translates to:
+  /// **'Meat Lover'**
+  String get pizzaMeatLover;
+
+  /// No description provided for @pizzaMeatLoverDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Pepperoni, sausage, bacon, and ham.'**
+  String get pizzaMeatLoverDesc;
+
+  /// No description provided for @pizzaMeatLoverFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A carnivore\'s dream come true! This hearty pizza is loaded with premium pepperoni, Italian sausage, crispy bacon, and savory ham. Every bite delivers a protein-packed punch of flavor. Perfect for those who believe more meat is always better.'**
+  String get pizzaMeatLoverFullDesc;
+
+  /// No description provided for @pizzaMexicali.
+  ///
+  /// In en, this message translates to:
+  /// **'Mexicali'**
+  String get pizzaMexicali;
+
+  /// No description provided for @pizzaMexicaliDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Spicy Mexican-inspired toppings with jalapeños.'**
+  String get pizzaMexicaliDesc;
+
+  /// No description provided for @pizzaMexicaliFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'A fiesta of flavors on a pizza! Our Mexicali pizza brings together the bold spices of Mexico with classic Italian pizza. Featuring spicy ground beef, jalapeños, bell peppers, onions, and our signature Mexican cheese blend. A fusion that\'s as exciting as it is delicious.'**
+  String get pizzaMexicaliFullDesc;
+
+  /// No description provided for @pizzaChickenTikkaMasala.
+  ///
+  /// In en, this message translates to:
+  /// **'Chicken Tikka Masala'**
+  String get pizzaChickenTikkaMasala;
+
+  /// No description provided for @pizzaChickenTikkaMasalaDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Indian-inspired with tikka masala chicken.'**
+  String get pizzaChickenTikkaMasalaDesc;
+
+  /// No description provided for @pizzaChickenTikkaMasalaFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Experience the rich, aromatic flavors of India on a perfectly baked pizza crust. Tender marinated chicken tikka, creamy masala sauce, red onions, and fresh cilantro create an unforgettable fusion. This bold creation brings the warmth of Indian spices to Italian tradition.'**
+  String get pizzaChickenTikkaMasalaFullDesc;
+
+  /// No description provided for @pizzaAlfredoChicken.
+  ///
+  /// In en, this message translates to:
+  /// **'Alfredo Chicken'**
+  String get pizzaAlfredoChicken;
+
+  /// No description provided for @pizzaAlfredoChickenDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Creamy alfredo sauce with grilled chicken.'**
+  String get pizzaAlfredoChickenDesc;
+
+  /// No description provided for @pizzaAlfredoChickenFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Indulge in creamy perfection with our Alfredo Chicken pizza. Tender grilled chicken breast, rich alfredo sauce, and mozzarella cheese come together on a golden crust. A white pizza that\'s as comforting as it is elegant. Pure creamy satisfaction in every bite.'**
+  String get pizzaAlfredoChickenFullDesc;
+
   /// No description provided for @combosDeals.
   ///
   /// In en, this message translates to:
@@ -2042,6 +2114,42 @@ abstract class AppLocalizations {
   /// **'Traditional Italian dressing with herbs and spices, perfect as a dip or dressing.'**
   String get dipItalianDressingFullDesc;
 
+  /// No description provided for @dipRanch.
+  ///
+  /// In en, this message translates to:
+  /// **'Ranch'**
+  String get dipRanch;
+
+  /// No description provided for @dipRanchDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Creamy ranch dip with herbs.'**
+  String get dipRanchDesc;
+
+  /// No description provided for @dipRanchFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Classic creamy ranch dip with a perfect blend of herbs and spices. Cool, tangy, and refreshing - the ultimate dipping sauce for wings, fries, and more.'**
+  String get dipRanchFullDesc;
+
+  /// No description provided for @dipBlueCheese.
+  ///
+  /// In en, this message translates to:
+  /// **'Blue Cheese'**
+  String get dipBlueCheese;
+
+  /// No description provided for @dipBlueCheeseDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Rich and tangy blue cheese dip.'**
+  String get dipBlueCheeseDesc;
+
+  /// No description provided for @dipBlueCheeseFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Bold and tangy blue cheese dip with chunks of real blue cheese. Rich, creamy, and full of flavor - a sophisticated choice for wings and vegetables.'**
+  String get dipBlueCheeseFullDesc;
+
   /// No description provided for @fries.
   ///
   /// In en, this message translates to:
@@ -2221,6 +2329,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Rich and creamy New York-style cheesecake with a buttery graham cracker crust. Smooth, decadent, and the perfect ending to any meal.'**
   String get dessertCheesecakeFullDesc;
+
+  /// No description provided for @dessertFreshCannoli.
+  ///
+  /// In en, this message translates to:
+  /// **'Fresh Cannoli'**
+  String get dessertFreshCannoli;
+
+  /// No description provided for @dessertFreshCannoliDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Crispy shell filled with sweet ricotta cream.'**
+  String get dessertFreshCannoliDesc;
+
+  /// No description provided for @dessertFreshCannoliFullDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Authentic Italian cannoli with a crispy, golden shell filled with sweet, creamy ricotta cheese. Topped with chocolate chips and dusted with powdered sugar. A traditional Sicilian treat that\'s both elegant and indulgent.'**
+  String get dessertFreshCannoliFullDesc;
 
   /// No description provided for @drinks.
   ///
