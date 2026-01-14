@@ -37,6 +37,11 @@ const orderSchema = new mongoose.Schema({
       price: Number,
       quantity: { type: Number, default: 1 }
     }],
+    description: {
+      type: String,
+      trim: true,
+      maxlength: [500, 'Description cannot exceed 500 characters']
+    },
     specialInstructions: {
       type: String,
       trim: true,

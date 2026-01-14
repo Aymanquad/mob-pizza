@@ -205,46 +205,68 @@ class OrderDetailScreen extends StatelessWidget {
                               const SizedBox(height: 4),
                             ],
                             // Show selected slices for combos (extract from description)
-                            if (isCombo && item.description.contains('Selected slices:')) ...[
+                            if (isCombo) ...[
                               Builder(
                                 builder: (context) {
-                                  final slicesMatch = RegExp(r'Selected slices:\s*(.+?)(?:\n|$)').firstMatch(item.description);
-                                  if (slicesMatch != null) {
-                                    final slicesText = slicesMatch.group(1)?.trim() ?? '';
-                                    if (slicesText.isNotEmpty) {
-                                      final slices = slicesText.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
-                                      return Column(
-                                        crossAxisAlignment: CrossAxisAlignment.start,
-                                        children: [
-                                          Text(
-                                            l10n.selectedSlices,
-                                            style: const TextStyle(
-                                              color: Color(0xFFD4AF7A),
-                                              fontSize: 12,
-                                              fontWeight: FontWeight.w600,
+                                  // Try to extract "Selected slices: ..." from description (case-insensitive)
+                                  final descLower = item.description.toLowerCase();
+                                  if (descLower.contains('selected slices:')) {
+                                    final slicesMatch = RegExp(r'Selected slices:\s*(.+?)(?:\n|$)', caseSensitive: false).firstMatch(item.description);
+                                    if (slicesMatch != null) {
+                                      final slicesText = slicesMatch.group(1)?.trim() ?? '';
+                                      if (slicesText.isNotEmpty) {
+                                        final slices = slicesText.split(',').map((s) => s.trim()).where((s) => s.isNotEmpty).toList();
+                                        return Column(
+                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          children: [
+                                            Text(
+                                              l10n.selectedSlices,
+                                              style: const TextStyle(
+                                                color: Color(0xFFD4AF7A),
+                                                fontSize: 12,
+                                                fontWeight: FontWeight.w600,
+                                              ),
                                             ),
-                                          ),
-                                          const SizedBox(height: 2),
-                                          Wrap(
-                                            spacing: 4,
-                                            runSpacing: 4,
-                                            children: slices.map((slice) {
-                                              return Padding(
-                                                padding: const EdgeInsets.only(right: 4),
-                                                child: Text(
-                                                  slice,
-                                                  style: const TextStyle(
-                                                    color: Color(0xFF878787),
-                                                    fontSize: 11,
+                                            const SizedBox(height: 2),
+                                            Wrap(
+                                              spacing: 4,
+                                              runSpacing: 4,
+                                              children: slices.map((slice) {
+                                                return Padding(
+                                                  padding: const EdgeInsets.only(right: 4),
+                                                  child: Text(
+                                                    slice,
+                                                    style: const TextStyle(
+                                                      color: Color(0xFF878787),
+                                                      fontSize: 11,
+                                                    ),
                                                   ),
-                                                ),
-                                              );
-                                            }).toList(),
-                                          ),
-                                          const SizedBox(height: 4),
-                                        ],
-                                      );
+                                                );
+                                              }).toList(),
+                                            ),
+                                            const SizedBox(height: 4),
+                                          ],
+                                        );
+                                      }
                                     }
+                                  }
+                                  // Fallback: if description exists but doesn't have "Selected slices:", show it anyway
+                                  if (item.description.isNotEmpty && 
+                                      item.description != item.name &&
+                                      !item.description.contains('Selected slices:')) {
+                                    return Column(
+                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                      children: [
+                                        Text(
+                                          item.description,
+                                          style: const TextStyle(
+                                            color: Color(0xFF878787),
+                                            fontSize: 11,
+                                          ),
+                                        ),
+                                        const SizedBox(height: 4),
+                                      ],
+                                    );
                                   }
                                   return const SizedBox.shrink();
                                 },

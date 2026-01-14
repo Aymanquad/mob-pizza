@@ -101,6 +101,7 @@ exports.createOrder = async (req, res) => {
           name: topping,
           price: 0, // You may want to calculate this from menu item
         })),
+        description: item.description || '',
         specialInstructions: item.specialInstructions || '',
         pricePerUnit: item.basePrice || 0,
         total: (item.basePrice || 0) * (item.quantity || 1),

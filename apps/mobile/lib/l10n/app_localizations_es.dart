@@ -906,47 +906,47 @@ class AppLocalizationsEs extends AppLocalizations {
       'The ultimate pizza loaded with all your favorites. Premium pepperoni, Italian sausage, bell peppers, onions, and mushrooms come together on our house tomato sauce and mozzarella. A hearty, satisfying classic that never disappoints.';
 
   @override
-  String get pizzaMeatLover => 'Meat Lover';
+  String get pizzaMeatLover => 'Amante de la Carne';
 
   @override
-  String get pizzaMeatLoverDesc => 'Pepperoni, sausage, bacon, and ham.';
+  String get pizzaMeatLoverDesc => 'Pepperoni, salchicha, tocino y jamón.';
 
   @override
   String get pizzaMeatLoverFullDesc =>
-      'A carnivore\'s dream come true! This hearty pizza is loaded with premium pepperoni, Italian sausage, crispy bacon, and savory ham. Every bite delivers a protein-packed punch of flavor. Perfect for those who believe more meat is always better.';
+      '¡El sueño de un carnívoro hecho realidad! Esta pizza abundante está cargada con pepperoni premium, salchicha italiana, tocino crujiente y jamón sabroso. Cada bocado ofrece un golpe de sabor lleno de proteínas. Perfecto para quienes creen que más carne siempre es mejor.';
 
   @override
   String get pizzaMexicali => 'Mexicali';
 
   @override
   String get pizzaMexicaliDesc =>
-      'Spicy Mexican-inspired toppings with jalapeños.';
+      'Ingredientes picantes inspirados en México con jalapeños.';
 
   @override
   String get pizzaMexicaliFullDesc =>
-      'A fiesta of flavors on a pizza! Our Mexicali pizza brings together the bold spices of Mexico with classic Italian pizza. Featuring spicy ground beef, jalapeños, bell peppers, onions, and our signature Mexican cheese blend. A fusion that\'s as exciting as it is delicious.';
+      '¡Una fiesta de sabores en una pizza! Nuestra pizza Mexicali combina las especias audaces de México con la pizza italiana clásica. Con carne molida picante, jalapeños, pimientos, cebollas y nuestra mezcla de queso mexicano. Una fusión tan emocionante como deliciosa.';
 
   @override
-  String get pizzaChickenTikkaMasala => 'Chicken Tikka Masala';
+  String get pizzaChickenTikkaMasala => 'Pollo Tikka Masala';
 
   @override
   String get pizzaChickenTikkaMasalaDesc =>
-      'Indian-inspired with tikka masala chicken.';
+      'Inspirado en la India con pollo tikka masala.';
 
   @override
   String get pizzaChickenTikkaMasalaFullDesc =>
-      'Experience the rich, aromatic flavors of India on a perfectly baked pizza crust. Tender marinated chicken tikka, creamy masala sauce, red onions, and fresh cilantro create an unforgettable fusion. This bold creation brings the warmth of Indian spices to Italian tradition.';
+      'Experimenta los sabores ricos y aromáticos de la India en una corteza de pizza perfectamente horneada. Pollo tikka marinado tierno, salsa masala cremosa, cebollas rojas y cilantro fresco crean una fusión inolvidable. Esta creación audaz trae el calor de las especias indias a la tradición italiana.';
 
   @override
-  String get pizzaAlfredoChicken => 'Alfredo Chicken';
+  String get pizzaAlfredoChicken => 'Pollo Alfredo';
 
   @override
   String get pizzaAlfredoChickenDesc =>
-      'Creamy alfredo sauce with grilled chicken.';
+      'Salsa alfredo cremosa con pollo a la parrilla.';
 
   @override
   String get pizzaAlfredoChickenFullDesc =>
-      'Indulge in creamy perfection with our Alfredo Chicken pizza. Tender grilled chicken breast, rich alfredo sauce, and mozzarella cheese come together on a golden crust. A white pizza that\'s as comforting as it is elegant. Pure creamy satisfaction in every bite.';
+      'Déjate llevar por la perfección cremosa con nuestra pizza de Pollo Alfredo. Pechuga de pollo a la parrilla tierna, rica salsa alfredo y queso mozzarella se unen en una corteza dorada. Una pizza blanca tan reconfortante como elegante. Pura satisfacción cremosa en cada bocado.';
 
   @override
   String get combosDeals => 'Combos / Deals';
@@ -1106,21 +1106,21 @@ class AppLocalizationsEs extends AppLocalizations {
   String get dipRanch => 'Ranch';
 
   @override
-  String get dipRanchDesc => 'Creamy ranch dip with herbs.';
+  String get dipRanchDesc => 'Salsa ranch cremosa con hierbas.';
 
   @override
   String get dipRanchFullDesc =>
-      'Classic creamy ranch dip with a perfect blend of herbs and spices. Cool, tangy, and refreshing - the ultimate dipping sauce for wings, fries, and more.';
+      'Salsa ranch cremosa clásica con una mezcla perfecta de hierbas y especias. Fresca, ácida y refrescante: la salsa para mojar definitiva para alitas, papas fritas y más.';
 
   @override
-  String get dipBlueCheese => 'Blue Cheese';
+  String get dipBlueCheese => 'Queso Azul';
 
   @override
-  String get dipBlueCheeseDesc => 'Rich and tangy blue cheese dip.';
+  String get dipBlueCheeseDesc => 'Salsa de queso azul rica y ácida.';
 
   @override
   String get dipBlueCheeseFullDesc =>
-      'Bold and tangy blue cheese dip with chunks of real blue cheese. Rich, creamy, and full of flavor - a sophisticated choice for wings and vegetables.';
+      'Salsa de queso azul audaz y ácida con trozos de queso azul real. Rica, cremosa y llena de sabor: una elección sofisticada para alitas y verduras.';
 
   @override
   String get fries => 'Fries';
@@ -1226,15 +1226,15 @@ class AppLocalizationsEs extends AppLocalizations {
       'Rich and creamy New York-style cheesecake with a buttery graham cracker crust. Smooth, decadent, and the perfect ending to any meal.';
 
   @override
-  String get dessertFreshCannoli => 'Fresh Cannoli';
+  String get dessertFreshCannoli => 'Cannoli Fresco';
 
   @override
   String get dessertFreshCannoliDesc =>
-      'Crispy shell filled with sweet ricotta cream.';
+      'Cáscara crujiente rellena con crema de ricotta dulce.';
 
   @override
   String get dessertFreshCannoliFullDesc =>
-      'Authentic Italian cannoli with a crispy, golden shell filled with sweet, creamy ricotta cheese. Topped with chocolate chips and dusted with powdered sugar. A traditional Sicilian treat that\'s both elegant and indulgent.';
+      'Cannoli italiano auténtico con una cáscara dorada y crujiente rellena de queso ricotta dulce y cremoso. Cubierto con chips de chocolate y espolvoreado con azúcar en polvo. Un manjar tradicional siciliano que es elegante e indulgente.';
 
   @override
   String get drinks => 'Drinks';
