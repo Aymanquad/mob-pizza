@@ -14,7 +14,12 @@ class OrderProvider with ChangeNotifier {
   DateTime? _lastLoadTime;
   final OrderService _orderService = OrderService();
 
-  List<Order> get orders => List.unmodifiable(_orders.reversed); // Most recent first
+  List<Order> get orders {
+    // Sort by createdAt in descending order (newest first)
+    final sorted = List<Order>.from(_orders);
+    sorted.sort((a, b) => b.createdAt.compareTo(a.createdAt));
+    return List.unmodifiable(sorted);
+  }
 
   List<Order> get pendingOrders => _orders.where((o) => 
     o.status != OrderStatus.delivered && o.status != OrderStatus.cancelled

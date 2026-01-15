@@ -71,21 +71,16 @@ class _CustomizePizzaScreenState extends State<CustomizePizzaScreen> {
     }
   }
   
-  // Base items (8 common pizza ingredients)
+  // Base items (3 common pizza ingredients)
   List<String> getBaseItems(AppLocalizations l10n) {
     return [
-      'Pepperoni',
-      'Italian Sausage',
-      'Mushrooms',
-      'Bell Peppers',
-      'Onions',
-      'Black Olives',
       'Extra Cheese',
-      'Tomato Sauce',
+      'Extra Sauce',
+      'Bell Peppers',
     ];
   }
   
-  // Available toppings (from existing menu items)
+  // Available toppings (around 10 popular options)
   List<String> getAvailableToppings(AppLocalizations l10n) {
     return [
       'Extra Pepperoni (+2.50)',
@@ -98,22 +93,18 @@ class _CustomizePizzaScreenState extends State<CustomizePizzaScreen> {
       'Olives (+1.50)',
       'Jalapeños (+1.00)',
       'Pineapple (+2.00)',
-      'Artichokes (+2.50)',
-      'Arugula (+2.50)',
-      'Prosciutto (+4.00)',
-      'Anchovies (+3.00)',
-      'Hot Honey (+1.50)',
-      'Truffle Oil (+3.00)',
     ];
   }
   
-  // Available dips
+  // Available dips (all dips from menu)
   List<String> getAvailableDips(AppLocalizations l10n) {
     return [
       l10n.dipHoneyMustard,
       l10n.dipGarlic,
       l10n.dipParmesan,
       l10n.dipItalianDressing,
+      l10n.dipRanch,
+      l10n.dipBlueCheese,
     ];
   }
   
@@ -362,12 +353,12 @@ class _CustomizePizzaScreenState extends State<CustomizePizzaScreen> {
                       onSelected: (selected) {
                         setState(() {
                           if (selected) {
-                            if (selectedBaseItems.length < 8) {
+                            if (selectedBaseItems.length < 3) {
                               selectedBaseItems.add(item);
                             } else {
                               ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
-                                  content: Text('Maximum 8 base items allowed'),
+                                  content: Text('Maximum 3 base items allowed'),
                                   backgroundColor: Color(0xFF7A1F1F),
                                 ),
                               );
