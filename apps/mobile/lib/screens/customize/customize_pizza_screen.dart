@@ -71,12 +71,13 @@ class _CustomizePizzaScreenState extends State<CustomizePizzaScreen> {
     }
   }
   
-  // Base items (3 common pizza ingredients)
+  // Base items (cheese and sauce options only - no vegetables)
   List<String> getBaseItems(AppLocalizations l10n) {
     return [
       'Extra Cheese',
       'Extra Sauce',
-      'Bell Peppers',
+      'Mozzarella Cheese',
+      'Tomato Sauce',
     ];
   }
   

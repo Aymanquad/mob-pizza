@@ -6,6 +6,8 @@ import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 import 'package:mob_pizza_mobile/providers/locale_provider.dart';
 import 'package:mob_pizza_mobile/screens/onboarding/onboarding_data.dart';
 import 'package:mob_pizza_mobile/services/onboarding_service.dart';
+import 'package:mob_pizza_mobile/providers/order_provider.dart';
+import 'package:mob_pizza_mobile/providers/cart_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -196,11 +198,29 @@ class _OnboardingScreen2State extends State<OnboardingScreen2> {
 
       debugPrint('[onboarding_2] saved locally, navigating home');
       if (mounted) {
+        // CRITICAL: Clear orders and cart cache before navigating
+        // This ensures new user doesn't see previous user's cached data
+        try {
+          final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+          await orderProvider.clearOrders();
+          debugPrint('[onboarding_2] Orders cleared before navigation');
+          
+          final cartProvider = Provider.of<CartProvider>(context, listen: false);
+          await cartProvider.clearCartCache();
+          debugPrint('[onboarding_2] Cart cleared before navigation');
+        } catch (e) {
+          debugPrint('[onboarding_2] Error clearing providers: $e');
+        }
+        
         context.go('/');
         // Apply locale after navigation so onboarding screen doesn't change language
+        // Also force reload orders for the new user
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) {
             context.read<LocaleProvider>().setLocale(Locale(_locale));
+            // Force reload orders for the new user
+            final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+            orderProvider.loadOrders(forceReload: true);
             final l10n = AppLocalizations.of(context)!;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(l10n.onboardingSuccess)),
@@ -258,11 +278,29 @@ class _OnboardingScreen2State extends State<OnboardingScreen2> {
 
       debugPrint('[onboarding_2] offline path saved, navigating home');
       if (mounted) {
+        // CRITICAL: Clear orders and cart cache before navigating
+        // This ensures new user doesn't see previous user's cached data
+        try {
+          final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+          await orderProvider.clearOrders();
+          debugPrint('[onboarding_2] Orders cleared before navigation (offline)');
+          
+          final cartProvider = Provider.of<CartProvider>(context, listen: false);
+          await cartProvider.clearCartCache();
+          debugPrint('[onboarding_2] Cart cleared before navigation (offline)');
+        } catch (e) {
+          debugPrint('[onboarding_2] Error clearing providers (offline): $e');
+        }
+        
         context.go('/');
         // Apply locale after navigation so onboarding screen doesn't change language
+        // Also force reload orders for the new user
         WidgetsBinding.instance.addPostFrameCallback((_) {
           if (mounted) {
             context.read<LocaleProvider>().setLocale(Locale(_locale));
+            // Force reload orders for the new user
+            final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+            orderProvider.loadOrders(forceReload: true);
             final l10n = AppLocalizations.of(context)!;
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(l10n.onboardingSuccessOffline)),

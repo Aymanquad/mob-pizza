@@ -424,5 +424,23 @@ class OrderProvider with ChangeNotifier {
       return null;
     }
   }
+
+  // Clear all orders from memory and cache - CRITICAL for logout/user switching
+  Future<void> clearOrders() async {
+    debugPrint('[OrderProvider] Clearing all orders from memory and cache');
+    _orders = [];
+    _lastLoadTime = null;
+    
+    // Clear from SharedPreferences as well
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(PrefKeys.orders);
+      debugPrint('[OrderProvider] Orders cleared from SharedPreferences cache');
+    } catch (e) {
+      debugPrint('[OrderProvider] Error clearing orders from cache: $e');
+    }
+    
+    notifyListeners();
+  }
 }
 

@@ -21,13 +21,14 @@ class _OrdersScreenState extends State<OrdersScreen> {
   void initState() {
     super.initState();
     // Load orders once when screen opens
+    // CRITICAL: Always force reload to ensure we have current user's orders
+    // This prevents showing cached orders from a previous user
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (mounted && !_hasLoaded) {
         final orderProvider = Provider.of<OrderProvider>(context, listen: false);
-        if (orderProvider.orders.isEmpty) {
-          orderProvider.loadOrders(forceReload: true);
-          _hasLoaded = true;
-        }
+        // Always force reload to ensure fresh data for current user
+        orderProvider.loadOrders(forceReload: true);
+        _hasLoaded = true;
       }
     });
   }

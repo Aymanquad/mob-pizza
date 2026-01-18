@@ -313,5 +313,22 @@ class CartProvider with ChangeNotifier {
     
     notifyListeners();
   }
+
+  // Clear cart from memory and cache - CRITICAL for logout/user switching
+  Future<void> clearCartCache() async {
+    debugPrint('[CartProvider] Clearing cart from memory and cache');
+    _items = [];
+    
+    // Clear from SharedPreferences as well
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.remove(PrefKeys.cartItems);
+      debugPrint('[CartProvider] Cart cleared from SharedPreferences cache');
+    } catch (e) {
+      debugPrint('[CartProvider] Error clearing cart from cache: $e');
+    }
+    
+    notifyListeners();
+  }
 }
 

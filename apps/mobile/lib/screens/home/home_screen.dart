@@ -73,14 +73,16 @@ class _HomeScreenState extends State<HomeScreen> {
       (l10n.customizePizza, l10n.customizePizzaDesc, '/customize-pizza', Icons.build_circle),
     ];
     
-    // Updated Family Bulletin with 3 current menu items (1 combo + 2 pizzas)
+    // Updated Family Bulletin with 4 current menu items (1 combo + 3 pizzas)
     // Indices based on item_detail_screen.dart _getItems() method:
     // - Pepperoni Classic: index 0
     // - Supreme: index 1  
+    // - Hawaiian Bacon: index 4
     // - 2 Slices + Drink combo: index 9
     final featured = [
       (l10n.bossPick, l10n.pizzaPepperoniClassic, '\$13.00', l10n.pizzaPepperoniClassicDesc, 0),
-      (l10n.houseSecret, l10n.pizzaSupreme, '\$14.50', l10n.pizzaSupremeDesc, 1),
+      (l10n.underTheTableDeals, l10n.pizzaSupreme, '\$14.50', l10n.pizzaSupremeDesc, 1),
+      (l10n.bossPick, l10n.pizzaHawaiianBacon, '\$14.50', l10n.pizzaHawaiianBaconDesc, 4),
       (l10n.familyCombo, l10n.combo2SlicesDrink, '\$15.99', l10n.combo2SlicesDrinkDesc, 9),
     ];
 
@@ -93,10 +95,10 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Container(
         color: const Color(0xFF0F0F0F),
         child: ListView(
-        padding: const EdgeInsets.all(18),
+        padding: const EdgeInsets.all(14),
         children: [
           Container(
-            padding: const EdgeInsets.all(18),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(18),
               gradient: const LinearGradient(
@@ -187,7 +189,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
@@ -221,59 +223,72 @@ class _HomeScreenState extends State<HomeScreen> {
                   .toList(),
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Text(l10n.familyShortcuts, style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w800, color: Color(0xFFC6A667))),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           Wrap(
-            spacing: 12,
-            runSpacing: 12,
+            spacing: 10,
+            runSpacing: 10,
             children: cards
                 .map(
                   (c) => GestureDetector(
                     onTap: () => context.go(c.$3),
-                    child: Container(
-                      width: (MediaQuery.of(context).size.width - 64) / 2,
-                      padding: const EdgeInsets.all(14),
-                      decoration: BoxDecoration(
-                        color: const Color(0xFF0F0F0F),
-                        borderRadius: BorderRadius.circular(14),
-                        border: Border.all(color: const Color(0xFF878787)),
-                        boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 10, offset: Offset(0, 6))],
-                      ),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Container(
-                            height: 60,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
-                              color: const Color(0xFF1C1512),
-                            ),
-                            child: ColorFiltered(
-                              colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
-                              child: Icon(
-                                c.$4,
-                                color: Colors.white,
-                                size: 32,
-                              ),
-                            ),
+                    child: SizedBox(
+                      width: (MediaQuery.of(context).size.width - 48) / 2,
+                      child: AspectRatio(
+                        aspectRatio: 1.0,
+                        child: Container(
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF0F0F0F),
+                            borderRadius: BorderRadius.circular(14),
+                            border: Border.all(color: const Color(0xFF878787)),
+                            boxShadow: const [BoxShadow(color: Colors.black54, blurRadius: 10, offset: Offset(0, 6))],
                           ),
-                          const SizedBox(height: 8),
-                          Text(c.$1, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFFF5E8C7))),
-                          const SizedBox(height: 4),
-                          Text(c.$2, style: const TextStyle(color: Color(0xFFC6A667), fontSize: 12)),
-                        ],
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Container(
+                                height: 60,
+                                width: double.infinity,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(10),
+                                  color: const Color(0xFF1C1512),
+                                ),
+                                child: ColorFiltered(
+                                  colorFilter: const ColorFilter.mode(Colors.white, BlendMode.srcIn),
+                                  child: Icon(
+                                    c.$4,
+                                    color: Colors.white,
+                                    size: 32,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(height: 8),
+                              Expanded(
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  children: [
+                                    Text(c.$1, style: const TextStyle(fontWeight: FontWeight.w800, fontSize: 16, color: Color(0xFFF5E8C7))),
+                                    const SizedBox(height: 4),
+                                    Text(c.$2, style: const TextStyle(color: Color(0xFFC6A667), fontSize: 12)),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 )
                 .toList(),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Container(
             key: _familyBulletinKey,
-            padding: const EdgeInsets.all(14),
+            padding: const EdgeInsets.all(12),
             decoration: BoxDecoration(
               color: const Color(0xFF0F0F0F),
               borderRadius: BorderRadius.circular(14),
@@ -288,8 +303,8 @@ class _HomeScreenState extends State<HomeScreen> {
                   (f) => GestureDetector(
                     onTap: () => context.go('/menu/${f.$5}'),
                     child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 6),
-                      padding: const EdgeInsets.all(12),
+                      margin: const EdgeInsets.symmetric(vertical: 5),
+                      padding: const EdgeInsets.all(10),
                       decoration: BoxDecoration(
                         color: const Color(0xFF1C1512),
                         borderRadius: BorderRadius.circular(12),
@@ -302,20 +317,20 @@ class _HomeScreenState extends State<HomeScreen> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Text(f.$1, style: const TextStyle(color: Color(0xFFC6A667), fontWeight: FontWeight.w700, fontSize: 12)),
+                                Text(f.$1, style: const TextStyle(color: Color(0xFFD9A441), fontWeight: FontWeight.w800, fontSize: 11, letterSpacing: 0.5)),
+                                const SizedBox(height: 5),
+                                Text(f.$2, style: const TextStyle(color: Color(0xFFF5E8C7), fontWeight: FontWeight.w900, fontSize: 16)),
                                 const SizedBox(height: 4),
-                                Text(f.$2, style: const TextStyle(color: Color(0xFFF5E8C7), fontWeight: FontWeight.w800, fontSize: 16)),
-                                const SizedBox(height: 4),
-                                Text(f.$4, style: const TextStyle(color: Color(0xFF878787), fontSize: 12)),
+                                Text(f.$4, style: const TextStyle(color: Color(0xFF878787), fontSize: 11)),
                               ],
                             ),
                           ),
-                          const SizedBox(width: 12),
+                          const SizedBox(width: 10),
                           Column(
                             children: [
-                              Text(f.$3, style: const TextStyle(color: Color(0xFFC6A667), fontWeight: FontWeight.w800, fontSize: 18)),
+                              Text(f.$3, style: const TextStyle(color: Color(0xFFD9A441), fontWeight: FontWeight.w900, fontSize: 18)),
                               const SizedBox(height: 4),
-                              const Icon(Icons.arrow_forward_ios, color: Color(0xFF878787), size: 16),
+                              const Icon(Icons.arrow_forward_ios, color: Color(0xFF878787), size: 14),
                             ],
                           ),
                         ],
@@ -326,7 +341,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ],
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 12),
           Container(
             padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(

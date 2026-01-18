@@ -4,6 +4,8 @@ import 'package:mob_pizza_mobile/config/constants.dart';
 import 'package:mob_pizza_mobile/services/user_service.dart';
 import 'package:mob_pizza_mobile/services/auth_service.dart';
 import 'package:mob_pizza_mobile/providers/locale_provider.dart';
+import 'package:mob_pizza_mobile/providers/order_provider.dart';
+import 'package:mob_pizza_mobile/providers/cart_provider.dart';
 import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -184,6 +186,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 
   Future<void> _logout(BuildContext context) async {
+    // CRITICAL: Clear providers first to remove cached data
+    try {
+      // Clear OrderProvider cache
+      final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+      await orderProvider.clearOrders();
+      debugPrint('[profile] Orders cleared from OrderProvider');
+      
+      // Clear CartProvider cache
+      final cartProvider = Provider.of<CartProvider>(context, listen: false);
+      await cartProvider.clearCartCache();
+      debugPrint('[profile] Cart cleared from CartProvider');
+    } catch (e) {
+      debugPrint('[profile] Error clearing providers: $e');
+    }
+
+    // Clear SharedPreferences
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove(PrefKeys.onboardingCompleted);
     await prefs.remove(PrefKeys.localeCode);
@@ -195,6 +213,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
     await prefs.remove(PrefKeys.firstName);
     await prefs.remove(PrefKeys.lastName);
     await prefs.remove(PrefKeys.address);
+    
+    // CRITICAL: Clear orders and cart from SharedPreferences cache
+    await prefs.remove(PrefKeys.orders);
+    await prefs.remove(PrefKeys.cartItems);
+    debugPrint('[profile] Orders and cart cleared from SharedPreferences');
     
     // Also sign out from Google
     try {
