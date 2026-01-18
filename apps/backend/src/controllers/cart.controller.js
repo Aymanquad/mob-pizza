@@ -1,19 +1,50 @@
 const User = require('../models/User');
 
 /**
- * Get user's cart
+ * Get user's cart - SECURITY: Users can only access their own cart
  */
 exports.getCart = async (req, res) => {
   try {
-    const { phone } = req.params;
+    // Express automatically URL decodes params, but let's be explicit
+    let { phone } = req.params; // Can be phone, email, or googleId
+    phone = decodeURIComponent(phone);
 
-    const user = await User.findOne({ phone }).select('cart');
+    console.log('[cart] Getting cart for identifier:', phone);
+
+    // Find user by phone, email, or googleId (same logic as orders)
+    let user = null;
+    let query = {};
+    
+    // Check if identifier is an email
+    if (phone.includes('@')) {
+      query = { email: phone.toLowerCase() };
+      console.log('[cart] Looking up user by email:', phone.toLowerCase());
+      user = await User.findOne(query).select('cart _id phone email');
+    }
+    
+    // If not found and not an email, try phone
+    if (!user && !phone.includes('@')) {
+      query = { phone };
+      console.log('[cart] Looking up user by phone:', phone);
+      user = await User.findOne(query).select('cart _id phone email');
+    }
+    
+    // If still not found, try googleId (for long numeric strings)
+    if (!user && phone.length > 15 && /^\d+$/.test(phone)) {
+      query = { googleId: phone };
+      console.log('[cart] Looking up user by googleId:', phone);
+      user = await User.findOne(query).select('cart _id phone email');
+    }
+    
     if (!user) {
+      console.error('[cart] User not found for identifier:', phone);
       return res.status(404).json({
         success: false,
         message: 'User not found',
       });
     }
+
+    console.log('[cart] Found user:', user._id, '- returning their cart');
 
     return res.status(200).json({
       success: true,
@@ -30,12 +61,16 @@ exports.getCart = async (req, res) => {
 };
 
 /**
- * Add item to cart
+ * Add item to cart - SECURITY: Users can only add items to their own cart
  */
 exports.addItem = async (req, res) => {
   try {
-    const { phone } = req.params;
+    // Express automatically URL decodes params, but let's be explicit
+    let { phone } = req.params; // Can be phone, email, or googleId
+    phone = decodeURIComponent(phone);
     const cartItem = req.body;
+
+    console.log('[cart] Adding item to cart for identifier:', phone);
 
     // Validate required fields
     if (!cartItem.id || !cartItem.name || !cartItem.basePrice || !cartItem.selectedSize) {
@@ -45,13 +80,40 @@ exports.addItem = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ phone });
+    // Find user by phone, email, or googleId (same logic as orders)
+    let user = null;
+    let query = {};
+    
+    // Check if identifier is an email
+    if (phone.includes('@')) {
+      query = { email: phone.toLowerCase() };
+      console.log('[cart] Looking up user by email:', phone.toLowerCase());
+      user = await User.findOne(query);
+    }
+    
+    // If not found and not an email, try phone
+    if (!user && !phone.includes('@')) {
+      query = { phone };
+      console.log('[cart] Looking up user by phone:', phone);
+      user = await User.findOne(query);
+    }
+    
+    // If still not found, try googleId (for long numeric strings)
+    if (!user && phone.length > 15 && /^\d+$/.test(phone)) {
+      query = { googleId: phone };
+      console.log('[cart] Looking up user by googleId:', phone);
+      user = await User.findOne(query);
+    }
+    
     if (!user) {
+      console.error('[cart] User not found for identifier:', phone);
       return res.status(404).json({
         success: false,
         message: 'User not found',
       });
     }
+
+    console.log('[cart] Found user:', user._id, '- adding item to their cart');
 
     // Check if item with same configuration exists
     const existingIndex = user.cart.findIndex(
@@ -97,12 +159,16 @@ exports.addItem = async (req, res) => {
 };
 
 /**
- * Update cart item quantity
+ * Update cart item quantity - SECURITY: Users can only update items in their own cart
  */
 exports.updateItem = async (req, res) => {
   try {
-    const { phone, itemId } = req.params;
+    // Express automatically URL decodes params, but let's be explicit
+    let { phone, itemId } = req.params; // phone can be phone, email, or googleId
+    phone = decodeURIComponent(phone);
     const { quantity } = req.body;
+
+    console.log('[cart] Updating cart item for identifier:', phone, 'itemId:', itemId);
 
     if (!quantity || quantity < 0) {
       return res.status(400).json({
@@ -111,13 +177,40 @@ exports.updateItem = async (req, res) => {
       });
     }
 
-    const user = await User.findOne({ phone });
+    // Find user by phone, email, or googleId (same logic as orders)
+    let user = null;
+    let query = {};
+    
+    // Check if identifier is an email
+    if (phone.includes('@')) {
+      query = { email: phone.toLowerCase() };
+      console.log('[cart] Looking up user by email:', phone.toLowerCase());
+      user = await User.findOne(query);
+    }
+    
+    // If not found and not an email, try phone
+    if (!user && !phone.includes('@')) {
+      query = { phone };
+      console.log('[cart] Looking up user by phone:', phone);
+      user = await User.findOne(query);
+    }
+    
+    // If still not found, try googleId (for long numeric strings)
+    if (!user && phone.length > 15 && /^\d+$/.test(phone)) {
+      query = { googleId: phone };
+      console.log('[cart] Looking up user by googleId:', phone);
+      user = await User.findOne(query);
+    }
+    
     if (!user) {
+      console.error('[cart] User not found for identifier:', phone);
       return res.status(404).json({
         success: false,
         message: 'User not found',
       });
     }
+
+    console.log('[cart] Found user:', user._id, '- updating item in their cart');
 
     const itemIndex = user.cart.findIndex((item) => item.id === itemId);
     if (itemIndex === -1) {
@@ -153,19 +246,50 @@ exports.updateItem = async (req, res) => {
 };
 
 /**
- * Remove item from cart
+ * Remove item from cart - SECURITY: Users can only remove items from their own cart
  */
 exports.removeItem = async (req, res) => {
   try {
-    const { phone, itemId } = req.params;
+    // Express automatically URL decodes params, but let's be explicit
+    let { phone, itemId } = req.params; // phone can be phone, email, or googleId
+    phone = decodeURIComponent(phone);
 
-    const user = await User.findOne({ phone });
+    console.log('[cart] Removing cart item for identifier:', phone, 'itemId:', itemId);
+
+    // Find user by phone, email, or googleId (same logic as orders)
+    let user = null;
+    let query = {};
+    
+    // Check if identifier is an email
+    if (phone.includes('@')) {
+      query = { email: phone.toLowerCase() };
+      console.log('[cart] Looking up user by email:', phone.toLowerCase());
+      user = await User.findOne(query);
+    }
+    
+    // If not found and not an email, try phone
+    if (!user && !phone.includes('@')) {
+      query = { phone };
+      console.log('[cart] Looking up user by phone:', phone);
+      user = await User.findOne(query);
+    }
+    
+    // If still not found, try googleId (for long numeric strings)
+    if (!user && phone.length > 15 && /^\d+$/.test(phone)) {
+      query = { googleId: phone };
+      console.log('[cart] Looking up user by googleId:', phone);
+      user = await User.findOne(query);
+    }
+    
     if (!user) {
+      console.error('[cart] User not found for identifier:', phone);
       return res.status(404).json({
         success: false,
         message: 'User not found',
       });
     }
+
+    console.log('[cart] Found user:', user._id, '- removing item from their cart');
 
     const itemIndex = user.cart.findIndex((item) => item.id === itemId);
     if (itemIndex === -1) {
@@ -194,19 +318,50 @@ exports.removeItem = async (req, res) => {
 };
 
 /**
- * Clear cart
+ * Clear cart - SECURITY: Users can only clear their own cart
  */
 exports.clearCart = async (req, res) => {
   try {
-    const { phone } = req.params;
+    // Express automatically URL decodes params, but let's be explicit
+    let { phone } = req.params; // Can be phone, email, or googleId
+    phone = decodeURIComponent(phone);
 
-    const user = await User.findOne({ phone });
+    console.log('[cart] Clearing cart for identifier:', phone);
+
+    // Find user by phone, email, or googleId (same logic as orders)
+    let user = null;
+    let query = {};
+    
+    // Check if identifier is an email
+    if (phone.includes('@')) {
+      query = { email: phone.toLowerCase() };
+      console.log('[cart] Looking up user by email:', phone.toLowerCase());
+      user = await User.findOne(query);
+    }
+    
+    // If not found and not an email, try phone
+    if (!user && !phone.includes('@')) {
+      query = { phone };
+      console.log('[cart] Looking up user by phone:', phone);
+      user = await User.findOne(query);
+    }
+    
+    // If still not found, try googleId (for long numeric strings)
+    if (!user && phone.length > 15 && /^\d+$/.test(phone)) {
+      query = { googleId: phone };
+      console.log('[cart] Looking up user by googleId:', phone);
+      user = await User.findOne(query);
+    }
+    
     if (!user) {
+      console.error('[cart] User not found for identifier:', phone);
       return res.status(404).json({
         success: false,
         message: 'User not found',
       });
     }
+
+    console.log('[cart] Found user:', user._id, '- clearing their cart');
 
     user.cart = [];
     await user.save();

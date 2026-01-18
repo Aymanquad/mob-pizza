@@ -220,16 +220,19 @@ exports.getOrders = async (req, res) => {
     
     console.log('[order] Found user:', user._id, 'role:', user.role);
 
-    // Build query - if user is admin or delivery, show ALL orders
-    // Otherwise, show only user's orders
+    // Build query - CRITICAL SECURITY FIX: Only admin/delivery can see ALL orders
+    // Default to customer filtering for safety (even if role is undefined/null)
     const orderQuery = {};
-    if (user.role === 'customer') {
-      orderQuery.customer = user._id; // Only show customer's own orders
-      console.log(`[order] Customer user - filtering by customer._id: ${user._id}`);
-    } else {
+    const isAdminOrDelivery = user.role === 'admin' || user.role === 'delivery';
+    
+    if (isAdminOrDelivery) {
+      // Admin/Delivery can see ALL orders - no customer filter
       console.log(`[order] Admin/Delivery user (${user.role}) - showing ALL orders`);
+    } else {
+      // Customer or any other/undefined role - ONLY show their own orders
+      orderQuery.customer = user._id;
+      console.log(`[order] Customer user (role: ${user.role || 'undefined'}) - filtering by customer._id: ${user._id}`);
     }
-    // If admin or delivery, orderQuery is empty (shows all orders)
     
     if (status) {
       orderQuery.orderStatus = status;
@@ -295,12 +298,18 @@ exports.getOrder = async (req, res) => {
       });
     }
 
-    // Build order query - customers can only see their own orders, admins/delivery can see any
+    // Build order query - CRITICAL SECURITY FIX: Only admin/delivery can see any order
+    // Default to customer filtering for safety
     const orderQuery = { _id: orderId };
-    if (user.role === 'customer') {
-      orderQuery.customer = user._id; // Customers can only see their own orders
+    const isAdminOrDelivery = user.role === 'admin' || user.role === 'delivery';
+    
+    if (!isAdminOrDelivery) {
+      // Customer or any other/undefined role - ONLY show their own orders
+      orderQuery.customer = user._id;
+      console.log(`[order] Customer user (role: ${user.role || 'undefined'}) - filtering by customer._id: ${user._id}`);
+    } else {
+      console.log(`[order] Admin/Delivery user (${user.role}) - can see any order`);
     }
-    // Admin and delivery can see any order (no customer filter)
 
     const order = await Order.findOne(orderQuery)
       .populate('items.menuItem', 'name image')
@@ -379,12 +388,18 @@ exports.updateOrderStatus = async (req, res) => {
       });
     }
 
-    // Build query - admin/delivery can update any order, customers can only update their own
+    // Build query - CRITICAL SECURITY FIX: Only admin/delivery can update any order
+    // Default to customer filtering for safety
     const orderQuery = { _id: orderId };
-    if (user.role === 'customer') {
-      orderQuery.customer = user._id; // Customers can only update their own orders
+    const isAdminOrDelivery = user.role === 'admin' || user.role === 'delivery';
+    
+    if (!isAdminOrDelivery) {
+      // Customer or any other/undefined role - ONLY update their own orders
+      orderQuery.customer = user._id;
+      console.log(`[order] Customer user (role: ${user.role || 'undefined'}) - can only update own orders, filtering by customer._id: ${user._id}`);
+    } else {
+      console.log(`[order] Admin/Delivery user (${user.role}) - can update any order`);
     }
-    // Admin and delivery can update any order (no customer filter)
 
     const order = await Order.findOne(orderQuery);
 
