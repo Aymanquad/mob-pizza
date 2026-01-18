@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:mob_pizza_mobile/screens/home/home_screen.dart';
 import 'package:mob_pizza_mobile/screens/menu/menu_list_screen.dart';
 import 'package:mob_pizza_mobile/screens/menu/item_detail_screen.dart';
@@ -14,7 +13,8 @@ import 'package:mob_pizza_mobile/screens/profile/profile_screen.dart';
 import 'package:mob_pizza_mobile/screens/customize/customize_pizza_screen.dart';
 import 'package:mob_pizza_mobile/services/auth_service.dart';
 import 'package:mob_pizza_mobile/widgets/bottom_nav_bar.dart';
-import 'package:mob_pizza_mobile/screens/onboarding/onboarding_screen.dart';
+import 'package:mob_pizza_mobile/screens/onboarding/onboarding_screen_1.dart';
+import 'package:mob_pizza_mobile/screens/onboarding/onboarding_screen_2.dart';
 
 class AppRouter {
   static GoRouter create({required bool isOnboarded}) {
@@ -24,7 +24,13 @@ class AppRouter {
       routes: [
         GoRoute(
           path: '/onboarding',
-          builder: (context, state) => const OnboardingScreen(),
+          builder: (context, state) => const OnboardingScreen1(),
+          routes: [
+            GoRoute(
+              path: 'personalize',
+              builder: (context, state) => const OnboardingScreen2(),
+            ),
+          ],
         ),
         GoRoute(
           path: '/checkout',
@@ -189,19 +195,10 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
                 tooltip: 'Back',
               )
             : null,
-        title: Row(
-          children: [
-            SvgPicture.asset(
-              'assets/icons/logo_emblem.svg',
-              height: 28,
-              width: 28,
-            ),
-            const SizedBox(width: 8),
-            SvgPicture.asset(
-              'assets/icons/logo_wordmark.svg',
-              height: 24,
-            ),
-          ],
+        title: Image.asset(
+          'assets/images/mobpizza_logo.png',
+          height: 40,
+          fit: BoxFit.contain,
         ),
         actions: [
           IconButton(

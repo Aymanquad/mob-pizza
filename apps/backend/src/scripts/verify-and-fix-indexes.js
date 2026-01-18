@@ -62,6 +62,23 @@ const verifyAndFix = async () => {
       console.log('✅ Created googleId_1 index');
     }
 
+    // Check email_1 index (CRITICAL FIX)
+    const emailIndex = indexes.find(idx => idx.name === 'email_1');
+    if (emailIndex) {
+      if (emailIndex.sparse) {
+        console.log('\n✅ email_1 index is sparse - GOOD!');
+      } else {
+        console.log('\n❌ email_1 index is NOT sparse - FIXING...');
+        await collection.dropIndex('email_1');
+        await collection.createIndex({ email: 1 }, { sparse: true, unique: true });
+        console.log('✅ Fixed email_1 index');
+      }
+    } else {
+      console.log('\n⚠️  email_1 index not found - CREATING...');
+      await collection.createIndex({ email: 1 }, { sparse: true, unique: true });
+      console.log('✅ Created email_1 index');
+    }
+
     // Check for users with phone: null
     const usersWithNullPhone = await collection.countDocuments({ phone: null });
     console.log(`\n📊 Users with phone: null: ${usersWithNullPhone}`);
@@ -71,11 +88,20 @@ const verifyAndFix = async () => {
       console.log('   This is OK if the index is sparse');
     }
 
+    // Check for users with email: null
+    const usersWithNullEmail = await collection.countDocuments({ email: null });
+    console.log(`\n📊 Users with email: null: ${usersWithNullEmail}`);
+    
+    if (usersWithNullEmail > 1) {
+      console.log('⚠️  Multiple users with email: null found');
+      console.log('   This is OK if the email index is sparse');
+    }
+
     // Verify final indexes
     const finalIndexes = await collection.indexes();
     console.log('\n✅ Final index status:');
     finalIndexes.forEach(idx => {
-      if (idx.name === 'phone_1' || idx.name === 'googleId_1') {
+      if (idx.name === 'phone_1' || idx.name === 'googleId_1' || idx.name === 'email_1') {
         console.log(`  ${idx.name}: sparse=${idx.sparse}, unique=${idx.unique || false}`);
       }
     });

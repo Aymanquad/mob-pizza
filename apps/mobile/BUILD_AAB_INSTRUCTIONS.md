@@ -1,10 +1,10 @@
 # Build .AAB File for Google Play Store - Closed Testing
 
 ## ✅ Version Code Updated
-- **Previous:** `0.1.0+2`
-- **Current:** `0.1.0+3` (updated in `pubspec.yaml`)
+- **Previous:** `0.1.0+3`
+- **Current:** `0.1.0+4` (updated in `pubspec.yaml`)
 
-The version code has been incremented to **3** for this Play Store upload.
+The version code has been incremented to **4** for this Play Store upload.
 
 ---
 
@@ -98,8 +98,8 @@ apps/mobile/build/app/outputs/bundle/release/app-release.aab
 
 ### Version Code Rules:
 - Each upload to Play Store **must** have a higher version code
-- Current version code: **3**
-- Next upload should be: **4** (increment in `pubspec.yaml`)
+- Current version code: **4**
+- Next upload should be: **5** (increment in `pubspec.yaml`)
 
 ---
 
@@ -112,7 +112,7 @@ apps/mobile/build/app/outputs/bundle/release/app-release.aab
 
 ### Build Fails with "Version Code Error"
 - Make sure version code in `pubspec.yaml` is higher than previous uploads
-- Current: `0.1.0+3`
+- Current: `0.1.0+4`
 
 ### Build is Slow
 - This is normal! Release builds take 5-10 minutes

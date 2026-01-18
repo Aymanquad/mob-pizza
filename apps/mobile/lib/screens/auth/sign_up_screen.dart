@@ -34,13 +34,18 @@ class SignUpScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.signUp),
+        title: Image.asset(
+          'assets/images/mobpizza_logo.png',
+          height: 32,
+          fit: BoxFit.contain,
+        ),
         backgroundColor: const Color(0xFF1C1512),
         foregroundColor: const Color(0xFFF5E8C7),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFFF5E8C7)),
           onPressed: () => context.go('/sign-in'),
         ),
+        centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(20),
@@ -48,6 +53,14 @@ class SignUpScreen extends StatelessWidget {
           key: formKey,
           child: ListView(
             children: [
+              Center(
+                child: Image.asset(
+                  'assets/images/mobpizza_logo.png',
+                  height: 100,
+                  fit: BoxFit.contain,
+                ),
+              ),
+              const SizedBox(height: 20),
               Text(l10n.createAccount, style: headingStyle),
               const SizedBox(height: 6),
               Text('We keep it hush. Only the family knows. Your credentials stay in the vault.', style: subheadStyle),

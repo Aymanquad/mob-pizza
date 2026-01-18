@@ -34,13 +34,15 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(Icons.local_pizza, size: 78, color: Color(0xFFD9A441)),
-              const SizedBox(height: 12),
-              Text(l10n.appName, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.w800)),
-              const SizedBox(height: 6),
-              Text(l10n.homeScreenSubtitle, style: const TextStyle(color: Color(0xFFC0B8A8))),
+              Image.asset(
+                'assets/images/mobpizza_logo.png',
+                height: 200,
+                fit: BoxFit.contain,
+              ),
+              const SizedBox(height: 20),
+              Text(l10n.homeScreenSubtitle, style: const TextStyle(color: Color(0xFFC0B8A8), fontSize: 16)),
               const SizedBox(height: 8),
-              Text(l10n.cinematicPiesSpeakeasy, style: const TextStyle(color: Color(0xFFC0B8A8))),
+              Text(l10n.cinematicPiesSpeakeasy, style: const TextStyle(color: Color(0xFFC0B8A8), fontSize: 14)),
             ],
           ),
         ),

@@ -30,13 +30,18 @@ class SignInScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(l10n.signIn),
+        title: Image.asset(
+          'assets/images/mobpizza_logo.png',
+          height: 32,
+          fit: BoxFit.contain,
+        ),
         backgroundColor: const Color(0xFF1C1512),
         foregroundColor: const Color(0xFFF5E8C7),
         leading: IconButton(
           icon: const Icon(Icons.arrow_back, color: Color(0xFFF5E8C7)),
           onPressed: () => context.go('/'),
         ),
+        centerTitle: true,
       ),
       body: Container(
         color: const Color(0xFF0F0F0F),
@@ -45,6 +50,14 @@ class SignInScreen extends StatelessWidget {
           key: formKey,
           child: ListView(
             children: [
+              Center(
+                child: Image.asset(
+                  'assets/images/mobpizza_logo.png',
+                  height: 100,
+                  fit: BoxFit.contain,
+                ),
+              ),
+              const SizedBox(height: 20),
               Text(l10n.signIn, style: headingStyle),
               const SizedBox(height: 6),
               Text('Enter your credentials to get back in. We keep it hush.', style: subheadStyle),

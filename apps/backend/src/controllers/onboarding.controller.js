@@ -101,6 +101,9 @@ const onboarding = async (req, res, next) => {
       query = { phone };
       updateData.$set.phone = phone;
       updateData.$set.phoneVerified = true;
+      // CRITICAL: Don't set email at all for phone-only users
+      // This prevents MongoDB from setting email: null which causes duplicate key errors
+      // The email field should not exist (undefined) rather than be null
       // Generate password for phone-based users (only on insert)
       const randomPassword = `Temp!${Math.random().toString(36).slice(-8)}`;
       const passwordHash = await bcrypt.hash(randomPassword, 12);
@@ -129,6 +132,13 @@ const onboarding = async (req, res, next) => {
       if (isOAuthFlow && (!phone || !phoneRegex.test(phone))) {
         delete newUserData.phone;
         delete newUserData.phoneVerified;
+      }
+      
+      // CRITICAL: Remove email if it's not provided for phone-only users
+      // This prevents MongoDB from setting email: null which causes duplicate key errors
+      if (!isOAuthFlow && (!email || !hasValidEmail)) {
+        delete newUserData.email;
+        delete newUserData.emailVerified;
       }
       
       user = await User.create(newUserData);
