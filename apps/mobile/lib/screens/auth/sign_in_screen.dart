@@ -33,6 +33,7 @@ class SignInScreen extends StatelessWidget {
         title: Image.asset(
           'assets/images/mobpizza_logo.png',
           height: 32,
+          width: 100,
           fit: BoxFit.contain,
         ),
         backgroundColor: const Color(0xFF1C1512),
@@ -54,6 +55,7 @@ class SignInScreen extends StatelessWidget {
                 child: Image.asset(
                   'assets/images/mobpizza_logo.png',
                   height: 100,
+                  width: 100,
                   fit: BoxFit.contain,
                 ),
               ),

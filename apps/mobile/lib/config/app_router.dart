@@ -198,6 +198,7 @@ class _ScaffoldWithBottomNavBarState extends State<ScaffoldWithBottomNavBar> {
         title: Image.asset(
           'assets/images/mobpizza_logo.png',
           height: 40,
+          width: 120,
           fit: BoxFit.contain,
         ),
         actions: [

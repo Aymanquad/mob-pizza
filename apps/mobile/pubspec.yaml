@@ -1,7 +1,7 @@
 name: mob_pizza_mobile
 description: Mob Pizza – Flutter mobile app (mob/speakeasy theme)
 publish_to: "none"
-version: 0.1.0+6
+version: 0.1.0+7
 
 environment:
   sdk: ">=3.3.0 <4.0.0"

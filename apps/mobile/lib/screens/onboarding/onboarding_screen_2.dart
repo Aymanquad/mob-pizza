@@ -331,6 +331,7 @@ class _OnboardingScreen2State extends State<OnboardingScreen2> {
                   child: Image.asset(
                     'assets/images/mobpizza_logo.png',
                     height: 60,
+                    width: 60,
                     fit: BoxFit.contain,
                   ),
                 ),

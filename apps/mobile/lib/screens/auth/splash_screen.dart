@@ -37,6 +37,7 @@ class _SplashScreenState extends State<SplashScreen> {
               Image.asset(
                 'assets/images/mobpizza_logo.png',
                 height: 200,
+                width: 200,
                 fit: BoxFit.contain,
               ),
               const SizedBox(height: 20),
