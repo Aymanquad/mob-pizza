@@ -1,7 +1,7 @@
 name: mob_pizza_mobile
 description: Mob Pizza – Flutter mobile app (mob/speakeasy theme)
 publish_to: "none"
-version: 0.1.0+4
+version: 0.1.0+6
 
 environment:
   sdk: ">=3.3.0 <4.0.0"
@@ -25,6 +25,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   flutter_lints: ^3.0.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter:
   uses-material-design: true
@@ -32,4 +33,12 @@ flutter:
     - assets/images/
     - assets/icons/
   generate: true
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/mobpizza_logo.png"
+  min_sdk_android: 21
+  adaptive_icon_background: "#FFFFFF"
+  adaptive_icon_foreground: "assets/images/mobpizza_logo.png"
 
