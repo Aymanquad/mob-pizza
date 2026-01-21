@@ -803,7 +803,7 @@ abstract class AppLocalizations {
   /// No description provided for @joinTheFamily.
   ///
   /// In en, this message translates to:
-  /// **'Join the Family'**
+  /// **'Join the Mobs'**
   String get joinTheFamily;
 
   /// No description provided for @language.

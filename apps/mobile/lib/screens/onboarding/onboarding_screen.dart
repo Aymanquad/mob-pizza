@@ -430,6 +430,15 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 ),
                 const SizedBox(height: 16),
                 // Phone Number Field (Optional)
+                Text(
+                  l10n.phoneNumber,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(height: 8),
                 TextFormField(
                   controller: _phoneController,
                   keyboardType: TextInputType.phone,
@@ -441,10 +450,9 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                   decoration: InputDecoration(
                     filled: true,
                     fillColor: const Color(0xFFF5E8C7),
-                    labelText: l10n.phoneNumber,
-                    labelStyle: const TextStyle(color: Colors.black87),
-                    hintText: '+15551234567 or 9876543210',
+                    hintText: '+1',
                     hintStyle: const TextStyle(color: Colors.black54),
+                    contentPadding: const EdgeInsets.symmetric(vertical: 16, horizontal: 16),
                     enabledBorder: OutlineInputBorder(
                       borderSide: const BorderSide(color: Color(0xFFD9A441)),
                       borderRadius: BorderRadius.circular(8),

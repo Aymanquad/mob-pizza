@@ -365,7 +365,7 @@ class AppLocalizationsEn extends AppLocalizations {
   String get lockInTheOrder => 'Lock In the Order';
 
   @override
-  String get joinTheFamily => 'Join the Family';
+  String get joinTheFamily => 'Join the Mobs';
 
   @override
   String get language => 'Language';
