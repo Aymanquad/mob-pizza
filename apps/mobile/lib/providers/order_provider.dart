@@ -218,6 +218,20 @@ class OrderProvider with ChangeNotifier {
       phoneNumber = json['phoneNumber'] as String? ?? '';
     }
 
+    // Normalize payment method coming from API to match app expectations
+    String _normalizePaymentMethod(String? apiPaymentMethod) {
+      switch ((apiPaymentMethod ?? '').toLowerCase()) {
+        case 'cash':
+        case 'cash_on_delivery':
+          return 'cash_on_delivery';
+        case 'card':
+        case 'stripe':
+        case 'razorpay':
+        default:
+          return 'stripe';
+      }
+    }
+
     return Order(
       id: json['_id']?.toString() ?? json['id']?.toString() ?? '',
       orderNumber: json['orderId'] as String? ?? json['orderNumber'] as String? ?? '',
@@ -225,7 +239,7 @@ class OrderProvider with ChangeNotifier {
       customerName: customerName,
       phoneNumber: phoneNumber,
       deliveryAddress: json['deliveryAddress']?.toString() ?? json['deliveryAddress'] as String? ?? '',
-      paymentMethod: json['paymentMethod'] as String? ?? 'cash_on_delivery',
+      paymentMethod: _normalizePaymentMethod(json['paymentMethod'] as String?),
       totalPrice: (json['totalAmount'] as num?)?.toDouble() ?? 0.0,
       status: status,
       createdAt: json['createdAt'] != null

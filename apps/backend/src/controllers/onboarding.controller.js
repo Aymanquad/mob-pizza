@@ -59,8 +59,10 @@ const onboarding = async (req, res, next) => {
 
     // Default names for quick onboarding; can be updated later
     // Handle empty strings as well as null/undefined
-    const defaultFirst = (firstName && firstName.trim()) || 'Guest';
-    const defaultLast = (lastName && lastName.trim()) || 'User';
+    const providedFirst = firstName && firstName.trim() ? firstName.trim() : null;
+    const providedLast = lastName && lastName.trim() ? lastName.trim() : null;
+    const defaultFirst = providedFirst || 'Guest';
+    const defaultLast = providedLast || 'User';
 
     // Build query and update object
     let query = {};
@@ -70,14 +72,23 @@ const onboarding = async (req, res, next) => {
         consents,
         onboardingCompleted: true,
         onboardingAt: new Date(),
-        // Always set firstName/lastName in $set (for both new and existing users)
-        firstName: defaultFirst,
-        lastName: defaultLast,
       },
       $setOnInsert: {
         isActive: true,
+        // Only set default names on INSERT (new user creation)
+        firstName: defaultFirst,
+        lastName: defaultLast,
       },
     };
+    
+    // For existing users: only update firstName/lastName if explicitly provided
+    // This preserves user's saved profile data
+    if (providedFirst) {
+      updateData.$set.firstName = providedFirst;
+    }
+    if (providedLast) {
+      updateData.$set.lastName = providedLast;
+    }
 
     if (isOAuthFlow) {
       // OAuth flow: use email + googleId
@@ -114,6 +125,15 @@ const onboarding = async (req, res, next) => {
     let user = await User.findOne(query).select('-passwordHash -__v');
     
     if (user) {
+      // User exists - preserve existing firstName/lastName unless explicitly provided
+      // Only set defaults if user doesn't have names yet (for old users)
+      if (!user.firstName && !providedFirst) {
+        updateData.$set.firstName = defaultFirst;
+      }
+      if (!user.lastName && !providedLast) {
+        updateData.$set.lastName = defaultLast;
+      }
+      
       // User exists - update them (phone won't be set to null since we don't include it)
       user = await User.findOneAndUpdate(
         query,

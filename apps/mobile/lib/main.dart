@@ -16,7 +16,11 @@ Future<void> main() async {
   final isOnboarded = prefs.getBool(PrefKeys.onboardingCompleted) ?? false;
   final localeCode = prefs.getString(PrefKeys.localeCode) ?? 'en';
   final storedPhone = prefs.getString(PrefKeys.phone) ?? '';
-  final effectiveOnboarded = isOnboarded && storedPhone.isNotEmpty;
+  final storedEmail = prefs.getString(PrefKeys.email) ?? '';
+  final storedGoogleId = prefs.getString(PrefKeys.googleId) ?? '';
+  // Treat any valid identifier (phone OR email/google) as sufficient for onboarding.
+  final hasIdentifier = storedPhone.isNotEmpty || storedEmail.isNotEmpty || storedGoogleId.isNotEmpty;
+  final effectiveOnboarded = isOnboarded && hasIdentifier;
 
   // Create providers and load saved data
   final cartProvider = CartProvider();
@@ -43,14 +47,20 @@ Future<void> main() async {
   );
 }
 
-class MobPizzaApp extends StatelessWidget {
+class MobPizzaApp extends StatefulWidget {
   const MobPizzaApp({super.key, required this.isOnboarded});
 
   final bool isOnboarded;
 
   @override
+  State<MobPizzaApp> createState() => _MobPizzaAppState();
+}
+
+class _MobPizzaAppState extends State<MobPizzaApp> {
+  late final router = AppRouter.create(isOnboarded: widget.isOnboarded);
+
+  @override
   Widget build(BuildContext context) {
-    final router = AppRouter.create(isOnboarded: isOnboarded);
     final localeProvider = Provider.of<LocaleProvider>(context);
 
     return MaterialApp.router(

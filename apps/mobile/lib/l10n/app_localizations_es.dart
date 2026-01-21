@@ -949,158 +949,158 @@ class AppLocalizationsEs extends AppLocalizations {
       'Déjate llevar por la perfección cremosa con nuestra pizza de Pollo Alfredo. Pechuga de pollo a la parrilla tierna, rica salsa alfredo y queso mozzarella se unen en una corteza dorada. Una pizza blanca tan reconfortante como elegante. Pura satisfacción cremosa en cada bocado.';
 
   @override
-  String get combosDeals => 'Combos / Deals';
+  String get combosDeals => 'Combos / Ofertas';
 
   @override
-  String get combo2SlicesDrink => 'Buy 2 Slices + Drink';
+  String get combo2SlicesDrink => '2 Rebanadas + Bebida';
 
   @override
   String get combo2SlicesDrinkDesc =>
-      'Two slices of pizza with your choice of drink.';
+      'Dos rebanadas de pizza con tu bebida a elección.';
 
   @override
   String get combo2SlicesDrinkFullDesc =>
-      'Great value combo! Get two slices of pizza from our selection and a refreshing drink to complete your meal.';
+      '¡Combo de gran valor! Obtén dos rebanadas de pizza de nuestra selección y una bebida refrescante para completar tu comida.';
 
   @override
-  String get comboSliceDrink => 'Slice + Drink';
+  String get comboSliceDrink => 'Rebanada + Bebida';
 
   @override
-  String get comboSliceDrinkDesc => 'One slice of pizza with a drink.';
+  String get comboSliceDrinkDesc => 'Una rebanada de pizza con bebida.';
 
   @override
   String get comboSliceDrinkFullDesc =>
-      'Perfect for a quick meal! One delicious slice of pizza paired with your favorite drink.';
+      'Perfecto para una comida rápida: una rebanada deliciosa de pizza acompañada de tu bebida favorita.';
 
   @override
-  String get comboSliceWingsSoda => 'Slice Pizza + Wings + Soda';
+  String get comboSliceWingsSoda => 'Rebanada + Alitas + Refresco';
 
   @override
   String get comboSliceWingsSodaDesc =>
-      'One slice of pizza, wings, and a soda.';
+      'Una rebanada de pizza, alitas y un refresco.';
 
   @override
   String get comboSliceWingsSodaFullDesc =>
-      'The perfect combo for the hungry! One slice of pizza, crispy wings with your choice of sauce, and a refreshing soda.';
+      'El combo perfecto para el hambre seria: una rebanada de pizza, alitas crujientes con tu salsa favorita y un refresco frío.';
 
   @override
-  String get combo10WingsDrink => '10 Wings + Drink';
+  String get combo10WingsDrink => '10 Alitas + Bebida';
 
   @override
   String get combo10WingsDrinkDesc =>
-      'Ten wings with your choice of sauce and a drink.';
+      'Diez alitas con tu salsa favorita y una bebida.';
 
   @override
   String get combo10WingsDrinkFullDesc =>
-      'Wing lover\'s delight! Ten crispy wings tossed in your favorite sauce, paired with a refreshing drink.';
+      '¡El sueño de los amantes de las alitas! Diez alitas crujientes bañadas en tu salsa favorita, acompañadas de una bebida refrescante.';
 
   @override
-  String get wingsBoneless => 'Wings / Boneless';
+  String get wingsBoneless => 'Alitas / Boneless';
 
   @override
-  String get wingsBuffalo => 'Buffalo Wings';
+  String get wingsBuffalo => 'Alitas Buffalo';
 
   @override
-  String get wingsBuffaloDesc => 'Classic spicy buffalo wings.';
+  String get wingsBuffaloDesc => 'Clásicas alitas buffalo picantes.';
 
   @override
   String get wingsBuffaloFullDesc =>
-      'Crispy chicken wings tossed in our signature spicy buffalo sauce. Tangy, hot, and perfectly balanced - the ultimate wing experience.';
+      'Alitas de pollo crujientes bañadas en nuestra salsa buffalo picante especial. Ácidas, calientes y perfectamente equilibradas: la experiencia definitiva de alitas.';
 
   @override
-  String get wingsGarlicParmesan => 'Garlic Parmesan Wings';
+  String get wingsGarlicParmesan => 'Alitas Ajo Parmesano';
 
   @override
   String get wingsGarlicParmesanDesc =>
-      'Crispy wings with garlic parmesan sauce.';
+      'Alitas crujientes con salsa de ajo parmesano.';
 
   @override
   String get wingsGarlicParmesanFullDesc =>
-      'Perfectly crispy wings coated in a rich, savory garlic parmesan sauce. Buttery, garlicky, and cheesy - a flavor explosion in every bite.';
+      'Alitas perfectamente crujientes cubiertas con una salsa rica y sabrosa de ajo y parmesano. Mantecosas, con ajo y muy quesudas: una explosión de sabor en cada bocado.';
 
   @override
-  String get wingsBBQ => 'BBQ Wings';
+  String get wingsBBQ => 'Alitas BBQ';
 
   @override
-  String get wingsBBQDesc => 'Sweet and smoky BBQ wings.';
+  String get wingsBBQDesc => 'Alitas BBQ dulces y ahumadas.';
 
   @override
   String get wingsBBQFullDesc =>
-      'Tender wings glazed with our house-made BBQ sauce. Sweet, smoky, and slightly tangy - finger-licking good!';
+      'Alitas tiernas glaseadas con nuestra salsa BBQ casera. Dulces, ahumadas y ligeramente ácidas: ¡para chuparse los dedos!';
 
   @override
-  String get wingsMangoHabanero => 'Mango Habanero Wings';
+  String get wingsMangoHabanero => 'Alitas Mango Habanero';
 
   @override
   String get wingsMangoHabaneroDesc =>
-      'Spicy wings with sweet mango habanero sauce.';
+      'Alitas picantes con salsa de mango habanero.';
 
   @override
   String get wingsMangoHabaneroFullDesc =>
-      'For those who love heat! Crispy wings tossed in a fiery mango habanero sauce that brings the perfect balance of sweet tropical fruit and intense spice.';
+      'Para quienes aman el picante: alitas crujientes bañadas en una salsa de mango habanero que equilibra perfectamente el dulce tropical con un picor intenso.';
 
   @override
-  String get wingsLemonPepper => 'Lemon Pepper Wings';
+  String get wingsLemonPepper => 'Alitas Limón Pimienta';
 
   @override
-  String get wingsLemonPepperDesc => 'Zesty lemon pepper seasoned wings.';
+  String get wingsLemonPepperDesc => 'Alitas sazonadas con limón y pimienta.';
 
   @override
   String get wingsLemonPepperFullDesc =>
-      'Bright and zesty wings seasoned with fresh lemon and cracked black pepper. Light, refreshing, and packed with flavor.';
+      'Alitas brillantes y cítricas sazonadas con limón fresco y pimienta negra molida. Ligeras, refrescantes y llenas de sabor.';
 
   @override
-  String get wingsHotHoney => 'Hot Honey Wings';
+  String get wingsHotHoney => 'Alitas Miel Picante';
 
   @override
-  String get wingsHotHoneyDesc => 'Sweet and spicy hot honey glazed wings.';
+  String get wingsHotHoneyDesc => 'Alitas glaseadas con miel picante.';
 
   @override
   String get wingsHotHoneyFullDesc =>
-      'The perfect sweet and heat combination! Crispy wings glazed with our hot honey sauce - sweet honey meets fiery heat for an unforgettable taste.';
+      'La combinación perfecta de dulce y picante: alitas crujientes glaseadas con nuestra salsa de miel picante. Miel dulce que se encuentra con un fuego suave en cada bocado.';
 
   @override
-  String get dips => 'Dips';
+  String get dips => 'Salsas';
 
   @override
-  String get dipHoneyMustard => 'Honey Mustard';
+  String get dipHoneyMustard => 'Mostaza con Miel';
 
   @override
-  String get dipHoneyMustardDesc => 'Sweet and tangy honey mustard dip.';
+  String get dipHoneyMustardDesc => 'Salsa de mostaza con miel dulce y ácida.';
 
   @override
   String get dipHoneyMustardFullDesc =>
-      'A perfect blend of sweet honey and tangy mustard creating a delightful dipping sauce that complements any dish.';
+      'La mezcla perfecta de miel dulce y mostaza ácida que crea una salsa deliciosa para acompañar cualquier plato.';
 
   @override
-  String get dipGarlic => 'Garlic Dip';
+  String get dipGarlic => 'Salsa de Ajo';
 
   @override
-  String get dipGarlicDesc => 'Creamy garlic dip with herbs.';
+  String get dipGarlicDesc => 'Salsa cremosa de ajo con hierbas.';
 
   @override
   String get dipGarlicFullDesc =>
-      'Rich and creamy garlic dip infused with fresh herbs, perfect for fries, wings, and more.';
+      'Salsa cremosa y rica de ajo infusionada con hierbas frescas, perfecta para papas fritas, alitas y más.';
 
   @override
-  String get dipParmesan => 'Parmesan Dip';
+  String get dipParmesan => 'Salsa de Parmesano';
 
   @override
-  String get dipParmesanDesc => 'Creamy parmesan cheese dip.';
+  String get dipParmesanDesc => 'Salsa cremosa de queso parmesano.';
 
   @override
   String get dipParmesanFullDesc =>
-      'Luxurious parmesan cheese dip with a smooth, creamy texture that elevates any side dish.';
+      'Lujosa salsa de queso parmesano con textura suave y cremosa que eleva cualquier guarnición.';
 
   @override
-  String get dipItalianDressing => 'Italian Dressing';
+  String get dipItalianDressing => 'Aderezo Italiano';
 
   @override
-  String get dipItalianDressingDesc => 'Classic Italian dressing dip.';
+  String get dipItalianDressingDesc => 'Clásico aderezo italiano para mojar.';
 
   @override
   String get dipItalianDressingFullDesc =>
-      'Traditional Italian dressing with herbs and spices, perfect as a dip or dressing.';
+      'Aderezo italiano tradicional con hierbas y especias, perfecto como salsa para mojar o como aderezo para ensaladas.';
 
   @override
   String get dipRanch => 'Ranch';
@@ -1123,107 +1123,108 @@ class AppLocalizationsEs extends AppLocalizations {
       'Salsa de queso azul audaz y ácida con trozos de queso azul real. Rica, cremosa y llena de sabor: una elección sofisticada para alitas y verduras.';
 
   @override
-  String get fries => 'Fries';
+  String get fries => 'Papas Fritas';
 
   @override
-  String get friesGarlic => 'Garlic Fries';
+  String get friesGarlic => 'Papas Fritas con Ajo';
 
   @override
-  String get friesGarlicDesc => 'Crispy fries tossed with garlic and herbs.';
+  String get friesGarlicDesc => 'Papas crujientes con ajo y hierbas.';
 
   @override
   String get friesGarlicFullDesc =>
-      'Golden crispy fries tossed with fresh minced garlic, parsley, and a hint of parmesan. A flavorful twist on the classic side.';
+      'Papas fritas doradas y crujientes mezcladas con ajo fresco picado, perejil y un toque de parmesano. Un giro lleno de sabor sobre la guarnición clásica.';
 
   @override
-  String get friesPlain => 'Plain Fries';
+  String get friesPlain => 'Papas Fritas Clásicas';
 
   @override
-  String get friesPlainDesc => 'Classic crispy golden fries.';
+  String get friesPlainDesc => 'Clásicas papas fritas doradas y crujientes.';
 
   @override
   String get friesPlainFullDesc =>
-      'Perfectly seasoned golden fries, crispy on the outside and fluffy on the inside. The classic side dish that never disappoints.';
+      'Papas fritas perfectamente sazonadas, crujientes por fuera y suaves por dentro. La guarnición clásica que nunca falla.';
 
   @override
-  String get salads => 'Salads';
+  String get salads => 'Ensaladas';
 
   @override
-  String get saladCaesar => 'Caesar Salad';
+  String get saladCaesar => 'Ensalada César';
 
   @override
-  String get saladCaesarDesc => 'Classic Caesar salad with romaine lettuce.';
+  String get saladCaesarDesc => 'Clásica ensalada César con lechuga romana.';
 
   @override
   String get saladCaesarFullDesc =>
-      'Crisp romaine lettuce tossed with our house-made Caesar dressing, parmesan cheese, and crunchy croutons. A timeless classic that never goes out of style.';
+      'Lechuga romana crujiente mezclada con nuestro aderezo César casero, queso parmesano y crutones crujientes. Un clásico atemporal que nunca pasa de moda.';
 
   @override
-  String get saladGreen => 'Green Salad';
+  String get saladGreen => 'Ensalada Verde';
 
   @override
   String get saladGreenDesc =>
-      'Fresh mixed greens with your choice of dressing.';
+      'Mezcla de hojas verdes frescas con aderezo a elección.';
 
   @override
   String get saladGreenFullDesc =>
-      'A refreshing mix of fresh greens, vegetables, and your choice of house dressing. Light, healthy, and delicious.';
+      'Una mezcla refrescante de hojas verdes, vegetales frescos y tu aderezo de la casa a elección. Ligera, saludable y deliciosa.';
 
   @override
-  String get small => 'Small';
+  String get small => 'Pequeña';
 
   @override
-  String get large => 'Large';
+  String get large => 'Grande';
 
   @override
   String get pasta => 'Pasta';
 
   @override
-  String get pastaChickenAlfredo => 'Chicken Alfredo';
+  String get pastaChickenAlfredo => 'Pasta Pollo Alfredo';
 
   @override
   String get pastaChickenAlfredoDesc =>
-      'Creamy alfredo pasta with tender chicken.';
+      'Pasta alfredo cremosa con pollo tierno.';
 
   @override
   String get pastaChickenAlfredoFullDesc =>
-      'Tender grilled chicken breast served over fettuccine pasta in a rich, creamy alfredo sauce. Garnished with parmesan cheese and fresh parsley for a comforting, indulgent meal.';
+      'Pasta fettuccine con pechuga de pollo a la parrilla en una salsa alfredo rica y cremosa. Terminada con queso parmesano y perejil fresco para una comida reconfortante e indulgente.';
 
   @override
-  String get desserts => 'Desserts';
+  String get desserts => 'Postres';
 
   @override
-  String get dessertChocolateChipCookiePizza => 'Chocolate Chip Cookie Pizza';
+  String get dessertChocolateChipCookiePizza =>
+      'Pizza de Galleta con Chispas de Chocolate';
 
   @override
   String get dessertChocolateChipCookiePizzaDesc =>
-      'Decadent chocolate chip cookie baked pizza-style.';
+      'Galleta de chispas de chocolate horneada estilo pizza.';
 
   @override
   String get dessertChocolateChipCookiePizzaFullDesc =>
-      'A giant warm chocolate chip cookie baked to perfection and served pizza-style. Gooey, chocolatey, and absolutely irresistible. Perfect for sharing or enjoying solo.';
+      'Una galleta gigante de chispas de chocolate, tibia y horneada a la perfección y servida al estilo pizza. Pegajosa, chocolatosa e irresistible. Perfecta para compartir o disfrutar en solitario.';
 
   @override
-  String get dessertChocolateChurros => 'Chocolate Churros';
+  String get dessertChocolateChurros => 'Churros con Chocolate';
 
   @override
   String get dessertChocolateChurrosDesc =>
-      'Crispy churros with chocolate dipping sauce.';
+      'Churros crujientes con salsa de chocolate.';
 
   @override
   String get dessertChocolateChurrosFullDesc =>
-      'Golden, crispy churros dusted with cinnamon sugar, served with a rich chocolate dipping sauce. A sweet treat that satisfies every craving.';
+      'Churros dorados y crujientes espolvoreados con azúcar y canela, servidos con una rica salsa de chocolate para mojar. Un dulce que satisface cualquier antojo.';
 
   @override
   String get dessertCheesecake => 'Cheesecake';
 
   @override
   String get dessertCheesecakeDesc =>
-      'Classic creamy New York-style cheesecake.';
+      'Clásico cheesecake cremoso estilo Nueva York.';
 
   @override
   String get dessertCheesecakeFullDesc =>
-      'Rich and creamy New York-style cheesecake with a buttery graham cracker crust. Smooth, decadent, and the perfect ending to any meal.';
+      'Cheesecake estilo Nueva York, rico y cremoso, con una base de galleta de mantequilla. Suave, decadente y el final perfecto para cualquier comida.';
 
   @override
   String get dessertFreshCannoli => 'Cannoli Fresco';

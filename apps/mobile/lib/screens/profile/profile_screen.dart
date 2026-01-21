@@ -59,16 +59,14 @@ class _ProfileScreenState extends State<ProfileScreen> {
       final localeProvider = Provider.of<LocaleProvider>(context, listen: false);
       _locale = localeProvider.locale.languageCode;
 
-      // Load from local prefs
-      _firstNameController.text = prefs.getString(PrefKeys.firstName) ?? '';
-      _lastNameController.text = prefs.getString(PrefKeys.lastName) ?? '';
-      _addressController.text = prefs.getString(PrefKeys.address) ?? '';
-
-      // Try to fetch from backend using current identifier
+      // Try to fetch from backend FIRST (source of truth)
       final identifier = await AuthService.getUserIdentifier();
       if (identifier.isNotEmpty) {
         try {
           final userData = await _userService.getProfile(identifier);
+          debugPrint('[profile] Loaded from backend: firstName=${userData['firstName']}, lastName=${userData['lastName']}, locale=${userData['locale']}');
+          
+          // Load from backend data (source of truth)
           _firstNameController.text = userData['firstName'] ?? '';
           _lastNameController.text = userData['lastName'] ?? '';
           
@@ -89,13 +87,35 @@ class _ProfileScreenState extends State<ProfileScreen> {
           if (addresses != null && addresses.isNotEmpty) {
             final addr = addresses[0];
             _addressController.text = addr['street'] ?? '';
+            // Sync address to local prefs
+            await prefs.setString(PrefKeys.address, _addressController.text);
+          } else {
+            _addressController.text = '';
           }
+          
           // Update locale from backend if available
           final backendLocale = userData['locale'] ?? _locale;
           _locale = backendLocale;
+          
+          // CRITICAL: Sync all backend data to local prefs so it persists after logout/login
+          await prefs.setString(PrefKeys.firstName, _firstNameController.text);
+          await prefs.setString(PrefKeys.lastName, _lastNameController.text);
+          await prefs.setString(PrefKeys.localeCode, _locale);
+          
+          // Update LocaleProvider to match backend locale
+          Provider.of<LocaleProvider>(context, listen: false).setLocale(Locale(_locale));
         } catch (e) {
-          debugPrint('[profile] Could not fetch from backend: $e');
+          debugPrint('[profile] Could not fetch from backend: $e, falling back to local prefs');
+          // Fallback to local prefs only if backend fetch fails
+          _firstNameController.text = prefs.getString(PrefKeys.firstName) ?? '';
+          _lastNameController.text = prefs.getString(PrefKeys.lastName) ?? '';
+          _addressController.text = prefs.getString(PrefKeys.address) ?? '';
         }
+      } else {
+        // No identifier - load from local prefs only
+        _firstNameController.text = prefs.getString(PrefKeys.firstName) ?? '';
+        _lastNameController.text = prefs.getString(PrefKeys.lastName) ?? '';
+        _addressController.text = prefs.getString(PrefKeys.address) ?? '';
       }
     } finally {
       if (mounted) setState(() => _isLoading = false);
@@ -110,13 +130,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
     try {
       final prefs = await SharedPreferences.getInstance();
       
-      // Save to local prefs
-      await prefs.setString(PrefKeys.firstName, _firstNameController.text.trim());
-      await prefs.setString(PrefKeys.lastName, _lastNameController.text.trim());
-      await prefs.setString(PrefKeys.address, _addressController.text.trim());
-      await prefs.setString(PrefKeys.localeCode, _locale);
-
-      // Update backend - use getUserIdentifier to get current identifier (phone or email)
+      // Update backend FIRST (source of truth)
+      // Only save to local prefs if backend update succeeds
       final identifier = await AuthService.getUserIdentifier();
       if (identifier.isEmpty) {
         throw Exception('No user identifier found. Please complete onboarding.');
@@ -147,9 +162,31 @@ class _ProfileScreenState extends State<ProfileScreen> {
         ];
       }
 
-      await _userService.updateProfile(identifier, updates);
+      // Update backend and get response
+      final updatedUserData = await _userService.updateProfile(identifier, updates);
+      debugPrint('[profile] Backend update response: $updatedUserData');
       
-      // Reload profile to get updated data from backend
+      // CRITICAL: Only sync to local prefs AFTER backend update succeeds
+      // This ensures data consistency - if backend fails, local prefs aren't updated
+      await prefs.setString(PrefKeys.firstName, updatedUserData['firstName'] ?? _firstNameController.text.trim());
+      await prefs.setString(PrefKeys.lastName, updatedUserData['lastName'] ?? _lastNameController.text.trim());
+      await prefs.setString(PrefKeys.localeCode, updatedUserData['locale'] ?? _locale);
+      
+      // Update address from backend response if available
+      final addresses = updatedUserData['addresses'] as List?;
+      if (addresses != null && addresses.isNotEmpty) {
+        final addr = addresses[0];
+        final street = addr['street'] ?? '';
+        _addressController.text = street;
+        await prefs.setString(PrefKeys.address, street);
+      } else {
+        await prefs.setString(PrefKeys.address, _addressController.text.trim());
+      }
+      
+      // Update locale from backend response
+      _locale = updatedUserData['locale'] ?? _locale;
+      
+      // Reload profile to ensure UI is in sync
       await _loadProfile();
 
       // Update LocaleProvider AFTER saving to persist the change
