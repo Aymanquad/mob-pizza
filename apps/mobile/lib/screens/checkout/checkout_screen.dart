@@ -154,6 +154,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           );
 
           final backendOrderId = orderData['_id']?.toString() ?? orderData['id']?.toString() ?? '';
+          // Use the backend-calculated totalAmount to ensure consistency
+          final orderTotalAmount = (orderData['totalAmount'] as num?)?.toDouble() ?? totalPrice;
 
           if (backendOrderId.isEmpty) {
             throw Exception('Failed to get order ID from backend');
@@ -162,10 +164,10 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
           // Clear cart before navigating to payment
           await cartProvider.clearCart();
 
-          // Navigate to Stripe payment screen
+          // Navigate to Stripe payment screen with backend-calculated amount
           if (mounted) {
             context.go(
-              '/payment/stripe?orderId=$backendOrderId&amount=$totalPrice&currency=USD',
+              '/payment/stripe?orderId=$backendOrderId&amount=$orderTotalAmount&currency=USD',
             );
           }
         } catch (e) {

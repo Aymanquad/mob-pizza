@@ -24,17 +24,17 @@ exports.createPaymentIntent = async (req, res) => {
       });
     }
 
-    // Verify order amount matches
-    const amountInCents = Math.round(amount);
+    // Use order's totalAmount to ensure consistency (ignore frontend amount)
     const orderAmountInCents = Math.round(order.totalAmount * 100);
+    const requestedAmountInCents = Math.round(amount);
     
-    if (amountInCents !== orderAmountInCents) {
-      console.warn(`[payment] Amount mismatch: requested ${amountInCents}, order ${orderAmountInCents}`);
+    if (requestedAmountInCents !== orderAmountInCents) {
+      console.warn(`[payment] Amount mismatch: requested ${requestedAmountInCents}, order ${orderAmountInCents}. Using order amount.`);
     }
 
-    // Create payment intent
+    // Create payment intent using order's calculated totalAmount
     const paymentIntent = await stripe.paymentIntents.create({
-      amount: amountInCents,
+      amount: orderAmountInCents,
       currency: currency.toLowerCase(),
       metadata: {
         orderId: orderId.toString(),
