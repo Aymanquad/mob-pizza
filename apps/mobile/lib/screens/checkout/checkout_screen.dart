@@ -161,9 +161,6 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
             throw Exception('Failed to get order ID from backend');
           }
 
-          // Clear cart before navigating to payment
-          await cartProvider.clearCart();
-
           // Navigate to Stripe payment screen with backend-calculated amount
           if (mounted) {
             context.go(

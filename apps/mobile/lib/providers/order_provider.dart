@@ -121,6 +121,17 @@ class OrderProvider with ChangeNotifier {
         } else {
           debugPrint('[OrderProvider] Showing all ${filteredOrders.length} orders for host/admin (role: admin/delivery)');
         }
+
+        // Payment rule: do NOT show Stripe orders unless payment is completed
+        // This ensures failed/pending Stripe checkouts do not appear in Orders for user or host.
+        filteredOrders = filteredOrders.where((json) {
+          final method = (json['paymentMethod'] as String? ?? '').toLowerCase();
+          final status = (json['paymentStatus'] as String? ?? 'pending').toLowerCase();
+          if (method == 'stripe' && status != 'completed') {
+            return false;
+          }
+          return true;
+        }).toList();
         
         _orders = filteredOrders.map((json) {
           try {

@@ -3,7 +3,10 @@ import 'package:flutter_stripe/flutter_stripe.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:mob_pizza_mobile/l10n/app_localizations.dart';
+import 'package:mob_pizza_mobile/providers/cart_provider.dart';
+import 'package:mob_pizza_mobile/providers/order_provider.dart';
 import 'package:mob_pizza_mobile/services/stripe_service.dart';
+import 'package:provider/provider.dart';
 import 'package:flutter/foundation.dart';
 
 class StripePaymentScreen extends StatefulWidget {
@@ -102,6 +105,14 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
         paymentIntentId: paymentIntentData['paymentIntentId'] as String,
         paymentMethodId: paymentMethod.id,
       );
+
+      // Only after successful payment: clear cart and refresh orders
+      if (mounted) {
+        final cartProvider = Provider.of<CartProvider>(context, listen: false);
+        final orderProvider = Provider.of<OrderProvider>(context, listen: false);
+        await cartProvider.clearCart();
+        await orderProvider.loadOrders(forceReload: true);
+      }
 
       // Show success dialog
       if (mounted) {
