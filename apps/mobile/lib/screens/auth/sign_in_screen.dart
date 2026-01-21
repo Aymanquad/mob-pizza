@@ -31,7 +31,7 @@ class SignInScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Image.asset(
-          'assets/images/mobpizza_logo.png',
+          'assets/images/mobpizza_logo.jpg',
           height: 32,
           width: 100,
           fit: BoxFit.contain,
@@ -53,7 +53,7 @@ class SignInScreen extends StatelessWidget {
             children: [
               Center(
                 child: Image.asset(
-                  'assets/images/mobpizza_logo.png',
+                  'assets/images/mobpizza_logo.jpg',
                   height: 100,
                   width: 100,
                   fit: BoxFit.contain,

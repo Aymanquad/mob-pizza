@@ -329,7 +329,7 @@ class _OnboardingScreen2State extends State<OnboardingScreen2> {
                 // Logo
                 Center(
                   child: Image.asset(
-                    'assets/images/mobpizza_logo.png',
+                    'assets/images/mobpizza_logo.jpg',
                     height: 60,
                     width: 60,
                     fit: BoxFit.contain,

@@ -37,8 +37,9 @@ flutter:
 flutter_launcher_icons:
   android: true
   ios: true
-  image_path: "assets/images/mobpizza_logo.png"
+  image_path: "assets/images/mobpizza_zoomedout_logo.png"
   min_sdk_android: 21
-  adaptive_icon_background: "#FFFFFF"
-  adaptive_icon_foreground: "assets/images/mobpizza_logo.png"
+  adaptive_icon_background: "#0B0C10"
+  adaptive_icon_foreground: "assets/images/mobpizza_zoomedout_logo.png"
+  adaptive_icon_padding: true
 

@@ -34,11 +34,16 @@ class _SplashScreenState extends State<SplashScreen> {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Image.asset(
-                'assets/images/mobpizza_logo.png',
-                height: 200,
-                width: 200,
-                fit: BoxFit.contain,
+              // Further reduced and padded to avoid any zoomed-in feel on launch
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Image.asset(
+                  // Use zoomed-out version for splash so it never feels cropped/zoomed.
+                  'assets/images/mobpizza_zoomedout_logo.png',
+                  height: 120,
+                  width: 120,
+                  fit: BoxFit.contain,
+                ),
               ),
               const SizedBox(height: 20),
               Text(l10n.homeScreenSubtitle, style: const TextStyle(color: Color(0xFFC0B8A8), fontSize: 16)),
