@@ -240,6 +240,7 @@ class OrderProvider with ChangeNotifier {
       phoneNumber: phoneNumber,
       deliveryAddress: json['deliveryAddress']?.toString() ?? json['deliveryAddress'] as String? ?? '',
       paymentMethod: _normalizePaymentMethod(json['paymentMethod'] as String?),
+      paymentStatus: json['paymentStatus'] as String? ?? 'pending',
       totalPrice: (json['totalAmount'] as num?)?.toDouble() ?? 0.0,
       status: status,
       createdAt: json['createdAt'] != null

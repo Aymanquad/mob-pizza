@@ -303,6 +303,68 @@ class AppLocalizationsEn extends AppLocalizations {
   String get paymentFailed => 'Payment Failed';
 
   @override
+  String get paymentCompletedSuccessfully =>
+      'Your payment has been completed successfully.';
+
+  @override
+  String get paymentCouldNotBeProcessed =>
+      'Your payment could not be processed. Please try again.';
+
+  @override
+  String get payment => 'Payment';
+
+  @override
+  String get orderTotal => 'Order Total';
+
+  @override
+  String get cardHolderName => 'Card Holder Name';
+
+  @override
+  String get cardNumber => 'Card Number';
+
+  @override
+  String get expiryDate => 'Expiry Date';
+
+  @override
+  String get cvc => 'CVC';
+
+  @override
+  String get payNow => 'Pay Now';
+
+  @override
+  String get viewOrders => 'View Orders';
+
+  @override
+  String get backToCheckout => 'Back to Checkout';
+
+  @override
+  String get tryAgain => 'Try Again';
+
+  @override
+  String get enterCardHolderName => 'Enter card holder name';
+
+  @override
+  String get pleaseEnterCardHolderName => 'Please enter card holder name';
+
+  @override
+  String get invalidCardNumber => 'Invalid card number';
+
+  @override
+  String get pleaseEnterCardNumber => 'Please enter card number';
+
+  @override
+  String get pleaseEnterExpiryDate => 'Please enter expiry date';
+
+  @override
+  String get invalidExpiryDate => 'Invalid expiry date';
+
+  @override
+  String get pleaseEnterCvc => 'Please enter CVC';
+
+  @override
+  String get invalidCvc => 'Invalid CVC';
+
+  @override
   String get items => 'items';
 
   @override

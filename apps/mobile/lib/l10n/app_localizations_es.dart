@@ -303,6 +303,70 @@ class AppLocalizationsEs extends AppLocalizations {
   String get paymentFailed => 'Pago fallido';
 
   @override
+  String get paymentCompletedSuccessfully =>
+      'Su pago se ha completado exitosamente.';
+
+  @override
+  String get paymentCouldNotBeProcessed =>
+      'Su pago no pudo ser procesado. Por favor, intente nuevamente.';
+
+  @override
+  String get payment => 'Pago';
+
+  @override
+  String get orderTotal => 'Total del Pedido';
+
+  @override
+  String get cardHolderName => 'Nombre del Titular';
+
+  @override
+  String get cardNumber => 'Número de Tarjeta';
+
+  @override
+  String get expiryDate => 'Fecha de Vencimiento';
+
+  @override
+  String get cvc => 'CVC';
+
+  @override
+  String get payNow => 'Pagar Ahora';
+
+  @override
+  String get viewOrders => 'Ver Pedidos';
+
+  @override
+  String get backToCheckout => 'Volver a Checkout';
+
+  @override
+  String get tryAgain => 'Intentar Nuevamente';
+
+  @override
+  String get enterCardHolderName => 'Ingrese el nombre del titular';
+
+  @override
+  String get pleaseEnterCardHolderName =>
+      'Por favor ingrese el nombre del titular';
+
+  @override
+  String get invalidCardNumber => 'Número de tarjeta inválido';
+
+  @override
+  String get pleaseEnterCardNumber => 'Por favor ingrese el número de tarjeta';
+
+  @override
+  String get pleaseEnterExpiryDate =>
+      'Por favor ingrese la fecha de vencimiento';
+
+  @override
+  String get invalidExpiryDate => 'Fecha de vencimiento inválida';
+
+  @override
+  String get pleaseEnterCvc => 'Por favor ingrese el CVC';
+
+  @override
+  String get invalidCvc => 'CVC inválido';
+
+  @override
   String get items => 'artículos';
 
   @override

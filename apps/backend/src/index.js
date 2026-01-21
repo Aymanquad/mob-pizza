@@ -9,6 +9,7 @@ const onboardingRoutes = require('./routes/onboarding.routes');
 const userRoutes = require('./routes/user.routes');
 const cartRoutes = require('./routes/cart.routes');
 const orderRoutes = require('./routes/order.routes');
+const paymentRoutes = require('./routes/payment.routes');
 
 const PORT = process.env.PORT || 5000;
 
@@ -35,6 +36,7 @@ const createApp = () => {
   app.use('/api/v1/users', userRoutes);
   app.use('/api/v1/cart', cartRoutes);
   app.use('/api/v1/orders', orderRoutes);
+  app.use('/api/v1/payment', paymentRoutes);
   app.get('/health', (_req, res) => {
     res.json({ status: 'ok', service: 'mob-pizza-api' });
   });

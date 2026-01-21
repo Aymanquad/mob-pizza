@@ -680,6 +680,126 @@ abstract class AppLocalizations {
   /// **'Payment Failed'**
   String get paymentFailed;
 
+  /// No description provided for @paymentCompletedSuccessfully.
+  ///
+  /// In en, this message translates to:
+  /// **'Your payment has been completed successfully.'**
+  String get paymentCompletedSuccessfully;
+
+  /// No description provided for @paymentCouldNotBeProcessed.
+  ///
+  /// In en, this message translates to:
+  /// **'Your payment could not be processed. Please try again.'**
+  String get paymentCouldNotBeProcessed;
+
+  /// No description provided for @payment.
+  ///
+  /// In en, this message translates to:
+  /// **'Payment'**
+  String get payment;
+
+  /// No description provided for @orderTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'Order Total'**
+  String get orderTotal;
+
+  /// No description provided for @cardHolderName.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Holder Name'**
+  String get cardHolderName;
+
+  /// No description provided for @cardNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Card Number'**
+  String get cardNumber;
+
+  /// No description provided for @expiryDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Expiry Date'**
+  String get expiryDate;
+
+  /// No description provided for @cvc.
+  ///
+  /// In en, this message translates to:
+  /// **'CVC'**
+  String get cvc;
+
+  /// No description provided for @payNow.
+  ///
+  /// In en, this message translates to:
+  /// **'Pay Now'**
+  String get payNow;
+
+  /// No description provided for @viewOrders.
+  ///
+  /// In en, this message translates to:
+  /// **'View Orders'**
+  String get viewOrders;
+
+  /// No description provided for @backToCheckout.
+  ///
+  /// In en, this message translates to:
+  /// **'Back to Checkout'**
+  String get backToCheckout;
+
+  /// No description provided for @tryAgain.
+  ///
+  /// In en, this message translates to:
+  /// **'Try Again'**
+  String get tryAgain;
+
+  /// No description provided for @enterCardHolderName.
+  ///
+  /// In en, this message translates to:
+  /// **'Enter card holder name'**
+  String get enterCardHolderName;
+
+  /// No description provided for @pleaseEnterCardHolderName.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter card holder name'**
+  String get pleaseEnterCardHolderName;
+
+  /// No description provided for @invalidCardNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid card number'**
+  String get invalidCardNumber;
+
+  /// No description provided for @pleaseEnterCardNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter card number'**
+  String get pleaseEnterCardNumber;
+
+  /// No description provided for @pleaseEnterExpiryDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter expiry date'**
+  String get pleaseEnterExpiryDate;
+
+  /// No description provided for @invalidExpiryDate.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid expiry date'**
+  String get invalidExpiryDate;
+
+  /// No description provided for @pleaseEnterCvc.
+  ///
+  /// In en, this message translates to:
+  /// **'Please enter CVC'**
+  String get pleaseEnterCvc;
+
+  /// No description provided for @invalidCvc.
+  ///
+  /// In en, this message translates to:
+  /// **'Invalid CVC'**
+  String get invalidCvc;
+
   /// No description provided for @items.
   ///
   /// In en, this message translates to:

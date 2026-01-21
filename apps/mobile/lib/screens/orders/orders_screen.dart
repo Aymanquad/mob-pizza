@@ -209,13 +209,36 @@ class _OrdersScreenState extends State<OrdersScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const SizedBox(height: 8),
-                          Text(
-                            '${order.items.length} ${order.items.length > 1 ? l10n.items : l10n.item} • \$${order.totalPrice.toStringAsFixed(2)}',
-                            style: const TextStyle(
-                              color: Color(0xFFD4AF7A),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                            ),
+                          Row(
+                            children: [
+                              Text(
+                                '${order.items.length} ${order.items.length > 1 ? l10n.items : l10n.item} • \$${order.totalPrice.toStringAsFixed(2)}',
+                                style: const TextStyle(
+                                  color: Color(0xFFD4AF7A),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              if (order.paymentStatus == 'completed') ...[
+                                const SizedBox(width: 8),
+                                Container(
+                                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                                  decoration: BoxDecoration(
+                                    color: const Color(0xFF00E676),
+                                    borderRadius: BorderRadius.circular(8),
+                                  ),
+                                  child: Text(
+                                    'PAID',
+                                    style: GoogleFonts.cinzel(
+                                      color: const Color(0xFF0F0F0F),
+                                      fontSize: 10,
+                                      fontWeight: FontWeight.w900,
+                                      letterSpacing: 0.5,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ],
                           ),
                           const SizedBox(height: 4),
                           Text(

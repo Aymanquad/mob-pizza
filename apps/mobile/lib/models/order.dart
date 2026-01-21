@@ -36,6 +36,7 @@ class Order {
   final String phoneNumber;
   final String deliveryAddress;
   final String paymentMethod; // 'cash_on_delivery' or 'stripe'
+  final String paymentStatus; // 'pending', 'completed', 'failed', 'refunded'
   final double totalPrice;
   final OrderStatus status;
   final DateTime createdAt;
@@ -49,6 +50,7 @@ class Order {
     required this.phoneNumber,
     required this.deliveryAddress,
     required this.paymentMethod,
+    this.paymentStatus = 'pending',
     required this.totalPrice,
     required this.status,
     required this.createdAt,
@@ -65,6 +67,7 @@ class Order {
       'phoneNumber': phoneNumber,
       'deliveryAddress': deliveryAddress,
       'paymentMethod': paymentMethod,
+      'paymentStatus': paymentStatus,
       'totalPrice': totalPrice,
       'status': status.index,
       'createdAt': createdAt.toIso8601String(),
@@ -84,6 +87,7 @@ class Order {
       phoneNumber: json['phoneNumber'] as String,
       deliveryAddress: json['deliveryAddress'] as String,
       paymentMethod: json['paymentMethod'] as String,
+      paymentStatus: json['paymentStatus'] as String? ?? 'pending',
       totalPrice: (json['totalPrice'] as num).toDouble(),
       status: OrderStatus.values[json['status'] as int],
       createdAt: DateTime.parse(json['createdAt'] as String),

@@ -15,6 +15,7 @@ import 'package:mob_pizza_mobile/services/auth_service.dart';
 import 'package:mob_pizza_mobile/widgets/bottom_nav_bar.dart';
 import 'package:mob_pizza_mobile/screens/onboarding/onboarding_screen_1.dart';
 import 'package:mob_pizza_mobile/screens/onboarding/onboarding_screen_2.dart';
+import 'package:mob_pizza_mobile/screens/payment/stripe_payment_screen.dart';
 
 class AppRouter {
   static GoRouter create({required bool isOnboarded}) {
@@ -35,6 +36,19 @@ class AppRouter {
         GoRoute(
           path: '/checkout',
           builder: (context, state) => const CheckoutScreen(),
+        ),
+        GoRoute(
+          path: '/payment/stripe',
+          builder: (context, state) {
+            final orderId = state.uri.queryParameters['orderId'] ?? '';
+            final amount = double.tryParse(state.uri.queryParameters['amount'] ?? '0') ?? 0.0;
+            final currency = state.uri.queryParameters['currency'] ?? 'USD';
+            return StripePaymentScreen(
+              orderId: orderId,
+              amount: amount,
+              currency: currency,
+            );
+          },
         ),
         GoRoute(
           path: '/customize-pizza',

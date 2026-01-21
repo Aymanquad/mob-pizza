@@ -10,6 +10,7 @@ import 'package:mob_pizza_mobile/config/constants.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mob_pizza_mobile/services/user_service.dart';
 import 'package:mob_pizza_mobile/services/auth_service.dart';
+import 'package:mob_pizza_mobile/services/order_service.dart';
 import 'package:flutter/foundation.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -131,6 +132,59 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         }
       }
 
+      // If Stripe payment, create order on backend first, then navigate to payment
+      if (_paymentMethod == 'stripe') {
+        try {
+          // Save total price before clearing cart
+          final totalPrice = cartProvider.totalPrice;
+          
+          final orderService = OrderService();
+          final orderData = await orderService.createOrder(
+            originalIdentifier,
+            items: cartProvider.items,
+            customerName: _nameController.text.trim(),
+            phoneNumber: phoneNumber,
+            deliveryAddress: _addressController.text.trim(),
+            paymentMethod: 'stripe',
+            totalPrice: totalPrice,
+            deliveryCharges: 0,
+            tax: totalPrice * 0.1,
+            discount: 0,
+            estimatedDelivery: DateTime.now().add(const Duration(minutes: 30)),
+          );
+
+          final backendOrderId = orderData['_id']?.toString() ?? orderData['id']?.toString() ?? '';
+
+          if (backendOrderId.isEmpty) {
+            throw Exception('Failed to get order ID from backend');
+          }
+
+          // Clear cart before navigating to payment
+          await cartProvider.clearCart();
+
+          // Navigate to Stripe payment screen
+          if (mounted) {
+            context.go(
+              '/payment/stripe?orderId=$backendOrderId&amount=$totalPrice&currency=USD',
+            );
+          }
+        } catch (e) {
+          if (mounted) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              SnackBar(
+                content: Text('Failed to create order: ${e.toString()}'),
+                backgroundColor: Colors.red,
+                duration: const Duration(seconds: 5),
+              ),
+            );
+          }
+          setState(() => _isLoading = false);
+          return;
+        }
+        return; // Exit early for Stripe payment
+      }
+
+      // For cash on delivery, proceed with existing flow
       // Generate order number
       final orderNumber = 'ORD-${DateTime.now().millisecondsSinceEpoch.toString().substring(7)}';
       final orderId = DateTime.now().millisecondsSinceEpoch.toString();
