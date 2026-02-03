@@ -163,7 +163,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
 
           // Navigate to Stripe payment screen with backend-calculated amount
           if (mounted) {
-            context.go(
+            // Use push so user can navigate back from the payment screen
+            context.push(
               '/payment/stripe?orderId=$backendOrderId&amount=$orderTotalAmount&currency=USD',
             );
           }

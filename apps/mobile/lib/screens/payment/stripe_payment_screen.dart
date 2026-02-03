@@ -318,6 +318,18 @@ class _StripePaymentScreenState extends State<StripePaymentScreen> {
       child: Scaffold(
         backgroundColor: const Color(0xFF1C1512),
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Color(0xFFF5E8C7)),
+            onPressed: () {
+              // Prefer popping if this screen was pushed; otherwise fallback to checkout
+              if (context.canPop()) {
+                context.pop();
+              } else {
+                context.go('/checkout');
+              }
+            },
+            tooltip: l10n.backToCheckout,
+          ),
           title: Text(
             l10n.payment,
             style: GoogleFonts.cinzel(
